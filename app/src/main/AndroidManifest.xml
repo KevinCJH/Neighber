@@ -10,9 +10,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/neighberlogo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/neighberlogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -31,7 +31,10 @@
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".BorrowingActivity" />
+        <activity android:name=".AddNewActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>
