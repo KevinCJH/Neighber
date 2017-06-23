@@ -1,29 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="orbital.raspberry.neighber.ProfileActivity"
-    android:orientation="vertical">
+    tools:context="orbital.raspberry.neighber.ProfileActivity">
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Choose Image"
-        android:id="@+id/chooseImg"/>
+        android:id="@+id/chooseImg"
+        android:layout_above="@+id/uploadImg"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Upload Image"
-        android:id="@+id/uploadImg"/>
+        android:id="@+id/uploadImg"
+        android:layout_above="@+id/imgView"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:id="@+id/imgView"/>
-</LinearLayout>
+        android:id="@+id/imgView"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentStart="true" />
+
+    <!-- Nav Bar -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/grey"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_browse"
+            android:drawableTop="@drawable/ic_search_black_24dp"
+            android:text="Browse"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_records"
+            android:drawableTop="@drawable/ic_library_books_black_24dp"
+            android:text="Records"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_addnew"
+            android:drawableTop="@drawable/ic_add_circle_black_24dp"
+            android:text="Add"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_chat"
+            android:drawableTop="@drawable/ic_chat_black_24dp"
+            android:text="Chat"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_profile"
+            android:drawableTop="@drawable/ic_person_outline_select_24dp"
+            android:text="My Profile"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
