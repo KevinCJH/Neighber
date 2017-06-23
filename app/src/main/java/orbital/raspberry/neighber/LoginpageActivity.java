@@ -32,7 +32,7 @@ public class LoginpageActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginpageActivity.this, ProfileActivity.class));
+            startActivity(new Intent(LoginpageActivity.this, MainActivity.class));
             finish();
         }
 
@@ -101,7 +101,7 @@ public class LoginpageActivity extends AppCompatActivity {
                                         Toast.makeText(LoginpageActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    Intent intent = new Intent(LoginpageActivity.this, ProfileActivity.class);
+                                    Intent intent = new Intent(LoginpageActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
