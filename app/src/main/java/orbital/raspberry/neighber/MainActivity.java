@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private TextView records, addnew, chat, profile;
+    private TextView browse, records, addnew, chat, profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +27,19 @@ public class MainActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        //Navigations
+        //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
         chat = (TextView) findViewById(R.id.action_chat);
         profile = (TextView) findViewById(R.id.action_profile);
+        browse = (TextView) findViewById(R.id.action_browse);
+
+        browse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +70,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //////////////////////End Navigation////////////////////////////
+
     }
 
-    //Top Right Menu
+    //////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -84,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //////////////////End top menu////////////////////////
 
 
 }

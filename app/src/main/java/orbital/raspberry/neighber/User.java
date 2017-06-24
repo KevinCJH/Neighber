@@ -6,6 +6,9 @@ public class User {
     private String displayname;
     private String email;
     private double ratings;
+    private String imguri;
+
+    public User(){}
 
     public User(String userid, String email, String displayname){
 
@@ -13,6 +16,7 @@ public class User {
         this.email = email;
         this.displayname = displayname;
         ratings = 0;
+        imguri = "";
 
     }
 
@@ -32,8 +36,5 @@ public class User {
         return ratings;
     }
 
-    public void setRatings(double ratings){
-        this.ratings = ratings;
-    }
-
+    public String getImgUri() { return imguri; }
 }
