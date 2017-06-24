@@ -60,9 +60,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
-
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
@@ -88,7 +85,8 @@ public class ProfileActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ProfileActivity.this, AddNewActivity.class));
+                finish();
             }
         });
 
@@ -116,9 +114,13 @@ public class ProfileActivity extends AppCompatActivity {
         ratings = (TextView) findViewById(R.id.ratingvalue);
         ratingbar = (RatingBar) findViewById(R.id.rating);
 
+        //To store userdata
         final String[] userdata = new String[1];
 
-        final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+        //Get Firebase auth instance
+        auth = FirebaseAuth.getInstance();
+
+        final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
         final String userid = currentFirebaseUser.getUid();
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
@@ -126,15 +128,15 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
-                        //Toast.makeText(ProfileActivity.this, "URL: " + user.getImgUri(), Toast.LENGTH_LONG).show();
 
                         //Set profile picture of user
                          String imageUri = user.getImgUri();
                          Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(imgView);
 
+                        //Store user display name
                         userdata[0] = user.getDisplayname();
 
-                        //Fill up profile info
+                        //Fill up profile details
                         displayname.setText(user.getDisplayname());
                         email.setText(user.getEmail());
                         ratings.setText("Ratings: " + user.getRatings());
@@ -144,17 +146,15 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(ProfileActivity.this, "Failed to retrieve user data..", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
                     }
                 });
 
 
-
-
         pd = new ProgressDialog(this);
-        pd.setMessage("Saving Changes....");
+        pd.setMessage("Saving Changes...");
 
-
+        //Go to gallery when user click on image view
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+        //Save change of profile
         saveChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,6 +215,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    //Return the image from user gallery and set it into image view
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
