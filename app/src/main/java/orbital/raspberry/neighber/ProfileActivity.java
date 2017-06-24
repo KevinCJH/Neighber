@@ -3,85 +3,213 @@ package orbital.raspberry.neighber;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Rating;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
-    Button chooseImg, uploadImg;
-    ImageView imgView;
-    int PICK_IMAGE_REQUEST = 111;
-    Uri filePath;
-    ProgressDialog pd;
+    private Button saveChange;
+    private CircleImageView imgView;
+    private int PICK_IMAGE_REQUEST = 111;
+    private Uri filePath;
+    private ProgressDialog pd;
+    private EditText displayname;
+    private TextView email, ratings;
+    private RatingBar ratingbar;
+    private TextView browse, records, addnew, chat, profile;
+    private boolean imgclickflag = false;
 
     //creating reference to firebase storage
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReferenceFromUrl("gs://neighber-b5ee0.appspot.com");
-
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReferenceFromUrl("gs://neighber-b5ee0.appspot.com");
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        chooseImg = (Button)findViewById(R.id.chooseImg);
-        uploadImg = (Button)findViewById(R.id.uploadImg);
-        imgView = (ImageView)findViewById(R.id.imgView);
+        //Get Firebase auth instance
+        auth = FirebaseAuth.getInstance();
 
-        pd = new ProgressDialog(this);
-        pd.setMessage("Uploading....");
+        //////////////Navigations/////////////
+        records = (TextView) findViewById(R.id.action_records);
+        addnew = (TextView) findViewById(R.id.action_addnew);
+        chat = (TextView) findViewById(R.id.action_chat);
+        profile = (TextView) findViewById(R.id.action_profile);
+        browse = (TextView) findViewById(R.id.action_browse);
 
-
-        chooseImg.setOnClickListener(new View.OnClickListener() {
+        browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                finish();
+            }
+        });
+
+        records.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        addnew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //////////////////////End Navigation////////////////////////////
+
+
+        saveChange = (Button)findViewById(R.id.saveChange);
+        imgView = (CircleImageView)findViewById(R.id.imgView);
+        displayname = (EditText)findViewById(R.id.displayname);
+        email = (TextView) findViewById(R.id.email);
+        ratings = (TextView) findViewById(R.id.ratingvalue);
+        ratingbar = (RatingBar) findViewById(R.id.rating);
+
+        final String[] userdata = new String[1];
+
+        final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+        final String userid = currentFirebaseUser.getUid();
+
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        mDatabase.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        //Toast.makeText(ProfileActivity.this, "URL: " + user.getImgUri(), Toast.LENGTH_LONG).show();
+
+                        //Set profile picture of user
+                         String imageUri = user.getImgUri();
+                         Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(imgView);
+
+                        userdata[0] = user.getDisplayname();
+
+                        //Fill up profile info
+                        displayname.setText(user.getDisplayname());
+                        email.setText(user.getEmail());
+                        ratings.setText("Ratings: " + user.getRatings());
+                        ratingbar.setRating(Double.valueOf(user.getRatings()).floatValue());
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(ProfileActivity.this, "Failed to retrieve user data..", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+        pd = new ProgressDialog(this);
+        pd.setMessage("Saving Changes....");
+
+
+        imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgclickflag = true;
                 Intent intent = new Intent();
                 intent.setType("image/*");
-                intent.setAction(Intent.ACTION_PICK);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
             }
         });
 
-        uploadImg.setOnClickListener(new View.OnClickListener() {
+
+        saveChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(filePath != null) {
-                    pd.show();
 
-                    StorageReference childRef = storageRef.child("image.jpg");
+                pd.show();
 
-                    //uploading the image
-                    UploadTask uploadTask = childRef.putFile(filePath);
-
-                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            pd.dismiss();
-                            Toast.makeText(ProfileActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            pd.dismiss();
-                            Toast.makeText(ProfileActivity.this, "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                //If display name is changed
+                if(!userdata[0].equals(displayname.getText().toString().trim())){
+                    mDatabase.child(userid).child("displayname").setValue(displayname.getText().toString().trim());
                 }
-                else {
-                    Toast.makeText(ProfileActivity.this, "Select an image", Toast.LENGTH_SHORT).show();
+
+                //If image has been modified
+                if(imgclickflag) {
+                    if (filePath != null) {
+
+                        StorageReference childRef = storageRef.child(userid + ".jpg");
+
+                        //uploading the image
+                        UploadTask uploadTask = childRef.putFile(filePath);
+
+                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                pd.dismiss();
+                                @SuppressWarnings("VisibleForTests") String dlurl = taskSnapshot.getDownloadUrl().toString();
+                                mDatabase.child(userid).child("imguri").setValue(dlurl);
+                                Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                pd.dismiss();
+                                Toast.makeText(ProfileActivity.this, "Fail to upload image" + e, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else{
+                        Toast.makeText(ProfileActivity.this, "Please choose an image", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }
+
             }
         });
     }
@@ -104,4 +232,29 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    //////////////////Top Right Menu//////////////////////
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                // to do logout action
+                auth.signOut();
+                startActivity(new Intent(ProfileActivity.this, LoginpageActivity.class));
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //////////////////End top menu////////////////////////
+
 }

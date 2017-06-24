@@ -4,30 +4,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     tools:context="orbital.raspberry.neighber.ProfileActivity">
 
     <Button
+        style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Choose Image"
-        android:id="@+id/chooseImg"
-        android:layout_above="@+id/uploadImg"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Upload Image"
-        android:id="@+id/uploadImg"
-        android:layout_above="@+id/imgView"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/imgView"
+        android:text="Save Changes"
+        android:id="@+id/saveChange"
         android:layout_above="@+id/linearLayout"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="13dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        app:civ_border_color="#ffffff"
+        app:civ_border_width="2dp" />
+
+    <EditText
+        android:id="@+id/displayname"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:textSize="24dp"
+        android:inputType="textPersonName"
+        android:hint="Change Display Name" />
+
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:textSize="24dp"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/displayname"
+        android:text="Email"/>
+
+    <RatingBar
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:isIndicator="true"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@+id/saveChange"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/ratingvalue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:textSize="20dp"
+        android:text="Ratings: "
+        android:layout_marginBottom="14dp"
+        android:layout_above="@+id/rating"
         android:layout_alignParentStart="true" />
+
 
     <!-- Nav Bar -->
     <LinearLayout
@@ -96,6 +141,8 @@
             android:layout_width="0dp" />
 
     </LinearLayout>
+
+
 
 
 </RelativeLayout>
