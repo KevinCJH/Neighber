@@ -8,8 +8,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 public class AddNewActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class AddNewActivity extends AppCompatActivity {
     private Button submitBtn;
     private EditText itemnameTxt, postdescTxt;
     private String userName;
+    private MaterialSpinner spinner;
 
     private FirebaseAuth auth;
 
@@ -35,6 +39,10 @@ public class AddNewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new);
+
+        //Set up spinner
+        spinner = (MaterialSpinner) findViewById(R.id.posttype);
+        spinner.setItems("I want to request for something", "I want to lend my stuff");
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -101,9 +109,11 @@ public class AddNewActivity extends AppCompatActivity {
                 // get unique post id from firebase
                 String postid = mDatabase.push().getKey();
 
+                int postType = spinner.getSelectedIndex() + 1;
+
                 //Create newpost object
                 Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                        postdescTxt.getText().toString().trim(), 1);
+                        postdescTxt.getText().toString().trim(), postType);
 
                 //Add post to database
                 mDatabase.child(postid).setValue(newpost);
