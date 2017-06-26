@@ -1,20 +1,27 @@
 package orbital.raspberry.neighber;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,36 +29,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PostActivity extends AppCompatActivity {
+public class ViewProfileActivity extends AppCompatActivity {
 
-    private String ruserid, rpostid;
-    private TextView rusernametxt, itemnametxt, postdesctxt;
-    private CircleImageView ruserimg;
+    private CircleImageView imgView;
+    private TextView displayname, email, ratings;
+    private RatingBar ratingbar;
     private TextView browse, records, addnew, chat, profile;
-    private Button viewprofile, writeoffer;
+    private String ruserid;
 
+    //creating reference to firebase storage
     private FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_viewprofile);
 
-        //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
-        rpostid = i.getStringExtra("rpostid");
-
-        rusernametxt = (TextView) findViewById(R.id.rusernameTxt);
-        itemnametxt = (TextView) findViewById(R.id.itemnameTxt);
-        postdesctxt = (TextView) findViewById(R.id.postdescTxt);
-        ruserimg = (CircleImageView) findViewById(R.id.imgView);
-        viewprofile = (Button) findViewById(R.id.viewprofile);
-        writeoffer = (Button) findViewById(R.id.sendoffer);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -63,7 +64,7 @@ public class PostActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, MainActivity.class));
+                startActivity(new Intent(ViewProfileActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -78,7 +79,7 @@ public class PostActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ViewProfileActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -93,70 +94,45 @@ public class PostActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ViewProfileActivity.this, ProfileActivity.class));
                 finish();
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
+
+        imgView = (CircleImageView) findViewById(R.id.imgView);
+        displayname = (TextView) findViewById(R.id.displayname);
+        email = (TextView) findViewById(R.id.email);
+        ratings = (TextView) findViewById(R.id.ratingvalue);
+        ratingbar = (RatingBar) findViewById(R.id.rating);
+
+
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-        uDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        mDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                //Display profile picture of user
+                //Set profile picture of user
                 String imageUri = user.getImgUri();
-                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
+                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(imgView);
 
-                //Display user name
-                rusernametxt.setText(user.getDisplayname());
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(PostActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
-        mDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Post post = dataSnapshot.getValue(Post.class);
-
-                //Display post item name and description
-
-                if(post.getPosttype() == 1) {
-                    itemnametxt.setText("I need an/a " + post.getItemname());
-                }else {
-                    itemnametxt.setText("I can lend an/a " + post.getItemname());
-                }
-                postdesctxt.setText(post.getPostdesc());
+                //Fill up profile details
+                displayname.setText(user.getDisplayname());
+                email.setText(user.getEmail());
+                ratings.setText("Ratings: " + user.getRatings());
+                ratingbar.setRating(Double.valueOf(user.getRatings()).floatValue());
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(PostActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        viewprofile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(PostActivity.this, ViewProfileActivity.class);
-                //Pass info to next activity
-                i.putExtra("ruserid", ruserid);
-                startActivity(i);
-
+                Toast.makeText(ViewProfileActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -177,7 +153,7 @@ public class PostActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(PostActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(ViewProfileActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }

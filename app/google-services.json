@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "96582521291",
+    "firebase_url": "https://neighber-b5ee0.firebaseio.com",
+    "project_id": "neighber-b5ee0",
+    "storage_bucket": "neighber-b5ee0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96582521291:android:da16350954d064a4",
+        "android_client_info": {
+          "package_name": "orbital.raspberry.neighber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96582521291-e505rp82bt57cuurt706gd9mg4tjsnl8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "orbital.raspberry.neighber",
+            "certificate_hash": "0e55e8855e249acfb23126f642c9bdb8da7b4224"
+          }
+        },
+        {
+          "client_id": "96582521291-9rbn5i7ekgogop13vklpk9t9bfopngf2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi1CE3oXeMEjli9XKeGt2eawQD-gB4TxM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96582521291-9rbn5i7ekgogop13vklpk9t9bfopngf2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
