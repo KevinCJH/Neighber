@@ -1,11 +1,8 @@
 package orbital.raspberry.neighber;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.*;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,40 +11,33 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private TextView browsereq, browseoff;
     private List<Post> requests;
     private ListView listViewRequests;
-    private static boolean calledAlready = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        if (!calledAlready)
-        {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            calledAlready = true;
-        }
+        setContentView(R.layout.activity_main2);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -68,15 +58,15 @@ public class MainActivity extends AppCompatActivity {
         browsereq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity2.this, MainActivity.class));
+                finish();
             }
         });
 
         browseoff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MainActivity2.class));
-                finish();
+
             }
         });
 
@@ -97,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddNewActivity.class));
+                startActivity(new Intent(MainActivity2.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -112,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                startActivity(new Intent(MainActivity2.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -135,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                     Post request = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 1
-                        if(request.getPosttype() == 1) {
+                        if(request.getPosttype() == 2) {
 
                             String datetime = getDate(request.getTimestamp());
 
@@ -147,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainActivity.this, requests);
+                RequestList reqAdapter = new RequestList(MainActivity2.this, requests);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -166,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 String requesterid = request.getUserid();
                 String postid = request.getPostid();
 
-                Intent i = new Intent(MainActivity.this, PostActivity.class);
+                Intent i = new Intent(MainActivity2.this, PostActivity.class);
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
@@ -198,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(MainActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(MainActivity2.this, LoginpageActivity.class));
                 finish();
                 break;
         }
