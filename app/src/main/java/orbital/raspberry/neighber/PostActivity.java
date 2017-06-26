@@ -131,7 +131,12 @@ public class PostActivity extends AppCompatActivity {
                 Post post = dataSnapshot.getValue(Post.class);
 
                 //Display post item name and description
-                itemnametxt.setText("I need a " + post.getItemname());
+
+                if(post.getPosttype() == 1) {
+                    itemnametxt.setText("I need an/a " + post.getItemname());
+                }else {
+                    itemnametxt.setText("I can lend an/a " + post.getItemname());
+                }
                 postdesctxt.setText(post.getPostdesc());
 
             }
