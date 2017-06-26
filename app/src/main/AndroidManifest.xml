@@ -33,6 +33,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".ProfileActivity" />
+        <activity android:name=".ViewProfileActivity" />
         <activity android:name=".BorrowingActivity" />
         <activity android:name=".AddNewActivity" />
         <activity android:name=".ChatActivity"></activity>

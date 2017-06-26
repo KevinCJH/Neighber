@@ -144,7 +144,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Post request = requests.get(position);
-                Toast.makeText(MainActivity.this, "Item: " + request.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Item: " + request.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
+                String requesterid = request.getUserid();
+                String postid = request.getPostid();
+
+                Intent i = new Intent(MainActivity.this, PostActivity.class);
+                i.putExtra("ruserid", requesterid);
+                i.putExtra("rpostid", postid);
+                startActivity(i);
+                finish();
 
             }
         });
