@@ -1,11 +1,10 @@
 package orbital.raspberry.neighber;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.*;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,28 +27,24 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class BorrowerRecordsActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
-    private TextView browsereq, browseoff;
+    private TextView borrowing, lending, history;
     private List<Post> posts;
     private ListView listViewRequests;
-    private static boolean calledAlready = false;
+    private String userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        if (!calledAlready)
-        {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            calledAlready = true;
-        }
+        setContentView(R.layout.activity_borrowerrecord);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+
+        userid = auth.getCurrentUser().getUid();
 
         posts = new ArrayList<>();
 
@@ -62,43 +56,52 @@ public class MainActivity extends AppCompatActivity {
         chat = (TextView) findViewById(R.id.action_chat);
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
-        browsereq = (TextView) findViewById(R.id.action_browse_request);
-        browseoff = (TextView) findViewById(R.id.action_browse_offer);
+        borrowing = (TextView) findViewById(R.id.action_borrowing);
+        lending = (TextView) findViewById(R.id.action_lending);
+        history = (TextView) findViewById(R.id.action_history);
 
-        browsereq.setOnClickListener(new View.OnClickListener() {
+        borrowing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        browseoff.setOnClickListener(new View.OnClickListener() {
+        lending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MainActivity2.class));
-                finish();
+                //startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity2.class));
+               // finish();
+            }
+        });
+
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity2.class));
+               // finish();
             }
         });
 
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity.class));
+                finish();
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BorrowerRecordsActivity.class));
-                finish();
+
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddNewActivity.class));
+                startActivity(new Intent(BorrowerRecordsActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                startActivity(new Intent(BorrowerRecordsActivity.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -136,19 +139,17 @@ public class MainActivity extends AppCompatActivity {
                     Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 1
-                        if(post.getPosttype() == 1 && post.getStatus() == 1) {
-
-                            String datetime = getDate(post.getTimestamp());
-
-                            post.setDatetime(datetime);
+                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid)) {
 
                             //adding to the list
                             posts.add(post);
+
+                            //TODO add records to list
                         }
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainActivity.this, posts);
+                RecordsList reqAdapter = new RecordsList(BorrowerRecordsActivity.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -161,28 +162,52 @@ public class MainActivity extends AppCompatActivity {
 
         listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = posts.get(position);
-                //Toast.makeText(MainActivity.this, "Item: " + post.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
-                String requesterid = post.getUserid();
-                String postid = post.getPostid();
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                Intent i = new Intent(MainActivity.this, PostActivity.class);
-                i.putExtra("ruserid", requesterid);
-                i.putExtra("rpostid", postid);
-                startActivity(i);
+                final Post post = posts.get(position);
+
+                if(post.getStatus() == 1) {
+
+                    CharSequence options[] = new CharSequence[]{"View Offer", "Update this Post", "Delete this Post"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    if (post.getRecordcount() <= 0) {
+                                        Toast.makeText(BorrowerRecordsActivity.this, "No offers were made to you", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Intent i = new Intent(BorrowerRecordsActivity.this, ViewOfferActivity.class);
+                                        i.putExtra("rpostid", post.getPostid());
+                                        startActivity(i);
+                                    }
+                                    break;
+                                case 1:
+                                    Intent i = new Intent(BorrowerRecordsActivity.this, EditPostActivity.class);
+                                    i.putExtra("rpostid", post.getPostid());
+                                    startActivity(i);
+                                    break;
+                                case 2:
+                                    //TODO Delete for Records
+                                    FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).removeValue();
+                                    posts.remove(position);
+                                    Toast.makeText(BorrowerRecordsActivity.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
 
             }
         });
 
     }
 
-    public String getDate(long time) {
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(time);
-        String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
-        return date;
-    }
 
     //////////////////Top Right Menu//////////////////////
     @Override
@@ -198,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(MainActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(BorrowerRecordsActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }

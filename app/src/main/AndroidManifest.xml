@@ -34,9 +34,12 @@
         <activity android:name=".SignupActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ViewProfileActivity" />
-        <activity android:name=".BorrowingActivity" />
         <activity android:name=".AddNewActivity" />
         <activity android:name=".MainActivity2" />
+        <activity android:name=".BorrowerRecordsActivity" />
+        <activity android:name=".WriteOfferActivity" />
+        <activity android:name=".EditPostActivity" />
+        <activity android:name=".ViewOfferActivity" />
         <activity android:name=".ChatActivity"></activity>
     </application>
 

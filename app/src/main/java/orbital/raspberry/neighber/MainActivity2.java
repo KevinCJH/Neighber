@@ -31,7 +31,7 @@ public class MainActivity2 extends AppCompatActivity {
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private TextView browsereq, browseoff;
-    private List<Post> requests;
+    private List<Post> posts;
     private ListView listViewRequests;
 
     @Override
@@ -42,7 +42,7 @@ public class MainActivity2 extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        requests = new ArrayList<>();
+        posts = new ArrayList<>();
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
 
@@ -80,7 +80,8 @@ public class MainActivity2 extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity2.this, BorrowerRecordsActivity.class));
+                finish();
             }
         });
 
@@ -117,27 +118,27 @@ public class MainActivity2 extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 //clearing the previous list
-                requests.clear();
+                posts.clear();
 
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    Post request = postSnapshot.getValue(Post.class);
+                    Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 1
-                        if(request.getPosttype() == 2) {
+                        if(post.getPosttype() == 2 && post.getStatus() == 1) {
 
-                            String datetime = getDate(request.getTimestamp());
+                            String datetime = getDate(post.getTimestamp());
 
-                            request.setDatetime(datetime);
+                            post.setDatetime(datetime);
 
                             //adding to the list
-                            requests.add(request);
+                            posts.add(post);
                         }
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainActivity2.this, requests);
+                RequestList reqAdapter = new RequestList(MainActivity2.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -151,10 +152,10 @@ public class MainActivity2 extends AppCompatActivity {
         listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post request = requests.get(position);
+                Post post = posts.get(position);
                 //Toast.makeText(MainActivity.this, "Item: " + request.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
-                String requesterid = request.getUserid();
-                String postid = request.getPostid();
+                String requesterid = post.getUserid();
+                String postid = post.getPostid();
 
                 Intent i = new Intent(MainActivity2.this, PostActivity.class);
                 i.putExtra("ruserid", requesterid);

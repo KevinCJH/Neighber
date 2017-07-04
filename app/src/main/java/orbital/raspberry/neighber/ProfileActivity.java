@@ -78,7 +78,8 @@ public class ProfileActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ProfileActivity.this, BorrowerRecordsActivity.class));
+                finish();
             }
         });
 

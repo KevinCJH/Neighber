@@ -45,7 +45,6 @@ public class ViewProfileActivity extends AppCompatActivity {
     //creating reference to firebase storage
     private FirebaseAuth auth;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +71,8 @@ public class ViewProfileActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ViewProfileActivity.this, BorrowerRecordsActivity.class));
+                finish();
             }
         });
 

@@ -1,17 +1,14 @@
 package orbital.raspberry.neighber;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,24 +22,21 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
-public class AddNewActivity extends AppCompatActivity {
+public class EditPostActivity extends AppCompatActivity {
 
+    private String rpostid;
     private TextView browse, records, addnew, chat, profile;
     private Button submitBtn;
     private EditText itemnameTxt, postdescTxt;
-    private String userName;
-    private MaterialSpinner spinner;
-
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new);
+        setContentView(R.layout.activity_edit_post);
 
-        //Set up spinner
-        spinner = (MaterialSpinner) findViewById(R.id.posttype);
-        spinner.setItems("I want to request for something", "I want to lend my stuff");
+        Intent i = getIntent();
+        rpostid = i.getStringExtra("rpostid");
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -54,7 +48,7 @@ public class AddNewActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddNewActivity.this, MainActivity.class));
+                startActivity(new Intent(EditPostActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -62,7 +56,7 @@ public class AddNewActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddNewActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(EditPostActivity.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -70,7 +64,8 @@ public class AddNewActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(EditPostActivity.this, AddNewActivity.class));
+                finish();
             }
         });
 
@@ -84,7 +79,7 @@ public class AddNewActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddNewActivity.this, ProfileActivity.class));
+                startActivity(new Intent(EditPostActivity.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -98,35 +93,38 @@ public class AddNewActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
-        final String userid = currentFirebaseUser.getUid();
-
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
+        mDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Post post = dataSnapshot.getValue(Post.class);
+
+                //Display post item name and description
+
+                itemnameTxt.setText(post.getItemname());
+
+                postdescTxt.setText(post.getPostdesc());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(EditPostActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // get unique post id from firebase
-                String postid = mDatabase.push().getKey();
+                //Edit name of the post
+                mDatabase.child(rpostid).child("itemname").setValue(itemnameTxt.getText().toString().trim());
 
-                //Get the post type based on which item is selected in the spinner
-                int postType = spinner.getSelectedIndex() + 1;
+                //Edit desc of the post
+                mDatabase.child(rpostid).child("postdesc").setValue(postdescTxt.getText().toString().trim());
 
-                //Create newpost object
-                Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                        postdescTxt.getText().toString().trim(), postType);
-
-                //Add post to database
-                mDatabase.child(postid).setValue(newpost);
-
-                //Add timestamp to the post
-                mDatabase.child(postid).child("timestamp").setValue(ServerValue.TIMESTAMP);
-
-                Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in the Records tab", Toast.LENGTH_LONG).show();
-
-                startActivity(new Intent(AddNewActivity.this, MainActivity.class));
-                finish();
+                Toast.makeText(EditPostActivity.this, "Changes has been saved", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -147,7 +145,7 @@ public class AddNewActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(AddNewActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(EditPostActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }

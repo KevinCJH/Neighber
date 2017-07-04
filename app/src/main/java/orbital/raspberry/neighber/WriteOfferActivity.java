@@ -2,57 +2,46 @@ package orbital.raspberry.neighber;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+public class WriteOfferActivity extends AppCompatActivity {
 
-public class PostActivity extends AppCompatActivity {
-
-    private String ruserid, rpostid, ruserdisplayname;
-    private TextView rusernametxt, itemnametxt, postdesctxt;
-    private CircleImageView ruserimg;
+    private String ruserid, rpostid, ritemname, ruserdisplayname;
     private TextView browse, records, addnew, chat, profile;
-    private Button viewprofile, writeoffer;
-    private int posttype;
+    private int rrecordcount;
+    private Button submitBtn;
+    private EditText offerdescTxt;
 
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_write_offer);
 
         //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
         rpostid = i.getStringExtra("rpostid");
-
-        rusernametxt = (TextView) findViewById(R.id.rusernameTxt);
-        itemnametxt = (TextView) findViewById(R.id.itemnameTxt);
-        postdesctxt = (TextView) findViewById(R.id.postdescTxt);
-        ruserimg = (CircleImageView) findViewById(R.id.imgView);
-        viewprofile = (Button) findViewById(R.id.viewprofile);
-        writeoffer = (Button) findViewById(R.id.sendoffer);
+        ruserdisplayname = i.getStringExtra("ruserdisplayname");
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -64,7 +53,7 @@ public class PostActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, MainActivity.class));
+                startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -72,7 +61,7 @@ public class PostActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(WriteOfferActivity.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -80,7 +69,7 @@ public class PostActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, AddNewActivity.class));
+                startActivity(new Intent(WriteOfferActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -95,97 +84,91 @@ public class PostActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, ProfileActivity.class));
+                startActivity(new Intent(WriteOfferActivity.this, ProfileActivity.class));
                 finish();
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
+        submitBtn = (Button)findViewById(R.id.submitRequest);
+        offerdescTxt = (EditText)findViewById(R.id.offerdesc);
+
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        if(auth.getCurrentUser().getUid().toString().equals(ruserid)){
-            writeoffer.setVisibility(View.GONE);
-        }
+        final String userid = auth.getCurrentUser().getUid();
+
+        final String[] userdisplayname = new String[1];
 
         final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-        uDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
+        uDatabase.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                //Display profile picture of user
-                String imageUri = user.getImgUri();
-                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
-
-                //Display user name
-                rusernametxt.setText(user.getDisplayname());
-
-                ruserdisplayname = user.getDisplayname();
-
+                userdisplayname[0] = user.getDisplayname();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(PostActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WriteOfferActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
-        mDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
+
+        final DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference("posts");
+        pDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Post post = dataSnapshot.getValue(Post.class);
 
-                //Display post item name and description
+                ritemname = post.getItemname();
 
-                if(post.getPosttype() == 1) {
-                    itemnametxt.setText("I need " + post.getItemname());
-                }else {
-                    itemnametxt.setText("I can lend " + post.getItemname());
-                }
-                postdesctxt.setText(post.getPostdesc());
+                rrecordcount = post.getRecordcount();
 
-                posttype = post.getPosttype();
+                //Toast.makeText(WriteOfferActivity.this, "Count: " + rrecordcount, Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(PostActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WriteOfferActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
 
-        viewprofile.setOnClickListener(new View.OnClickListener() {
+        submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(PostActivity.this, ViewProfileActivity.class);
-                //Pass info to next activity
-                i.putExtra("ruserid", ruserid);
-                startActivity(i);
+                // get unique post id from firebase
+                String recordid = mDatabase.push().getKey();
+
+                //Create new offertoborrowpost object
+                OfferToBorrowPost newoffer = new OfferToBorrowPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
+
+                newoffer.setAgreementdesc(offerdescTxt.getText().toString().trim());
+
+                //Add post to database
+                mDatabase.child(recordid).setValue(newoffer);
+
+                mDatabase.child(recordid).child("timestamp").setValue(ServerValue.TIMESTAMP);
+
+                //Update number of offers made to the post
+
+                rrecordcount += 1;
+
+                pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
+
+                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may edit/delete the offer in the Records tab", Toast.LENGTH_LONG).show();
+
+                startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
+                finish();
 
             }
         });
-
-        writeoffer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(posttype == 1) {
-                    Intent i = new Intent(PostActivity.this, WriteOfferActivity.class);
-                    //Pass info to next activity
-                    i.putExtra("ruserid", ruserid);
-                    i.putExtra("rpostid", rpostid);
-                    i.putExtra("ruserdisplayname", ruserdisplayname);
-                    startActivity(i);
-                }
-
-            }
-        });
-
 
     }
 
@@ -203,7 +186,7 @@ public class PostActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(PostActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(WriteOfferActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }
@@ -211,5 +194,4 @@ public class PostActivity extends AppCompatActivity {
     }
 
     //////////////////End top menu////////////////////////
-
 }

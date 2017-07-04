@@ -19,7 +19,8 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_black_24dp"
+            android:drawableTop="@drawable/ic_search_select_24dp"
+            android:textColor="@color/colorPrimary"
             android:text="Browse"
             android:textAlignment="center"
             android:onClick="onClick"
@@ -41,8 +42,7 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_addnew"
-            android:drawableTop="@drawable/ic_add_circle_select_24dp"
-            android:textColor="@color/colorPrimary"
+            android:drawableTop="@drawable/ic_add_circle_black_24dp"
             android:text="Add"
             android:textAlignment="center"
             android:onClick="onClick"
@@ -74,35 +74,29 @@
 
     </LinearLayout>
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/posttype"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
 
-    <EditText
-        android:id="@+id/itemname"
+    <TextView
+        android:id="@+id/infotxt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="24dp"
         android:inputType="textPersonName"
-        android:hint="Name of Item"
+        android:hint="Agreement and Condition of Item"
+        android:textStyle="bold"
         android:layout_marginTop="23dp"
         android:layout_below="@+id/posttype"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/postdesc"
+        android:id="@+id/offerdesc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:maxLines="5"
         android:textSize="24dp"
         android:maxLength="200"
-        android:hint="Add some description for your post."
+        android:hint="Example: This item has some scratches on the side, but is working perfectly. I expect it to be return in the same condition"
         android:inputType="textMultiLine"
-        android:layout_below="@+id/itemname"
+        android:layout_below="@+id/infotxt"
         android:layout_alignParentStart="true"
         android:layout_marginTop="27dp" />
 
@@ -110,7 +104,7 @@
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit Post"
+        android:text="Submit Offer"
         android:id="@+id/submitRequest"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
