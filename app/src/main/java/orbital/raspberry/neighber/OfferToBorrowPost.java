@@ -17,6 +17,7 @@ public class OfferToBorrowPost {
     private String returnagreementdesc;
     private String datetime;
     private long timestamp;
+    private int status;
 
     public OfferToBorrowPost(){}
 
@@ -28,6 +29,7 @@ public class OfferToBorrowPost {
         this.itemname = itemname;
         this.ownername = ownername;
         this.targetname = targetname;
+        status = 1;
     }
 
     public String getRecordid(){
@@ -81,6 +83,14 @@ public class OfferToBorrowPost {
     }
 
     public long getTimestamp() { return timestamp; }
+
+    public int getStatus(){
+        return status;
+    }
+
+    public void setStatus(int status){
+        this.status = status;
+    }
 
 
 }

@@ -16,6 +16,8 @@ public class Post {
     private int status;
     //Upon agreement, the other party id is recorded here
     private String otherid;
+    private String agreementid;
+    private String othername;
     //Post type -  1:request 2:offer
     private int posttype;
     //For list view
@@ -85,6 +87,16 @@ public class Post {
 
     public String getOtherid(){
         return otherid;
+    }
+
+    public String getOthername(){ return othername; }
+
+    public void setAgreementid(String agreementid){
+        this.agreementid = agreementid;
+    }
+
+    public String getAgreementid(){
+        return agreementid;
     }
 
 }

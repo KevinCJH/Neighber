@@ -13,16 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 
-public class WriteOfferActivity extends AppCompatActivity {
+public class WriteOfferActivity2 extends AppCompatActivity {
 
     private String ruserid, rpostid, ritemname, ruserdisplayname;
     private TextView browse, records, addnew, chat, profile;
@@ -35,7 +33,7 @@ public class WriteOfferActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_offer);
+        setContentView(R.layout.activity_write_offer2);
 
         //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
@@ -53,7 +51,7 @@ public class WriteOfferActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
+                startActivity(new Intent(WriteOfferActivity2.this, MainActivity.class));
                 finish();
             }
         });
@@ -61,7 +59,7 @@ public class WriteOfferActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(WriteOfferActivity2.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -69,7 +67,7 @@ public class WriteOfferActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity.this, AddNewActivity.class));
+                startActivity(new Intent(WriteOfferActivity2.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -84,7 +82,7 @@ public class WriteOfferActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity.this, ProfileActivity.class));
+                startActivity(new Intent(WriteOfferActivity2.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -112,7 +110,7 @@ public class WriteOfferActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(WriteOfferActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WriteOfferActivity2.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -133,11 +131,11 @@ public class WriteOfferActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(WriteOfferActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WriteOfferActivity2.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,12 +145,12 @@ public class WriteOfferActivity extends AppCompatActivity {
                 String recordid = mDatabase.push().getKey();
 
                 //Create new offertoborrowpost object
-                OfferToBorrowPost newoffer = new OfferToBorrowPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
+                OfferToLendPost newreq = new OfferToLendPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
 
-                newoffer.setAgreementdesc(offerdescTxt.getText().toString().trim());
+                newreq.setRequestdesc(offerdescTxt.getText().toString().trim());
 
                 //Add post to database
-                mDatabase.child(recordid).setValue(newoffer);
+                mDatabase.child(recordid).setValue(newreq);
 
                 mDatabase.child(recordid).child("timestamp").setValue(ServerValue.TIMESTAMP);
 
@@ -162,9 +160,9 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
 
-                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may edit/delete the offer in the Records(Lending) tab", Toast.LENGTH_LONG).show();
+                Toast.makeText(WriteOfferActivity2.this, "Request Submitted! You may edit/delete the request in the Records(Borrowing) tab", Toast.LENGTH_LONG).show();
 
-                startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
+                startActivity(new Intent(WriteOfferActivity2.this, MainActivity.class));
                 finish();
 
             }
@@ -186,7 +184,7 @@ public class WriteOfferActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(WriteOfferActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(WriteOfferActivity2.this, LoginpageActivity.class));
                 finish();
                 break;
         }

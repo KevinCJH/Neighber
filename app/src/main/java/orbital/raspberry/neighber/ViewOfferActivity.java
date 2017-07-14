@@ -149,7 +149,10 @@ public class ViewOfferActivity extends AppCompatActivity {
 
                 final OfferToBorrowPost offer = offers.get(position);
 
-
+                Intent i = new Intent(ViewOfferActivity.this, AgreementActivity.class);
+                i.putExtra("ruserid", offer.getOwnerid());
+                i.putExtra("rofferid", offer.getRecordid());
+                startActivity(i);
 
             }
         });

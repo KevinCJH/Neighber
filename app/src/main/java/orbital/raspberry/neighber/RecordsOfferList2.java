@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class RecordsList extends ArrayAdapter<Post> {
+public class RecordsOfferList2 extends ArrayAdapter<OfferToBorrowPost> {
 
     private Activity context;
-    List<Post> posts;
+    List<OfferToBorrowPost> offers;
 
-    public RecordsList(Activity context, List<Post> posts) {
-        super(context, R.layout.layout_records_list, posts);
+    public RecordsOfferList2(Activity context, List<OfferToBorrowPost> offers) {
+        super(context, R.layout.layout_records_list, offers);
         this.context = context;
-        this.posts = posts;
+        this.offers = offers;
     }
 
     @Override
@@ -29,21 +29,21 @@ public class RecordsList extends ArrayAdapter<Post> {
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);
         TextView status = (TextView) listViewItem.findViewById(R.id.statusTxt);
 
-        Post post = posts.get(position);
-        itemname.setText(post.getItemname());
+        OfferToBorrowPost offer = offers.get(position);
+        itemname.setText(offer.getItemname());
 
-        switch(post.getStatus()){
+        switch(offer.getStatus()){
             case 1:
-                status.setText("Status: Pending Offers");
-                offernum.setText("Number of Offers: " + post.getRecordcount());
+                status.setText("Status: Pending Reply");
+                offernum.setText("Sent To: " + offer.getTargetname());
                 break;
             case 2:
-                status.setText("Status: Borrowing in Progress");
-                offernum.setText("Borrowing From: " + post.getOthername());
+                status.setText("Status: Lending in Progress");
+                offernum.setText("Lending To: " + offer.getTargetname());
                 break;
             case 3:
                 status.setText("Status: Returning in Progress");
-                offernum.setText("Returning To: " + post.getOthername());
+                offernum.setText("Returning From: " + offer.getTargetname());
                 break;
 
         }

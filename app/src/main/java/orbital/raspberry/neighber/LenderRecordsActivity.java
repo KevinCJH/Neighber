@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,17 +22,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
-public class BorrowerRecordsActivity extends AppCompatActivity {
+public class LenderRecordsActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private TextView borrowing, lending, history;
     private List<Post> posts;
-    private List<OfferToLendPost> offers;
+    private List<OfferToBorrowPost> offers;
     private ListView listViewRequests, listViewRequests2;
     private String userid;
     private int rrecordcount;
@@ -41,7 +38,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_borrowerrecord);
+        setContentView(R.layout.activity_lenderrecord);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -67,15 +64,16 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         borrowing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(LenderRecordsActivity.this, BorrowerRecordsActivity.class));
+                finish();
             }
         });
 
         lending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BorrowerRecordsActivity.this, LenderRecordsActivity.class));
-                finish();
+                //startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity2.class));
+               // finish();
             }
         });
 
@@ -90,7 +88,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity.class));
+                startActivity(new Intent(LenderRecordsActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -105,7 +103,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BorrowerRecordsActivity.this, AddNewActivity.class));
+                startActivity(new Intent(LenderRecordsActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -120,7 +118,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BorrowerRecordsActivity.this, ProfileActivity.class));
+                startActivity(new Intent(LenderRecordsActivity.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -142,8 +140,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                     //getting artist
                     Post post = postSnapshot.getValue(Post.class);
 
-                    //If post type is request aka 1
-                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() <= 3) {
+                    //If post type is offers aka 2
+                        if(post.getPosttype() == 2 && post.getUserid().toString().equals(userid) && post.getStatus() <= 3) {
 
                             //adding to the list
                             posts.add(post);
@@ -152,7 +150,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                RecordsList reqAdapter = new RecordsList(BorrowerRecordsActivity.this, posts);
+                RecordsList2 reqAdapter = new RecordsList2(LenderRecordsActivity.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -164,7 +162,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         });
 
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -177,7 +175,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
+                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
 
                     if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 3) {
 
@@ -188,7 +186,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                RecordsOfferList oAdapter = new RecordsOfferList(BorrowerRecordsActivity.this, offers);
+                RecordsOfferList2 oAdapter = new RecordsOfferList2(LenderRecordsActivity.this, offers);
                 //attaching adapter to the listview
                 listViewRequests2.setAdapter(oAdapter);
             }
@@ -208,9 +206,9 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                 //Status pending
                 if(post.getStatus() == 1) {
 
-                    CharSequence options[] = new CharSequence[]{"View Offer", "Update this Post", "Delete this Post"};
+                    CharSequence options[] = new CharSequence[]{"View Requests", "Update this Post", "Delete this Post"};
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
@@ -218,15 +216,16 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                             switch (pos) {
                                 case 0:
                                     if (post.getRecordcount() <= 0) {
-                                        Toast.makeText(BorrowerRecordsActivity.this, "No offers were made to you", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LenderRecordsActivity.this, "No requests were made to you", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Intent i = new Intent(BorrowerRecordsActivity.this, ViewOfferActivity.class);
-                                        i.putExtra("rpostid", post.getPostid());
-                                        startActivity(i);
+                                        //TODO
+                                        //Intent i = new Intent(LenderRecordsActivity.this, ViewOfferActivity.class);
+                                        //i.putExtra("rpostid", post.getPostid());
+                                        //startActivity(i);
                                     }
                                     break;
                                 case 1:
-                                    Intent i = new Intent(BorrowerRecordsActivity.this, EditPostActivity.class);
+                                    Intent i = new Intent(LenderRecordsActivity.this, EditPostActivity.class);
                                     i.putExtra("rpostid", post.getPostid());
                                     startActivity(i);
                                     break;
@@ -234,7 +233,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).removeValue();
                                     deleteRecords(post.getPostid());
                                     posts.remove(position);
-                                    Toast.makeText(BorrowerRecordsActivity.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LenderRecordsActivity.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
                                     break;
                             }
                         }
@@ -246,22 +245,16 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 else if(post.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"Return Item", "View borrower profile"};
+                    CharSequence options[] = new CharSequence[]{"View lendee profile"};
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
-                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity.class);
-                                    i1.putExtra("agreementid", post.getAgreementid());
-                                    i1.putExtra("postid", post.getPostid());
-                                    startActivity(i1);
-                                    break;
-                                case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    Intent i2 = new Intent(LenderRecordsActivity.this, ViewProfileActivity.class);
                                     i2.putExtra("ruserid", post.getOtherid());
                                     startActivity(i2);
                                     break;
@@ -280,7 +273,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final OfferToLendPost offer = offers.get(position);
+                final OfferToBorrowPost offer = offers.get(position);
 
                 final DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference("posts");
                 pDatabase.child(offer.getPostid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -293,34 +286,34 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(BorrowerRecordsActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LenderRecordsActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
                     }
                 });
 
                 //Status pending
                 if(offer.getStatus() == 1) {
 
-                    CharSequence options[] = new CharSequence[]{"View Post", "Delete this Request"};
+                    CharSequence options[] = new CharSequence[]{"View Post", "Delete this Offer"};
                     final int newnumrecord;
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
-                                    Intent i = new Intent(BorrowerRecordsActivity.this, PostActivity.class);
+                                    Intent i = new Intent(LenderRecordsActivity.this, PostActivity.class);
                                     i.putExtra("rpostid", offer.getPostid());
                                     i.putExtra("ruserid", offer.getTargetid());
                                     startActivity(i);
                                     break;
                                 case 1:
-                                    FirebaseDatabase.getInstance().getReference("offertolend").child(offer.getRecordid()).removeValue();
+                                    FirebaseDatabase.getInstance().getReference("offertoborrow").child(offer.getRecordid()).removeValue();
                                     rrecordcount -= 1;
                                     FirebaseDatabase.getInstance().getReference("posts").child(offer.getPostid()).child("recordcount").setValue(rrecordcount);
                                     offers.remove(position);
-                                    Toast.makeText(BorrowerRecordsActivity.this, "Request has been deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LenderRecordsActivity.this, "Offer has been deleted", Toast.LENGTH_SHORT).show();
                                     break;
                             }
                         }
@@ -332,22 +325,16 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 else if(offer.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"Return Item", "View borrower profile"};
+                    CharSequence options[] = new CharSequence[]{"View lendee profile"};
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
-                                    /*Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity.class);
-                                    i1.putExtra("agreementid", offer.getAgreementid());
-                                    i1.putExtra("postid", offer.getPostid());
-                                    startActivity(i1); */
-                                    break;
-                                case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    Intent i2 = new Intent(LenderRecordsActivity.this, ViewProfileActivity.class);
                                     i2.putExtra("ruserid", offer.getTargetid());
                                     startActivity(i2);
                                     break;
@@ -367,7 +354,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
     public void deleteRecords(final String postid){
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -376,12 +363,12 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
+                    OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
 
                     String recordid = offer.getRecordid();
 
                     if(offer.getPostid().equals(postid)){
-                        FirebaseDatabase.getInstance().getReference("offertoborrow").child(recordid).removeValue();
+                        FirebaseDatabase.getInstance().getReference("offertolend").child(recordid).removeValue();
                     }
 
                 }
@@ -412,7 +399,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(BorrowerRecordsActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(LenderRecordsActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }

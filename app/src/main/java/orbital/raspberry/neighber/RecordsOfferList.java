@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class RecordsList extends ArrayAdapter<Post> {
+public class RecordsOfferList extends ArrayAdapter<OfferToLendPost> {
 
     private Activity context;
-    List<Post> posts;
+    List<OfferToLendPost> offers;
 
-    public RecordsList(Activity context, List<Post> posts) {
-        super(context, R.layout.layout_records_list, posts);
+    public RecordsOfferList(Activity context, List<OfferToLendPost> offers) {
+        super(context, R.layout.layout_records_list, offers);
         this.context = context;
-        this.posts = posts;
+        this.offers = offers;
     }
 
     @Override
@@ -29,21 +29,21 @@ public class RecordsList extends ArrayAdapter<Post> {
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);
         TextView status = (TextView) listViewItem.findViewById(R.id.statusTxt);
 
-        Post post = posts.get(position);
-        itemname.setText(post.getItemname());
+        OfferToLendPost offer = offers.get(position);
+        itemname.setText(offer.getItemname());
 
-        switch(post.getStatus()){
+        switch(offer.getStatus()){
             case 1:
-                status.setText("Status: Pending Offers");
-                offernum.setText("Number of Offers: " + post.getRecordcount());
+                status.setText("Status: Pending Reply");
+                offernum.setText("Sent To: " + offer.getTargetname());
                 break;
             case 2:
                 status.setText("Status: Borrowing in Progress");
-                offernum.setText("Borrowing From: " + post.getOthername());
+                offernum.setText("Borrowing From: " + offer.getTargetname());
                 break;
             case 3:
                 status.setText("Status: Returning in Progress");
-                offernum.setText("Returning To: " + post.getOthername());
+                offernum.setText("Returning To: " + offer.getTargetname());
                 break;
 
         }

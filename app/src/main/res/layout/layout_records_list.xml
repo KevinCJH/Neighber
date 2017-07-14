@@ -13,14 +13,14 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:text=""
+        android:text="Status"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-        android:id="@+id/desc1"
+        android:id="@+id/statusTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:text="Desc"
+        android:text=""
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:id="@+id/offernumTxt"
         android:layout_width="match_parent"

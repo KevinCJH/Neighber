@@ -17,9 +17,8 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_borrowing"
-            android:drawableTop="@drawable/ic_arrow_downward_select_24dp"
+            android:drawableTop="@drawable/ic_arrow_downward_black_24dp"
             android:text="Borrowing"
-            android:textColor="@color/colorPrimary"
             android:textAlignment="center"
             android:onClick="onClick"
             android:clickable="true"
@@ -29,7 +28,8 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_lending"
-            android:drawableTop="@drawable/ic_arrow_upward_black_24dp"
+            android:drawableTop="@drawable/ic_arrow_upward_select_24dp"
+            android:textColor="@color/colorPrimary"
             android:text="Lending"
             android:textAlignment="center"
             android:onClick="onClick"
@@ -124,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:text="Your Requests(Post):"
+        android:text="Your Offers(Post):"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:layout_below="@+id/linearLayout4"
@@ -143,7 +143,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:text="Your Requests(Sent):"
+        android:text="Your Offers(Sent):"
         android:layout_below="@+id/listRequest"
         android:id="@+id/textViewPost2" />
 

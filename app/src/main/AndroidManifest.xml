@@ -38,8 +38,12 @@
         <activity android:name=".MainActivity2" />
         <activity android:name=".BorrowerRecordsActivity" />
         <activity android:name=".WriteOfferActivity" />
+        <activity android:name=".WriteOfferActivity2" />
         <activity android:name=".EditPostActivity" />
         <activity android:name=".ViewOfferActivity" />
+        <activity android:name=".AgreementActivity" />
+        <activity android:name=".ReturnAgreementActivity" />
+        <activity android:name=".LenderRecordsActivity" />
         <activity android:name=".ChatActivity"></activity>
     </application>
 

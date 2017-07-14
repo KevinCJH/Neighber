@@ -1,11 +1,10 @@
 package orbital.raspberry.neighber;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,39 +19,36 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PostActivity extends AppCompatActivity {
+public class AgreementActivity extends AppCompatActivity {
 
-    private String ruserid, rpostid, ruserdisplayname;
-    private TextView rusernametxt, itemnametxt, postdesctxt;
+    private String ruserid, rofferid, ruserdisplayname;
+    private TextView rusernametxt, offerdesctxt;
     private CircleImageView ruserimg;
     private TextView browse, records, addnew, chat, profile;
-    private Button viewprofile, writeoffer;
-    private int posttype;
+    private Button viewprofile, acceptoffer;
+    private String postid;
 
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_agreement);
 
         //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
-        rpostid = i.getStringExtra("rpostid");
+        rofferid = i.getStringExtra("rofferid");
 
         rusernametxt = (TextView) findViewById(R.id.rusernameTxt);
-        itemnametxt = (TextView) findViewById(R.id.itemnameTxt);
-        postdesctxt = (TextView) findViewById(R.id.postdescTxt);
+        offerdesctxt = (TextView) findViewById(R.id.offerdesc);
         ruserimg = (CircleImageView) findViewById(R.id.imgView);
         viewprofile = (Button) findViewById(R.id.viewprofile);
-        writeoffer = (Button) findViewById(R.id.sendoffer);
+        acceptoffer = (Button) findViewById(R.id.acceptoffer);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -64,7 +60,7 @@ public class PostActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, MainActivity.class));
+                startActivity(new Intent(AgreementActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -72,7 +68,7 @@ public class PostActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -80,7 +76,7 @@ public class PostActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, AddNewActivity.class));
+                startActivity(new Intent(AgreementActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -95,7 +91,7 @@ public class PostActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostActivity.this, ProfileActivity.class));
+                startActivity(new Intent(AgreementActivity.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -104,10 +100,6 @@ public class PostActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
-
-        if(auth.getCurrentUser().getUid().toString().equals(ruserid)){
-            writeoffer.setVisibility(View.GONE);
-        }
 
         final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
         uDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -128,33 +120,26 @@ public class PostActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(PostActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AgreementActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
-        mDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Post post = dataSnapshot.getValue(Post.class);
+                OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
 
-                //Display post item name and description
+                //Display description
+                offerdesctxt.setText(offer.getAgreementdesc());
 
-                if(post.getPosttype() == 1) {
-                    itemnametxt.setText("I need " + post.getItemname());
-                }else {
-                    itemnametxt.setText("I can lend " + post.getItemname());
-                    writeoffer.setText("Write Request");
-                }
-                postdesctxt.setText(post.getPostdesc());
-
-                posttype = post.getPosttype();
+                postid = offer.getPostid();
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(PostActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AgreementActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -163,7 +148,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(PostActivity.this, ViewProfileActivity.class);
+                Intent i = new Intent(AgreementActivity.this, ViewProfileActivity.class);
                 //Pass info to next activity
                 i.putExtra("ruserid", ruserid);
                 startActivity(i);
@@ -171,30 +156,45 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        writeoffer.setOnClickListener(new View.OnClickListener() {
+        acceptoffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(posttype == 1) {
-                    Intent i = new Intent(PostActivity.this, WriteOfferActivity.class);
-                    //Pass info to next activity
-                    i.putExtra("ruserid", ruserid);
-                    i.putExtra("rpostid", rpostid);
-                    i.putExtra("ruserdisplayname", ruserdisplayname);
-                    startActivity(i);
-                }else if(posttype == 2){
-                    Intent i = new Intent(PostActivity.this, WriteOfferActivity2.class);
-                    //Pass info to next activity
-                    i.putExtra("ruserid", ruserid);
-                    i.putExtra("rpostid", rpostid);
-                    i.putExtra("ruserdisplayname", ruserdisplayname);
-                    startActivity(i);
-                }
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                confirmAgreement();
+                                Toast.makeText(AgreementActivity.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(AgreementActivity.this, MainActivity.class));
+                                finish();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(AgreementActivity.this);
+                builder.setMessage("Please ensure that you have received the correct item and in good condition").setPositiveButton("Confirm", dialogClickListener)
+                        .setNegativeButton("Cancel", dialogClickListener).show();
+
 
             }
         });
 
 
+    }
+
+    public void confirmAgreement(){
+        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
+        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
+        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
+        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
     }
 
     //////////////////Top Right Menu//////////////////////
@@ -211,7 +211,7 @@ public class PostActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(PostActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(AgreementActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }

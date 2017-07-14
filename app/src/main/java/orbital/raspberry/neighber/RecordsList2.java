@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class RecordsList extends ArrayAdapter<Post> {
+public class RecordsList2 extends ArrayAdapter<Post> {
 
     private Activity context;
     List<Post> posts;
 
-    public RecordsList(Activity context, List<Post> posts) {
+    public RecordsList2(Activity context, List<Post> posts) {
         super(context, R.layout.layout_records_list, posts);
         this.context = context;
         this.posts = posts;
@@ -34,16 +34,16 @@ public class RecordsList extends ArrayAdapter<Post> {
 
         switch(post.getStatus()){
             case 1:
-                status.setText("Status: Pending Offers");
-                offernum.setText("Number of Offers: " + post.getRecordcount());
+                status.setText("Status: Pending Requests");
+                offernum.setText("Number of Requests: " + post.getRecordcount());
                 break;
             case 2:
-                status.setText("Status: Borrowing in Progress");
-                offernum.setText("Borrowing From: " + post.getOthername());
+                status.setText("Status: Lending in Progress");
+                offernum.setText("Lending To: " + post.getOthername());
                 break;
             case 3:
                 status.setText("Status: Returning in Progress");
-                offernum.setText("Returning To: " + post.getOthername());
+                offernum.setText("Returning From: " + post.getOthername());
                 break;
 
         }
