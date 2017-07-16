@@ -72,16 +72,14 @@ public class LenderRecordsActivity extends AppCompatActivity {
         lending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity2.class));
-               // finish();
             }
         });
 
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity2.class));
-               // finish();
+                startActivity(new Intent(LenderRecordsActivity.this, HistoryRecordsActivity.class));
+                finish();
             }
         });
 
@@ -141,7 +139,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
                     Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is offers aka 2
-                        if(post.getPosttype() == 2 && post.getUserid().toString().equals(userid) && post.getStatus() <= 3) {
+                        if(post.getPosttype() == 2 && post.getUserid().toString().equals(userid) && post.getStatus() <= 4) {
 
                             //adding to the list
                             posts.add(post);
@@ -218,10 +216,9 @@ public class LenderRecordsActivity extends AppCompatActivity {
                                     if (post.getRecordcount() <= 0) {
                                         Toast.makeText(LenderRecordsActivity.this, "No requests were made to you", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        //TODO
-                                        //Intent i = new Intent(LenderRecordsActivity.this, ViewOfferActivity.class);
-                                        //i.putExtra("rpostid", post.getPostid());
-                                        //startActivity(i);
+                                        Intent i = new Intent(LenderRecordsActivity.this, ViewRequestActivity.class);
+                                        i.putExtra("rpostid", post.getPostid());
+                                        startActivity(i);
                                     }
                                     break;
                                 case 1:
@@ -254,6 +251,35 @@ public class LenderRecordsActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
+                                    Intent i2 = new Intent(LenderRecordsActivity.this, ViewProfileActivity.class);
+                                    i2.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i2);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
+                //Status returning
+
+                else if(post.getStatus() == 4) {
+
+                    CharSequence options[] = new CharSequence[]{"View return agreement", "View lendee profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i = new Intent(LenderRecordsActivity.this, ReturnAgreementAcceptActivity2.class);
+                                    i.putExtra("rpostid", post.getPostid());
+                                    i.putExtra("rofferid", post.getAgreementid());
+                                    startActivity(i);
+                                    break;
+                                case 1:
                                     Intent i2 = new Intent(LenderRecordsActivity.this, ViewProfileActivity.class);
                                     i2.putExtra("ruserid", post.getOtherid());
                                     startActivity(i2);
@@ -344,6 +370,34 @@ public class LenderRecordsActivity extends AppCompatActivity {
                     builder.show();
                 }
 
+                //Status returning
+
+                else if(offer.getStatus() == 3) {
+
+                    CharSequence options[] = new CharSequence[]{"View return agreement", "View lendee profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i = new Intent(LenderRecordsActivity.this, ReturnAgreementAcceptActivity.class);
+                                    i.putExtra("rpostid", offer.getPostid());
+                                    i.putExtra("rofferid", offer.getRecordid());
+                                    startActivity(i);
+                                    break;
+                                case 1:
+                                    Intent i2 = new Intent(LenderRecordsActivity.this, ViewProfileActivity.class);
+                                    i2.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i2);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
 
             }
         });

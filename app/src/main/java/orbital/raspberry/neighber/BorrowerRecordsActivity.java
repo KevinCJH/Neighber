@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,9 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class BorrowerRecordsActivity extends AppCompatActivity {
 
@@ -82,8 +79,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity2.class));
-               // finish();
+                startActivity(new Intent(BorrowerRecordsActivity.this, HistoryRecordsActivity.class));
+                finish();
             }
         });
 
@@ -179,7 +176,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                     //getting artist
                     OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
 
-                    if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 3) {
+                    if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 4) {
 
                         //adding to the list
                         offers.add(offer);
@@ -328,9 +325,38 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                     builder.show();
                 }
 
-                //Status borrowing
+                //Status Agreement
 
                 else if(offer.getStatus() == 2) {
+
+                    CharSequence options[] = new CharSequence[]{"View Agreement", "View borrower profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, AgreementActivity2.class);
+                                    i1.putExtra("ruserid", offer.getTargetid());
+                                    i1.putExtra("rofferid", offer.getRecordid());
+                                    startActivity(i1);
+                                    break;
+                                case 1:
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i2.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i2);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
+                //Status borrowing
+
+                else if(offer.getStatus() == 3) {
 
                     CharSequence options[] = new CharSequence[]{"Return Item", "View borrower profile"};
 
@@ -341,10 +367,10 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
-                                    /*Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity.class);
-                                    i1.putExtra("agreementid", offer.getAgreementid());
+                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity2.class);
+                                    i1.putExtra("agreementid", offer.getRecordid());
                                     i1.putExtra("postid", offer.getPostid());
-                                    startActivity(i1); */
+                                    startActivity(i1);
                                     break;
                                 case 1:
                                     Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);

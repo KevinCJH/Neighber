@@ -14,13 +14,12 @@
         android:background="@color/grey"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout3">
+        android:id="@+id/linearLayout5">
 
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_select_24dp"
-            android:textColor="@color/colorPrimary"
+            android:drawableTop="@drawable/ic_search_black_24dp"
             android:text="Browse"
             android:textAlignment="center"
             android:onClick="onClick"
@@ -31,8 +30,9 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_black_24dp"
+            android:drawableTop="@drawable/ic_library_books_select_24dp"
             android:text="Records"
+            android:textColor="@color/colorPrimary"
             android:textAlignment="center"
             android:onClick="onClick"
             android:clickable="true"
@@ -74,45 +74,21 @@
 
     </LinearLayout>
 
-
     <TextView
-        android:id="@+id/infotxt"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:inputType="textPersonName"
-        android:hint="Agreement and Condition of Item"
-        android:textStyle="bold"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/posttype"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:id="@+id/offerdesc"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="5"
-        android:textSize="24dp"
-        android:lines="3"
-        android:hint="Example: This item has some scratches on the side, but is working perfectly. Expect item to be return in the same condition"
-        android:inputType="textMultiLine"
-        android:layout_below="@+id/infotxt"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
-
-    <Button
-        style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send Offer"
-        android:id="@+id/submitRequest"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:layout_above="@+id/linearLayout3"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:text="Requested by:"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:id="@+id/textView2" />
+
+    <ListView
+        android:id="@+id/listRequest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
-
-
+        android:layout_above="@+id/linearLayout5"
+        android:layout_below="@+id/textView2" />
 
 </RelativeLayout>

@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,26 +17,33 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
-public class ReturnAgreementActivity extends AppCompatActivity {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    private String agreementid, postid;
+public class RateUserActivity extends AppCompatActivity {
+
+    private CircleImageView imgView;
+    private TextView displayname;
+    private RatingBar ratingbar;
+    private Button rateuser;
     private TextView browse, records, addnew, chat, profile;
-    private Button submitBtn;
-    private EditText returndesc;
+    private String ruserid;
+    private String postid;
+    private double userrating;
+    private int totalrater;
 
+    //creating reference to firebase storage
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_return_agreement);
+        setContentView(R.layout.activity_rateuser);
 
-        //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
-        agreementid = i.getStringExtra("agreementid");
+        ruserid = i.getStringExtra("ruserid");
         postid = i.getStringExtra("postid");
 
         //////////////Navigations/////////////
@@ -49,7 +56,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, MainActivity.class));
+                startActivity(new Intent(RateUserActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -57,7 +64,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(RateUserActivity.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -65,7 +72,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, AddNewActivity.class));
+                startActivity(new Intent(RateUserActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -80,37 +87,69 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, ProfileActivity.class));
+                startActivity(new Intent(RateUserActivity.this, ProfileActivity.class));
                 finish();
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
-        submitBtn = (Button)findViewById(R.id.submitRequest);
-        returndesc = (EditText)findViewById(R.id.returndesc);
+
+        imgView = (CircleImageView) findViewById(R.id.imgView);
+        displayname = (TextView) findViewById(R.id.displayname);
+        ratingbar = (RatingBar) findViewById(R.id.rating);
+        rateuser = (Button) findViewById(R.id.submitRating);
+
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        mDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                //Set profile picture of user
+                String imageUri = user.getImgUri();
+                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(imgView);
+
+                //Fill up profile details
+                displayname.setText(user.getDisplayname());
+
+                userrating = user.getRatings();
+
+                totalrater = user.getTotalvote();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(RateUserActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rateuser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                double newRate = ratingbar.getRating();
 
-                String returnagreement = returndesc.getText().toString().trim();
+                int newtotalrater = totalrater + 1;
 
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(agreementid).child("returnagreementdesc").setValue(returnagreement);
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(agreementid).child("status").setValue(3);
-                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(3);
+                userrating = ((userrating * totalrater) + newRate) / newtotalrater;
 
+                FirebaseDatabase.getInstance().getReference("users").child(ruserid).child("ratings").setValue(userrating);
+                FirebaseDatabase.getInstance().getReference("users").child(ruserid).child("totalvote").setValue(newtotalrater);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("rated").setValue(1);
 
-                Toast.makeText(ReturnAgreementActivity.this, "The user has been informed that you wish to return the loaned item", Toast.LENGTH_LONG).show();
+                Toast.makeText(RateUserActivity.this, "Rating has been submitted", Toast.LENGTH_SHORT).show();
 
                 finish();
 
             }
         });
+
 
     }
 
@@ -128,7 +167,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(ReturnAgreementActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(RateUserActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }
@@ -136,4 +175,5 @@ public class ReturnAgreementActivity extends AppCompatActivity {
     }
 
     //////////////////End top menu////////////////////////
+
 }

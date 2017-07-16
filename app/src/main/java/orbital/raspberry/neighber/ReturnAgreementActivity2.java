@@ -13,14 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
-public class ReturnAgreementActivity extends AppCompatActivity {
+public class ReturnAgreementActivity2 extends AppCompatActivity {
 
     private String agreementid, postid;
     private TextView browse, records, addnew, chat, profile;
@@ -49,7 +44,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, MainActivity.class));
+                startActivity(new Intent(ReturnAgreementActivity2.this, MainActivity.class));
                 finish();
             }
         });
@@ -57,7 +52,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ReturnAgreementActivity2.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -65,7 +60,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ReturnAgreementActivity2.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -80,7 +75,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReturnAgreementActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ReturnAgreementActivity2.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -100,12 +95,11 @@ public class ReturnAgreementActivity extends AppCompatActivity {
 
                 String returnagreement = returndesc.getText().toString().trim();
 
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(agreementid).child("returnagreementdesc").setValue(returnagreement);
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(agreementid).child("status").setValue(3);
-                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(3);
+                FirebaseDatabase.getInstance().getReference("offertolend").child(agreementid).child("returnagreementdesc").setValue(returnagreement);
+                FirebaseDatabase.getInstance().getReference("offertolend").child(agreementid).child("status").setValue(4);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(4);
 
-
-                Toast.makeText(ReturnAgreementActivity.this, "The user has been informed that you wish to return the loaned item", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReturnAgreementActivity2.this, "The user has been informed that you wish to return the loaned item", Toast.LENGTH_LONG).show();
 
                 finish();
 
@@ -128,7 +122,7 @@ public class ReturnAgreementActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(ReturnAgreementActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(ReturnAgreementActivity2.this, LoginpageActivity.class));
                 finish();
                 break;
         }

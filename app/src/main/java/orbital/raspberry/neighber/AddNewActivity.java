@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -100,6 +101,20 @@ public class AddNewActivity extends AppCompatActivity {
 
         final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
         final String userid = currentFirebaseUser.getUid();
+
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+               if(position == 0){
+                   postdescTxt.setHint("Add description for your Request");
+                   submitBtn.setText("Submit Request");
+               }else{
+                   postdescTxt.setHint("Add description for your Offer");
+                   submitBtn.setText("Submit Offer");
+               }
+            }
+        });
+
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 

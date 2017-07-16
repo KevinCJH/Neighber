@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +24,11 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AgreementActivity extends AppCompatActivity {
+public class ViewRequestSentActivity extends AppCompatActivity {
 
     private String ruserid, rofferid, ruserdisplayname;
-    private TextView rusernametxt, offerdesctxt;
+    private TextView rusernametxt, requestdesctxt ;
+    private EditText offerdesctxt;
     private CircleImageView ruserimg;
     private TextView browse, records, addnew, chat, profile;
     private Button viewprofile, acceptoffer;
@@ -37,7 +39,7 @@ public class AgreementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agreement);
+        setContentView(R.layout.activity_request_sent_view);
 
         //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
@@ -45,10 +47,11 @@ public class AgreementActivity extends AppCompatActivity {
         rofferid = i.getStringExtra("rofferid");
 
         rusernametxt = (TextView) findViewById(R.id.rusernameTxt);
-        offerdesctxt = (TextView) findViewById(R.id.offerdesc);
+        offerdesctxt = (EditText) findViewById(R.id.offerdesc);
         ruserimg = (CircleImageView) findViewById(R.id.imgView);
         viewprofile = (Button) findViewById(R.id.viewprofile);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
+        requestdesctxt = (TextView) findViewById(R.id.requestdesc);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -60,7 +63,7 @@ public class AgreementActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, MainActivity.class));
+                startActivity(new Intent(ViewRequestSentActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -68,7 +71,7 @@ public class AgreementActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ViewRequestSentActivity.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -76,7 +79,7 @@ public class AgreementActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ViewRequestSentActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -91,7 +94,7 @@ public class AgreementActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ViewRequestSentActivity.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -120,18 +123,18 @@ public class AgreementActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AgreementActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewRequestSentActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
+                OfferToLendPost offer = dataSnapshot.getValue(OfferToLendPost.class);
 
                 //Display description
-                offerdesctxt.setText(offer.getAgreementdesc());
+                requestdesctxt.setText(offer.getRequestdesc());
 
                 postid = offer.getPostid();
 
@@ -139,7 +142,7 @@ public class AgreementActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AgreementActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewRequestSentActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -148,7 +151,7 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(AgreementActivity.this, ViewProfileActivity.class);
+                Intent i = new Intent(ViewRequestSentActivity.this, ViewProfileActivity.class);
                 //Pass info to next activity
                 i.putExtra("ruserid", ruserid);
                 startActivity(i);
@@ -160,45 +163,22 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                //Yes button clicked
-                                confirmAgreement();
-                                Toast.makeText(AgreementActivity.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
-                                finish();
-                                break;
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
+                FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("agreementdesc").setValue(offerdesctxt.getText().toString().trim());
+                FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("status").setValue(2);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
 
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
-                        }
-                    }
-                };
+                Toast.makeText(ViewRequestSentActivity.this, "Your agreement has been sent to the user", Toast.LENGTH_SHORT).show();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AgreementActivity.this);
-                builder.setMessage("Please ensure that you have received the correct item and in good condition").setPositiveButton("Confirm", dialogClickListener)
-                        .setNegativeButton("Cancel", dialogClickListener).show();
-
+                startActivity(new Intent(ViewRequestSentActivity.this, LenderRecordsActivity.class));
+                finish();
 
             }
         });
 
 
-    }
-
-    public void confirmAgreement(){
-        String agreement = offerdesctxt.getText().toString().trim();
-
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
     }
 
     //////////////////Top Right Menu//////////////////////
@@ -215,7 +195,7 @@ public class AgreementActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(AgreementActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(ViewRequestSentActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }

@@ -23,31 +23,26 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AgreementActivity extends AppCompatActivity {
+public class ReturnAgreementAcceptActivity extends AppCompatActivity {
 
-    private String ruserid, rofferid, ruserdisplayname;
-    private TextView rusernametxt, offerdesctxt;
-    private CircleImageView ruserimg;
+    private String rofferid, rpostid;
+    private TextView offerdesctxt;
     private TextView browse, records, addnew, chat, profile;
-    private Button viewprofile, acceptoffer;
-    private String postid;
+    private Button acceptoffer;
 
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agreement);
+        setContentView(R.layout.activity_return_agreement_accept);
 
         //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
-        ruserid = i.getStringExtra("ruserid");
+        rpostid = i.getStringExtra("rpostid");
         rofferid = i.getStringExtra("rofferid");
 
-        rusernametxt = (TextView) findViewById(R.id.rusernameTxt);
         offerdesctxt = (TextView) findViewById(R.id.offerdesc);
-        ruserimg = (CircleImageView) findViewById(R.id.imgView);
-        viewprofile = (Button) findViewById(R.id.viewprofile);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
 
         //////////////Navigations/////////////
@@ -60,7 +55,7 @@ public class AgreementActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, MainActivity.class));
+                startActivity(new Intent(ReturnAgreementAcceptActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -68,7 +63,7 @@ public class AgreementActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ReturnAgreementAcceptActivity.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -76,7 +71,7 @@ public class AgreementActivity extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ReturnAgreementAcceptActivity.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -91,7 +86,7 @@ public class AgreementActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ReturnAgreementAcceptActivity.this, ProfileActivity.class));
                 finish();
             }
         });
@@ -101,28 +96,6 @@ public class AgreementActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-        uDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-
-                //Display profile picture of user
-                String imageUri = user.getImgUri();
-                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
-
-                //Display user name
-                rusernametxt.setText(user.getDisplayname());
-
-                ruserdisplayname = user.getDisplayname();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AgreementActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -131,30 +104,16 @@ public class AgreementActivity extends AppCompatActivity {
                 OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
 
                 //Display description
-                offerdesctxt.setText(offer.getAgreementdesc());
-
-                postid = offer.getPostid();
+                offerdesctxt.setText(offer.getReturnagreementdesc());
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AgreementActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ReturnAgreementAcceptActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
-
-        viewprofile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(AgreementActivity.this, ViewProfileActivity.class);
-                //Pass info to next activity
-                i.putExtra("ruserid", ruserid);
-                startActivity(i);
-
-            }
-        });
 
         acceptoffer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,8 +126,8 @@ public class AgreementActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
                                 confirmAgreement();
-                                Toast.makeText(AgreementActivity.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
+                                Toast.makeText(ReturnAgreementAcceptActivity.this, "Item has been returned to you successfully", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(ReturnAgreementAcceptActivity.this, LenderRecordsActivity.class));
                                 finish();
                                 break;
 
@@ -179,8 +138,8 @@ public class AgreementActivity extends AppCompatActivity {
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AgreementActivity.this);
-                builder.setMessage("Please ensure that you have received the correct item and in good condition").setPositiveButton("Confirm", dialogClickListener)
+                AlertDialog.Builder builder = new AlertDialog.Builder(ReturnAgreementAcceptActivity.this);
+                builder.setMessage("Please ensure that item is returned to you in good condition").setPositiveButton("Confirm", dialogClickListener)
                         .setNegativeButton("Cancel", dialogClickListener).show();
 
 
@@ -193,12 +152,9 @@ public class AgreementActivity extends AppCompatActivity {
     public void confirmAgreement(){
         String agreement = offerdesctxt.getText().toString().trim();
 
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("posts").child(rpostid).child("status").setValue(4);
+        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(4);
+        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("returnagreementdesc").setValue(agreement);
     }
 
     //////////////////Top Right Menu//////////////////////
@@ -215,7 +171,7 @@ public class AgreementActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(AgreementActivity.this, LoginpageActivity.class));
+                startActivity(new Intent(ReturnAgreementAcceptActivity.this, LoginpageActivity.class));
                 finish();
                 break;
         }

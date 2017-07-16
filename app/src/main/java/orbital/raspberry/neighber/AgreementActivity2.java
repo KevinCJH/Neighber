@@ -1,5 +1,7 @@
 package orbital.raspberry.neighber;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,29 +19,30 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
-public class WriteOfferActivity2 extends AppCompatActivity {
+public class AgreementActivity2 extends AppCompatActivity {
 
-    private String ruserid, rpostid, ritemname, ruserdisplayname;
+    private String ruserid, rofferid, ruserdisplayname;
+    private EditText offerdesctxt;
     private TextView browse, records, addnew, chat, profile;
-    private int rrecordcount;
-    private Button submitBtn;
-    private EditText offerdescTxt;
+    private Button acceptoffer;
+    private String postid;
 
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_offer2);
+        setContentView(R.layout.activity_agreement2);
 
         //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
-        rpostid = i.getStringExtra("rpostid");
-        ruserdisplayname = i.getStringExtra("ruserdisplayname");
+        rofferid = i.getStringExtra("rofferid");
+
+        offerdesctxt = (EditText) findViewById(R.id.offerdesc);
+        acceptoffer = (Button) findViewById(R.id.acceptoffer);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -51,7 +54,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity2.this, MainActivity.class));
+                startActivity(new Intent(AgreementActivity2.this, MainActivity.class));
                 finish();
             }
         });
@@ -59,7 +62,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity2.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(AgreementActivity2.this, BorrowerRecordsActivity.class));
                 finish();
             }
         });
@@ -67,7 +70,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity2.this, AddNewActivity.class));
+                startActivity(new Intent(AgreementActivity2.this, AddNewActivity.class));
                 finish();
             }
         });
@@ -82,92 +85,92 @@ public class WriteOfferActivity2 extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WriteOfferActivity2.this, ProfileActivity.class));
+                startActivity(new Intent(AgreementActivity2.this, ProfileActivity.class));
                 finish();
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
-        submitBtn = (Button)findViewById(R.id.submitRequest);
-        offerdescTxt = (EditText)findViewById(R.id.offerdesc);
-
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        final String userid = auth.getCurrentUser().getUid();
-
-        final String[] userdisplayname = new String[1];
-
         final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-        uDatabase.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+        uDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                userdisplayname[0] = user.getDisplayname();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(WriteOfferActivity2.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        final DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference("posts");
-        pDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Post post = dataSnapshot.getValue(Post.class);
-
-                ritemname = post.getItemname();
-
-                rrecordcount = post.getRecordcount();
-
-                //Toast.makeText(WriteOfferActivity.this, "Count: " + rrecordcount, Toast.LENGTH_SHORT).show();
+                ruserdisplayname = user.getDisplayname();
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(WriteOfferActivity2.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AgreementActivity2.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                OfferToLendPost offer = dataSnapshot.getValue(OfferToLendPost.class);
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+                //Display description
+                offerdesctxt.setText(offer.getAgreementdesc());
+
+                postid = offer.getPostid();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(AgreementActivity2.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        acceptoffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // get unique post id from firebase
-                String recordid = mDatabase.push().getKey();
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                confirmAgreement();
+                                Toast.makeText(AgreementActivity2.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(AgreementActivity2.this, BorrowerRecordsActivity.class));
+                                finish();
+                                break;
 
-                //Create new offertoborrowpost object
-                OfferToLendPost newreq = new OfferToLendPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
 
-                newreq.setRequestdesc(offerdescTxt.getText().toString().trim());
+                AlertDialog.Builder builder = new AlertDialog.Builder(AgreementActivity2.this);
+                builder.setMessage("Please ensure that you have received the correct item and in good condition").setPositiveButton("Confirm", dialogClickListener)
+                        .setNegativeButton("Cancel", dialogClickListener).show();
 
-                //Add post to database
-                mDatabase.child(recordid).setValue(newreq);
-
-                mDatabase.child(recordid).child("timestamp").setValue(ServerValue.TIMESTAMP);
-
-                //Update number of offers made to the post
-
-                rrecordcount += 1;
-
-                pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
-
-                Toast.makeText(WriteOfferActivity2.this, "Request Submitted! You may view/delete the request in the Records(Borrowing) tab", Toast.LENGTH_LONG).show();
-
-                startActivity(new Intent(WriteOfferActivity2.this, MainActivity.class));
-                finish();
 
             }
         });
 
+
+    }
+
+    public void confirmAgreement(){
+        String agreement = offerdesctxt.getText().toString().trim();
+
+        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(3);
+        FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("status").setValue(3);
+        FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("agreementdesc").setValue(agreement);
     }
 
     //////////////////Top Right Menu//////////////////////
@@ -184,7 +187,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(WriteOfferActivity2.this, LoginpageActivity.class));
+                startActivity(new Intent(AgreementActivity2.this, LoginpageActivity.class));
                 finish();
                 break;
         }
@@ -192,4 +195,5 @@ public class WriteOfferActivity2 extends AppCompatActivity {
     }
 
     //////////////////End top menu////////////////////////
+
 }

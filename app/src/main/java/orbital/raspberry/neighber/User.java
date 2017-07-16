@@ -7,6 +7,7 @@ public class User {
     private String email;
     private double ratings;
     private String imguri;
+    private int totalvote;
 
     public User(){}
 
@@ -17,6 +18,7 @@ public class User {
         this.displayname = displayname;
         ratings = 0;
         imguri = "";
+        totalvote = 0;
 
     }
 
@@ -37,4 +39,8 @@ public class User {
     }
 
     public String getImgUri() { return imguri; }
+
+    public int getTotalvote(){
+        return totalvote;
+    }
 }

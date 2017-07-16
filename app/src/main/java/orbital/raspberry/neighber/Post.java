@@ -22,6 +22,7 @@ public class Post {
     private int posttype;
     //For list view
     private String datetime;
+    private int rated;
 
     public Post(){}
 
@@ -33,6 +34,7 @@ public class Post {
         this.posttype = posttype;
         recordcount = 0;
         status = 1;
+        rated = 0;
     }
 
     public String getPostid() {
@@ -97,6 +99,10 @@ public class Post {
 
     public String getAgreementid(){
         return agreementid;
+    }
+
+    public int getRated(){
+        return rated;
     }
 
 }

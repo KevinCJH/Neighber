@@ -38,10 +38,14 @@ public class RecordsOfferList extends ArrayAdapter<OfferToLendPost> {
                 offernum.setText("Sent To: " + offer.getTargetname());
                 break;
             case 2:
+                status.setText("Status: Pending Agreement");
+                offernum.setText("Sent From: " + offer.getTargetname());
+                break;
+            case 3:
                 status.setText("Status: Borrowing in Progress");
                 offernum.setText("Borrowing From: " + offer.getTargetname());
                 break;
-            case 3:
+            case 4:
                 status.setText("Status: Returning in Progress");
                 offernum.setText("Returning To: " + offer.getTargetname());
                 break;
