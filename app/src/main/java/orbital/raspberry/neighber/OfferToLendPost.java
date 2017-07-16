@@ -21,6 +21,7 @@ public class OfferToLendPost {
     private String datetime;
     private long timestamp;
     private int status;
+    private int rated;
 
     public OfferToLendPost(){}
 
@@ -33,6 +34,7 @@ public class OfferToLendPost {
         this.ownername = ownername;
         this.targetname = targetname;
         status = 1;
+        rated = 0;
     }
 
     public String getRecordid(){
@@ -101,6 +103,10 @@ public class OfferToLendPost {
 
     public void setStatus(int status){
         this.status = status;
+    }
+
+    public int getRated(){
+        return rated;
     }
 
 }

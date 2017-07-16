@@ -56,7 +56,6 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddNewActivity.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -64,7 +63,6 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddNewActivity.this, BorrowerRecordsActivity.class));
-                finish();
             }
         });
 
@@ -86,7 +84,6 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddNewActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -122,6 +119,10 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                ProgressDialog pd = new ProgressDialog(AddNewActivity.this);
+                pd.setMessage("Submitting...");
+                pd.show();
+
                 // get unique post id from firebase
                 String postid = mDatabase.push().getKey();
 
@@ -139,6 +140,8 @@ public class AddNewActivity extends AppCompatActivity {
                 mDatabase.child(postid).child("timestamp").setValue(ServerValue.TIMESTAMP);
 
                 Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in the Records tab", Toast.LENGTH_LONG).show();
+
+                pd.dismiss();
 
                 startActivity(new Intent(AddNewActivity.this, MainActivity.class));
                 finish();
@@ -162,8 +165,13 @@ public class AddNewActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(AddNewActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(AddNewActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(AddNewActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

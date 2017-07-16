@@ -18,6 +18,7 @@ public class OfferToBorrowPost {
     private String datetime;
     private long timestamp;
     private int status;
+    private int rated;
 
     public OfferToBorrowPost(){}
 
@@ -30,6 +31,7 @@ public class OfferToBorrowPost {
         this.ownername = ownername;
         this.targetname = targetname;
         status = 1;
+        rated = 0;
     }
 
     public String getRecordid(){
@@ -92,5 +94,8 @@ public class OfferToBorrowPost {
         this.status = status;
     }
 
+    public int getRated(){
+        return rated;
+    }
 
 }

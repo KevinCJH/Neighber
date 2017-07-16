@@ -2,7 +2,11 @@ package orbital.raspberry.neighber;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,34 +14,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
-public class EditPostActivity extends AppCompatActivity {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    private String rpostid;
+public class SettingsActivity extends AppCompatActivity {
+    private CircleImageView imgView;
+    private TextView displayname, email;
     private TextView browse, records, addnew, chat, profile;
-    private Button submitBtn;
-    private EditText itemnameTxt, postdescTxt;
+    private String ruserid;
+    private Button changeEm, changePw;
+
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_post);
+        setContentView(R.layout.activity_settings);
 
-        Intent i = getIntent();
-        rpostid = i.getStringExtra("rpostid");
+        //Get Firebase auth instance
+        auth = FirebaseAuth.getInstance();
+        ruserid = auth.getCurrentUser().getUid();
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -49,21 +62,21 @@ public class EditPostActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EditPostActivity.this, MainActivity.class));
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EditPostActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(SettingsActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EditPostActivity.this, AddNewActivity.class));
+                startActivity(new Intent(SettingsActivity.this, AddNewActivity.class));
             }
         });
 
@@ -77,60 +90,63 @@ public class EditPostActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EditPostActivity.this, ProfileActivity.class));
+                startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
-        submitBtn = (Button)findViewById(R.id.submitRequest);
-        itemnameTxt = (EditText)findViewById(R.id.itemname);
-        postdescTxt = (EditText)findViewById(R.id.postdesc);
+
+        imgView = (CircleImageView) findViewById(R.id.imgView);
+        displayname = (TextView) findViewById(R.id.displayname);
+        email = (TextView) findViewById(R.id.email);
+        changeEm = (Button) findViewById(R.id.changeemailBtn);
+        changePw = (Button) findViewById(R.id.changepwBtn);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
-        mDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        mDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Post post = dataSnapshot.getValue(Post.class);
+                User user = dataSnapshot.getValue(User.class);
 
-                //Display post item name and description
+                //Set profile picture of user
+                String imageUri = user.getImgUri();
+                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(imgView);
 
-                itemnameTxt.setText(post.getItemname());
-
-                postdescTxt.setText(post.getPostdesc());
+                //Fill up profile details
+                displayname.setText(user.getDisplayname());
+                email.setText(user.getEmail());
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(EditPostActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
+            }
+        });
+
+        changeEm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        changePw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ProgressDialog pd = new ProgressDialog(EditPostActivity.this);
-                pd.setMessage("Saving Changes...");
-                pd.show();
-
-                //Edit name of the post
-                mDatabase.child(rpostid).child("itemname").setValue(itemnameTxt.getText().toString().trim());
-
-                //Edit desc of the post
-                mDatabase.child(rpostid).child("postdesc").setValue(postdescTxt.getText().toString().trim());
-
-                pd.dismiss();
-
-                Toast.makeText(EditPostActivity.this, "Changes has been saved", Toast.LENGTH_SHORT).show();
-
-                finish();
-
+                startActivity(new Intent(SettingsActivity.this, ChangePasswordActivity.class));
             }
         });
 
@@ -150,17 +166,15 @@ public class EditPostActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(EditPostActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(SettingsActivity.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(EditPostActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     //////////////////End top menu////////////////////////
+
 }

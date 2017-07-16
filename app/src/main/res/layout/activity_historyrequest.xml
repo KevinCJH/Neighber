@@ -124,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:text="Request and Offer History (Post):"
+        android:text="Request History (Sent):"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:layout_below="@+id/linearLayout4"
@@ -136,7 +136,7 @@
         android:layout_height="165dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textViewPost"
-        android:layout_above="@+id/viewrequest" />
+        android:layout_above="@+id/viewrecord" />
 
     <Button
         style="?android:textAppearanceSmall"
@@ -155,8 +155,8 @@
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Request History (Sent)"
-        android:id="@+id/viewrequest"
+        android:text="View History (Post)"
+        android:id="@+id/viewrecord"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"

@@ -51,7 +51,13 @@
         <activity android:name=".ViewRequestActivity" />
         <activity android:name=".ViewRequestSentActivity" />
         <activity android:name=".HistoryRecordsActivity" />
+        <activity android:name=".HistoryRequestActivity" />
+        <activity android:name=".HistoryOfferActivity" />
         <activity android:name=".RateUserActivity" />
+        <activity android:name=".OfferRateUserActivity" />
+        <activity android:name=".RequestRateUserActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".ChatActivity"></activity>
     </application>
 

@@ -59,7 +59,6 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity2.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -81,7 +80,6 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity2.this, BorrowerRecordsActivity.class));
-                finish();
             }
         });
 
@@ -89,7 +87,6 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity2.this, AddNewActivity.class));
-                finish();
             }
         });
 
@@ -104,7 +101,6 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity2.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -161,7 +157,6 @@ public class MainActivity2 extends AppCompatActivity {
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
-                finish();
 
             }
         });
@@ -175,7 +170,7 @@ public class MainActivity2 extends AppCompatActivity {
         return date;
     }
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -189,8 +184,13 @@ public class MainActivity2 extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(MainActivity2.this, LoginpageActivity.class));
+                Intent i = new Intent(MainActivity2.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(MainActivity2.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

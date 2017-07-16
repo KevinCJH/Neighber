@@ -65,7 +65,6 @@ public class LenderRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LenderRecordsActivity.this, BorrowerRecordsActivity.class));
-                finish();
             }
         });
 
@@ -79,7 +78,6 @@ public class LenderRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LenderRecordsActivity.this, HistoryRecordsActivity.class));
-                finish();
             }
         });
 
@@ -87,7 +85,6 @@ public class LenderRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LenderRecordsActivity.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -102,7 +99,6 @@ public class LenderRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LenderRecordsActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
@@ -117,7 +113,6 @@ public class LenderRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LenderRecordsActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -439,7 +434,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
     }
 
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -453,8 +448,13 @@ public class LenderRecordsActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(LenderRecordsActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(LenderRecordsActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(LenderRecordsActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

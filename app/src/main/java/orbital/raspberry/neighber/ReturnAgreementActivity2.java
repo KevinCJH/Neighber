@@ -45,7 +45,6 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ReturnAgreementActivity2.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -53,7 +52,6 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ReturnAgreementActivity2.this, BorrowerRecordsActivity.class));
-                finish();
             }
         });
 
@@ -61,7 +59,6 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ReturnAgreementActivity2.this, AddNewActivity.class));
-                finish();
             }
         });
 
@@ -76,7 +73,6 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ReturnAgreementActivity2.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -108,7 +104,7 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
 
     }
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -122,8 +118,13 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(ReturnAgreementActivity2.this, LoginpageActivity.class));
+                Intent i = new Intent(ReturnAgreementActivity2.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(ReturnAgreementActivity2.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,6 +1,7 @@
 package orbital.raspberry.neighber;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,7 +62,6 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AgreementActivity.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -69,7 +69,6 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
-                finish();
             }
         });
 
@@ -77,7 +76,6 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AgreementActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
@@ -92,7 +90,6 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AgreementActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -168,6 +165,7 @@ public class AgreementActivity extends AppCompatActivity {
                                 //Yes button clicked
                                 confirmAgreement();
                                 Toast.makeText(AgreementActivity.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
+
                                 startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
                                 finish();
                                 break;
@@ -215,8 +213,13 @@ public class AgreementActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(AgreementActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(AgreementActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(AgreementActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -26,7 +26,7 @@ import java.math.RoundingMode;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RateUserActivity extends AppCompatActivity {
+public class RequestRateUserActivity extends AppCompatActivity {
 
     private CircleImageView imgView;
     private TextView displayname;
@@ -34,7 +34,7 @@ public class RateUserActivity extends AppCompatActivity {
     private Button rateuser;
     private TextView browse, records, addnew, chat, profile;
     private String ruserid;
-    private String postid;
+    private String rrecordid;
     private double userrating;
     private int totalrater;
 
@@ -48,7 +48,7 @@ public class RateUserActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
-        postid = i.getStringExtra("postid");
+        rrecordid = i.getStringExtra("rrecordid");
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -60,21 +60,21 @@ public class RateUserActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RateUserActivity.this, MainActivity.class));
+                startActivity(new Intent(RequestRateUserActivity.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RateUserActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(RequestRateUserActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RateUserActivity.this, AddNewActivity.class));
+                startActivity(new Intent(RequestRateUserActivity.this, AddNewActivity.class));
             }
         });
 
@@ -88,7 +88,7 @@ public class RateUserActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RateUserActivity.this, ProfileActivity.class));
+                startActivity(new Intent(RequestRateUserActivity.this, ProfileActivity.class));
             }
         });
 
@@ -125,7 +125,7 @@ public class RateUserActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(RateUserActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RequestRateUserActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -133,7 +133,7 @@ public class RateUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                ProgressDialog pd = new ProgressDialog(RateUserActivity.this);
+                ProgressDialog pd = new ProgressDialog(RequestRateUserActivity.this);
                 pd.setMessage("Submitting...");
                 pd.show();
 
@@ -148,11 +148,11 @@ public class RateUserActivity extends AppCompatActivity {
 
                 FirebaseDatabase.getInstance().getReference("users").child(ruserid).child("ratings").setValue(userrating);
                 FirebaseDatabase.getInstance().getReference("users").child(ruserid).child("totalvote").setValue(newtotalrater);
-                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("rated").setValue(1);
+                FirebaseDatabase.getInstance().getReference("offertolend").child(rrecordid).child("rated").setValue(1);
 
                 pd.dismiss();
 
-                Toast.makeText(RateUserActivity.this, "Rating has been submitted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RequestRateUserActivity.this, "Rating has been submitted", Toast.LENGTH_SHORT).show();
 
                 finish();
 
@@ -162,6 +162,7 @@ public class RateUserActivity extends AppCompatActivity {
 
     }
 
+    //Round off value to two decimal place
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -184,13 +185,13 @@ public class RateUserActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(RateUserActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(RequestRateUserActivity.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(RateUserActivity.this, SettingsActivity.class));
+                startActivity(new Intent(RequestRateUserActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

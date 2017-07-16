@@ -65,7 +65,6 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PostActivity.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -73,7 +72,6 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PostActivity.this, BorrowerRecordsActivity.class));
-                finish();
             }
         });
 
@@ -81,7 +79,6 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PostActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
@@ -96,7 +93,6 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PostActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -197,7 +193,7 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -211,8 +207,13 @@ public class PostActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(PostActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(PostActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(PostActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

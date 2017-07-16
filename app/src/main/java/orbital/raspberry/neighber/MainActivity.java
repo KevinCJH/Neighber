@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, MainActivity2.class));
-                finish();
             }
         });
 
@@ -91,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, BorrowerRecordsActivity.class));
-                finish();
             }
         });
 
@@ -99,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
@@ -114,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -184,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         return date;
     }
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -198,8 +194,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(MainActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(MainActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

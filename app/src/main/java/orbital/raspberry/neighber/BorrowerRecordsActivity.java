@@ -72,7 +72,6 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BorrowerRecordsActivity.this, LenderRecordsActivity.class));
-                finish();
             }
         });
 
@@ -80,7 +79,6 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BorrowerRecordsActivity.this, HistoryRecordsActivity.class));
-                finish();
             }
         });
 
@@ -88,7 +86,6 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BorrowerRecordsActivity.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -103,7 +100,6 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BorrowerRecordsActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
@@ -118,7 +114,6 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BorrowerRecordsActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -438,8 +433,13 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(BorrowerRecordsActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(BorrowerRecordsActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(BorrowerRecordsActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

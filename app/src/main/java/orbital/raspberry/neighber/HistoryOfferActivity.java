@@ -25,31 +25,31 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryRecordsActivity extends AppCompatActivity {
+public class HistoryOfferActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private TextView borrowing, lending, history;
-    private List<Post> posts;
+    private List<OfferToBorrowPost> offers;
     private ListView listViewRequests;
     private String userid;
-    private Button requestbtn, offerbtn;
+    private Button recordbtn, requestbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_historyrecord);
+        setContentView(R.layout.activity_historyoffer);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
         userid = auth.getCurrentUser().getUid();
 
-        posts = new ArrayList<>();
+        offers = new ArrayList<>();
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
+        recordbtn = (Button) findViewById(R.id.viewrecord);
         requestbtn = (Button) findViewById(R.id.viewrequest);
-        offerbtn = (Button) findViewById(R.id.viewoffer);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -64,14 +64,14 @@ public class HistoryRecordsActivity extends AppCompatActivity {
         borrowing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         lending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, LenderRecordsActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, LenderRecordsActivity.class));
             }
         });
 
@@ -85,21 +85,21 @@ public class HistoryRecordsActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, MainActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, AddNewActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, AddNewActivity.class));
             }
         });
 
@@ -113,13 +113,13 @@ public class HistoryRecordsActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, ProfileActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, ProfileActivity.class));
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
 
         //attaching value event listener
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -127,29 +127,24 @@ public class HistoryRecordsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 //clearing the previous list
-                posts.clear();
+                offers.clear();
 
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    Post post = postSnapshot.getValue(Post.class);
+                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
 
                     //If post type is request aka 1
-                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() == 4) {
+                        if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() == 4) {
 
                             //adding to the list
-                            posts.add(post);
-
-                        }else if(post.getPosttype() == 2 && post.getUserid().toString().equals(userid) && post.getStatus() == 5){
-
-                            //adding to the list
-                            posts.add(post);
+                            offers.add(offer);
 
                         }
                 }
 
                 //creating adapter
-                HistoryList reqAdapter = new HistoryList(HistoryRecordsActivity.this, posts);
+                HistoryOfferList reqAdapter = new HistoryOfferList(HistoryOfferActivity.this, offers);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -164,96 +159,58 @@ public class HistoryRecordsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final Post post = posts.get(position);
-
-                //Status pending
-                if(post.getPosttype() == 1) {
+                final OfferToBorrowPost offer = offers.get(position);
 
                     CharSequence options[] = new CharSequence[]{"View Lender Profile", "Rate this User", "Delete this Record"};
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecordsActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryOfferActivity.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
-                                    Intent i = new Intent(HistoryRecordsActivity.this, ViewProfileActivity.class);
-                                    i.putExtra("ruserid", post.getOtherid());
+                                    Intent i = new Intent(HistoryOfferActivity.this, ViewProfileActivity.class);
+                                    i.putExtra("ruserid", offer.getTargetid());
                                     startActivity(i);
                                     break;
                                 case 1:
-                                    if(post.getRated() == 0) {
-                                        Intent i2 = new Intent(HistoryRecordsActivity.this, RateUserActivity.class);
-                                        i2.putExtra("ruserid", post.getOtherid());
-                                        i2.putExtra("postid", post.getPostid());
+                                    if(offer.getRated() == 0) {
+                                        Intent i2 = new Intent(HistoryOfferActivity.this, OfferRateUserActivity.class);
+                                        i2.putExtra("ruserid", offer.getTargetid());
+                                        i2.putExtra("rrecordid", offer.getRecordid());
                                         startActivity(i2);
                                     }else{
-                                        Toast.makeText(HistoryRecordsActivity.this, "Already rated this user.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(HistoryOfferActivity.this, "Already rated this user.", Toast.LENGTH_SHORT).show();
                                     }
                                     break;
                                 case 2:
-                                    FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).child("status").setValue(8);
-                                    posts.remove(position);
-                                    Toast.makeText(HistoryRecordsActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                    FirebaseDatabase.getInstance().getReference("offertoborrow").child(offer.getRecordid()).child("status").setValue(8);
+                                    offers.remove(position);
+                                    Toast.makeText(HistoryOfferActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
                                     break;
                             }
                         }
                     });
                     builder.show();
 
-                }else{
-
-                    CharSequence options[] = new CharSequence[]{"View Borrower Profile", "Rate this User", "Delete this Record"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i = new Intent(HistoryRecordsActivity.this, ViewProfileActivity.class);
-                                    i.putExtra("ruserid", post.getOtherid());
-                                    startActivity(i);
-                                    break;
-                                case 1:
-                                    if(post.getRated() == 0) {
-                                        Intent i2 = new Intent(HistoryRecordsActivity.this, RateUserActivity.class);
-                                        i2.putExtra("ruserid", post.getOtherid());
-                                        i2.putExtra("postid", post.getPostid());
-                                        startActivity(i2);
-                                    }else{
-                                        Toast.makeText(HistoryRecordsActivity.this, "Already rated this user.", Toast.LENGTH_SHORT).show();
-                                    }
-                                    break;
-                                case 2:
-                                    FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).child("status").setValue(8);
-                                    posts.remove(position);
-                                    Toast.makeText(HistoryRecordsActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
-
-                }
 
 
+            }
+        });
+
+
+        recordbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HistoryOfferActivity.this, HistoryRecordsActivity.class));
             }
         });
 
         requestbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, HistoryRequestActivity.class));
-            }
-        });
-
-        offerbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, HistoryOfferActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, HistoryRequestActivity.class));
             }
         });
 
@@ -261,7 +218,7 @@ public class HistoryRecordsActivity extends AppCompatActivity {
     }
 
 
-    ///////////////////Top Right Menu//////////////////////
+    //////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -275,13 +232,13 @@ public class HistoryRecordsActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(HistoryRecordsActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(HistoryOfferActivity.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(HistoryRecordsActivity.this, SettingsActivity.class));
+                startActivity(new Intent(HistoryOfferActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
