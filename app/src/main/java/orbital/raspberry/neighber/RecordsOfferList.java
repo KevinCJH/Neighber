@@ -35,19 +35,19 @@ public class RecordsOfferList extends ArrayAdapter<OfferToLendPost> {
         switch(offer.getStatus()){
             case 1:
                 status.setText("Status: Pending Reply");
-                offernum.setText("Sent To: " + offer.getTargetname());
+                offernum.setText("From: " + offer.getTargetname());
                 break;
             case 2:
-                status.setText("Status: Pending Agreement");
-                offernum.setText("Sent From: " + offer.getTargetname());
+                status.setText("Status: Collection of Item");
+                offernum.setText("Collect From: " + offer.getTargetname());
                 break;
             case 3:
                 status.setText("Status: Borrowing in Progress");
                 offernum.setText("Borrowing From: " + offer.getTargetname());
                 break;
             case 4:
-                status.setText("Status: Returning in Progress");
-                offernum.setText("Returning To: " + offer.getTargetname());
+                status.setText("Status: Returning Item");
+                offernum.setText("Return To: " + offer.getTargetname());
                 break;
 
         }

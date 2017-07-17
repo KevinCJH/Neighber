@@ -170,7 +170,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
                     //getting artist
                     OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
 
-                    if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 3) {
+                    if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 5) {
 
                         //adding to the list
                         offers.add(offer);
@@ -237,7 +237,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
 
                 else if(post.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"View lendee profile"};
+                    CharSequence options[] = new CharSequence[]{"View borrower profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");
@@ -260,7 +260,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
 
                 else if(post.getStatus() == 4) {
 
-                    CharSequence options[] = new CharSequence[]{"View return agreement", "View lendee profile"};
+                    CharSequence options[] = new CharSequence[]{"View return agreement", "View borrower profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");
@@ -342,11 +342,64 @@ public class LenderRecordsActivity extends AppCompatActivity {
                     builder.show();
                 }
 
-                //Status borrowing
+                //Status send Agreement
 
                 else if(offer.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"View lendee profile"};
+                    CharSequence options[] = new CharSequence[]{"Write agreement for item", "View borrower profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i1 = new Intent(LenderRecordsActivity.this, SendAgreementActivity.class);
+                                    i1.putExtra("ruserid", offer.getTargetid());
+                                    i1.putExtra("rofferid", offer.getRecordid());
+                                    startActivity(i1);
+                                    break;
+                                case 1:
+                                    Intent i2 = new Intent(LenderRecordsActivity.this, ViewProfileActivity.class);
+                                    i2.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i2);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+
+                }
+
+                //Status wait for accept agreement
+
+                else if(offer.getStatus() == 3) {
+                    CharSequence options[] = new CharSequence[]{"View borrower profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i2 = new Intent(LenderRecordsActivity.this, ViewProfileActivity.class);
+                                    i2.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i2);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
+
+                //Status lending
+
+                else if(offer.getStatus() == 4) {
+
+                    CharSequence options[] = new CharSequence[]{"View borrower profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");
@@ -367,9 +420,9 @@ public class LenderRecordsActivity extends AppCompatActivity {
 
                 //Status returning
 
-                else if(offer.getStatus() == 3) {
+                else if(offer.getStatus() == 5) {
 
-                    CharSequence options[] = new CharSequence[]{"View return agreement", "View lendee profile"};
+                    CharSequence options[] = new CharSequence[]{"View return agreement", "View borrower profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(LenderRecordsActivity.this);
                     builder.setTitle("Options");

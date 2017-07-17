@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <!-- Bottom Nav Bar -->
     <LinearLayout
         android:layout_width="fill_parent"
@@ -14,13 +12,12 @@
         android:background="@color/grey"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout3">
+        android:id="@+id/linearLayout5">
 
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_select_24dp"
-            android:textColor="@color/colorPrimary"
+            android:drawableTop="@drawable/ic_search_black_24dp"
             android:text="Browse"
             android:textAlignment="center"
             android:onClick="onClick"
@@ -31,8 +28,9 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_black_24dp"
+            android:drawableTop="@drawable/ic_library_books_select_24dp"
             android:text="Records"
+            android:textColor="@color/colorPrimary"
             android:textAlignment="center"
             android:onClick="onClick"
             android:clickable="true"
@@ -74,18 +72,27 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        android:text="Your Offer and Condition of Item"
+        android:layout_marginTop="22dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
-        android:id="@+id/infotxt"
-        android:layout_width="fill_parent"
+        android:id="@+id/txt1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:inputType="textPersonName"
-        android:hint="Offer and Condition of Loan"
         android:textStyle="bold"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/posttype"
-        android:layout_alignParentStart="true" />
+        android:textSize="24dp"
+        android:text="Agreement"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/offerwritten"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/offerdesc"
@@ -94,25 +101,31 @@
         android:maxLines="5"
         android:textSize="24dp"
         android:lines="3"
-        android:hint="Example: This item has some scratches on the side, but is working perfectly. Expect item to be return in the same condition"
+        android:hint="Agreement for both parties"
         android:inputType="textMultiLine"
-        android:layout_below="@+id/infotxt"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:layout_below="@+id/txt1"
+        android:layout_alignParentStart="true" />
 
     <Button
-        style="?android:textAppearanceSmall"
+        android:id="@+id/sendagree"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send Offer"
-        android:id="@+id/submitRequest"
+        android:textColor="@color/white"
         android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:layout_above="@+id/linearLayout3"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:text="Send Agreement"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@+id/linearLayout5"
+        android:layout_alignParentStart="true" />
 
+    <TextView
+        android:id="@+id/offerwritten"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:text="Offer description"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/txt2"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

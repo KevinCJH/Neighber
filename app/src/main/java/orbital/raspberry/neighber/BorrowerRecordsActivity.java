@@ -135,7 +135,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                     Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 1
-                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() <= 3) {
+                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() <= 5) {
 
                             //adding to the list
                             posts.add(post);
@@ -234,11 +234,40 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                     builder.show();
                 }
 
-                //Status borrowing
-
+                //wait for agreement
                 else if(post.getStatus() == 2) {
+                    //TODO
+                    //Chat and View profile
+                }
 
-                    CharSequence options[] = new CharSequence[]{"Return Item", "View borrower profile"};
+                //accept agreement
+                else if(post.getStatus() == 3) {
+
+                    CharSequence options[] = new CharSequence[]{"View the agreement"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, AgreementActivity.class);
+                                    i1.putExtra("ruserid", post.getOtherid());
+                                    i1.putExtra("rofferid", post.getAgreementid());
+                                    startActivity(i1);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+
+                }
+
+                //borrowing in progress
+                else if(post.getStatus() == 4) {
+
+                    CharSequence options[] = new CharSequence[]{"Return Item", "View lender profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
                     builder.setTitle("Options");
@@ -324,7 +353,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 else if(offer.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"View Agreement", "View borrower profile"};
+                    CharSequence options[] = new CharSequence[]{"View Agreement", "View lender profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
                     builder.setTitle("Options");
@@ -353,7 +382,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 else if(offer.getStatus() == 3) {
 
-                    CharSequence options[] = new CharSequence[]{"Return Item", "View borrower profile"};
+                    CharSequence options[] = new CharSequence[]{"Return Item", "View lender profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
                     builder.setTitle("Options");

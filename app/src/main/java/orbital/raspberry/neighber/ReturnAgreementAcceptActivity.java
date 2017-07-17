@@ -148,8 +148,8 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
     public void confirmAgreement(){
         String agreement = offerdesctxt.getText().toString().trim();
 
-        FirebaseDatabase.getInstance().getReference("posts").child(rpostid).child("status").setValue(4);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(4);
+        FirebaseDatabase.getInstance().getReference("posts").child(rpostid).child("status").setValue(6);
+        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(6);
         FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("returnagreementdesc").setValue(agreement);
     }
 

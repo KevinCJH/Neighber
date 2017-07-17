@@ -135,7 +135,7 @@ public class HistoryOfferActivity extends AppCompatActivity {
                     OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
 
                     //If post type is request aka 1
-                        if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() == 4) {
+                        if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() == 6) {
 
                             //adding to the list
                             offers.add(offer);
@@ -161,7 +161,7 @@ public class HistoryOfferActivity extends AppCompatActivity {
 
                 final OfferToBorrowPost offer = offers.get(position);
 
-                    CharSequence options[] = new CharSequence[]{"View Lender Profile", "Rate this User", "Delete this Record"};
+                    CharSequence options[] = new CharSequence[]{"View Borrower Profile", "Rate this User", "Delete this Record"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryOfferActivity.this);
                     builder.setTitle("Options");

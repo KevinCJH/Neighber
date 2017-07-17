@@ -35,15 +35,23 @@ public class RecordsOfferList2 extends ArrayAdapter<OfferToBorrowPost> {
         switch(offer.getStatus()){
             case 1:
                 status.setText("Status: Pending Reply");
-                offernum.setText("Sent To: " + offer.getTargetname());
+                offernum.setText("From: " + offer.getTargetname());
                 break;
             case 2:
+                status.setText("Status: Offer Accepted");
+                offernum.setText("From: " + offer.getTargetname());
+                break;
+            case 3:
+                status.setText("Status: Collection of Item");
+                offernum.setText("Send To: " + offer.getTargetname());
+                break;
+            case 4:
                 status.setText("Status: Lending in Progress");
                 offernum.setText("Lending To: " + offer.getTargetname());
                 break;
-            case 3:
-                status.setText("Status: Returning in Progress");
-                offernum.setText("Returning From: " + offer.getTargetname());
+            case 5:
+                status.setText("Status: Returning Item");
+                offernum.setText("Collect From: " + offer.getTargetname());
                 break;
 
         }

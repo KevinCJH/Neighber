@@ -103,9 +103,6 @@ public class SettingsActivity extends AppCompatActivity {
         changeEm = (Button) findViewById(R.id.changeemailBtn);
         changePw = (Button) findViewById(R.id.changepwBtn);
 
-        //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
-
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
         mDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

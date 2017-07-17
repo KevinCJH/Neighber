@@ -19,6 +19,7 @@ public class OfferToBorrowPost {
     private long timestamp;
     private int status;
     private int rated;
+    private String offerdesc;
 
     public OfferToBorrowPost(){}
 
@@ -96,6 +97,14 @@ public class OfferToBorrowPost {
 
     public int getRated(){
         return rated;
+    }
+
+    public void setOfferdesc(String offerdesc){
+        this.offerdesc = offerdesc;
+    }
+
+    public String getOfferdesc(){
+        return offerdesc;
     }
 
 }

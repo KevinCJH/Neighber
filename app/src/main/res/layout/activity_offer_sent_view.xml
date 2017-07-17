@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <!-- Bottom Nav Bar -->
     <LinearLayout
         android:layout_width="fill_parent"
@@ -14,13 +12,12 @@
         android:background="@color/grey"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout3">
+        android:id="@+id/linearLayout5">
 
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_select_24dp"
-            android:textColor="@color/colorPrimary"
+            android:drawableTop="@drawable/ic_search_black_24dp"
             android:text="Browse"
             android:textAlignment="center"
             android:onClick="onClick"
@@ -31,8 +28,9 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_black_24dp"
+            android:drawableTop="@drawable/ic_library_books_select_24dp"
             android:text="Records"
+            android:textColor="@color/colorPrimary"
             android:textAlignment="center"
             android:onClick="onClick"
             android:clickable="true"
@@ -75,44 +73,70 @@
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/infotxt"
-        android:layout_width="fill_parent"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        app:civ_border_color="#ffffff"
+        app:civ_border_width="2dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="15dp" />
+
+
+    <Button
+        android:id="@+id/acceptoffer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:inputType="textPersonName"
-        android:hint="Offer and Condition of Loan"
-        android:textStyle="bold"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/posttype"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:text="Accept Offer"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/linearLayout5"
         android:layout_alignParentStart="true" />
 
-    <EditText
-        android:id="@+id/offerdesc"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/rusernameTxt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="5"
+        android:layout_column="0"
+        android:layout_gravity="center_vertical"
+        android:layout_row="1"
+        android:text="User Name"
         android:textSize="24dp"
-        android:lines="3"
-        android:hint="Example: This item has some scratches on the side, but is working perfectly. Expect item to be return in the same condition"
-        android:inputType="textMultiLine"
-        android:layout_below="@+id/infotxt"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:textStyle="bold"
+        android:layout_marginEnd="34dp"
+        android:layout_alignTop="@+id/imgView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="21dp" />
 
     <Button
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:id="@+id/viewprofile"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Offer"
-        android:id="@+id/submitRequest"
+        android:layout_column="0"
+        android:layout_gravity="center_vertical"
+        android:layout_row="4"
         android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:layout_above="@+id/linearLayout3"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:text="Profile"
+        android:textColor="@color/white"
+        android:maxLines="1"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/rusernameTxt"
+        android:layout_alignStart="@+id/rusernameTxt"
+        android:layout_alignEnd="@+id/rusernameTxt" />
 
+    <TextView
+        android:id="@+id/requestdesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:text="Offer Description"
+        android:maxLines="2"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

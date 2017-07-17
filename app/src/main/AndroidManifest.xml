@@ -49,6 +49,7 @@
         <activity android:name=".ReturnAgreementAcceptActivity2" />
         <activity android:name=".LenderRecordsActivity" />
         <activity android:name=".ViewRequestActivity" />
+        <activity android:name=".ViewOfferSentActivity" />
         <activity android:name=".ViewRequestSentActivity" />
         <activity android:name=".HistoryRecordsActivity" />
         <activity android:name=".HistoryRequestActivity" />
@@ -58,7 +59,8 @@
         <activity android:name=".RequestRateUserActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".SendAgreementActivity" />
+        <activity android:name=".ChatActivity" />
     </application>
 
 </manifest>

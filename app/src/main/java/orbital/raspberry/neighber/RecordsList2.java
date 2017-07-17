@@ -38,16 +38,16 @@ public class RecordsList2 extends ArrayAdapter<Post> {
                 offernum.setText("Number of Requests: " + post.getRecordcount());
                 break;
             case 2:
-                status.setText("Status: Pending Agreement");
-                offernum.setText("From: " + post.getOthername());
+                status.setText("Status: Collection of Item");
+                offernum.setText("Send To: " + post.getOthername());
                 break;
             case 3:
                 status.setText("Status: Lending in Progress");
                 offernum.setText("Lending To: " + post.getOthername());
                 break;
             case 4:
-                status.setText("Status: Returning in Progress");
-                offernum.setText("Returning From: " + post.getOthername());
+                status.setText("Status: Returning Item");
+                offernum.setText("Collect From: " + post.getOthername());
                 break;
 
         }

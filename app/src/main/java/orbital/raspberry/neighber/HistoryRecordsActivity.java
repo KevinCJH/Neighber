@@ -135,7 +135,7 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                     Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 1
-                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() == 4) {
+                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() == 6) {
 
                             //adding to the list
                             posts.add(post);

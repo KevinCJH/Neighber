@@ -1,8 +1,5 @@
 package orbital.raspberry.neighber;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +22,13 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AgreementActivity extends AppCompatActivity {
+public class ViewOfferSentActivity extends AppCompatActivity {
 
     private String ruserid, rofferid, ruserdisplayname;
-    private TextView offerdesctxt;
+    private TextView rusernametxt, requestdesctxt ;
+    private CircleImageView ruserimg;
     private TextView browse, records, addnew, chat, profile;
-    private Button acceptoffer;
+    private Button viewprofile, acceptoffer;
     private String postid;
 
     private FirebaseAuth auth;
@@ -37,15 +36,18 @@ public class AgreementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agreement);
+        setContentView(R.layout.activity_offer_sent_view);
 
         //Get userid based on which item was click in the previous activity
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
         rofferid = i.getStringExtra("rofferid");
 
-        offerdesctxt = (TextView) findViewById(R.id.offerdesc);
+        rusernametxt = (TextView) findViewById(R.id.rusernameTxt);
+        ruserimg = (CircleImageView) findViewById(R.id.imgView);
+        viewprofile = (Button) findViewById(R.id.viewprofile);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
+        requestdesctxt = (TextView) findViewById(R.id.requestdesc);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -57,21 +59,21 @@ public class AgreementActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, MainActivity.class));
+                startActivity(new Intent(ViewOfferSentActivity.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ViewOfferSentActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ViewOfferSentActivity.this, AddNewActivity.class));
             }
         });
 
@@ -85,7 +87,7 @@ public class AgreementActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ViewOfferSentActivity.this, ProfileActivity.class));
             }
         });
 
@@ -100,13 +102,20 @@ public class AgreementActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
+                //Display profile picture of user
+                String imageUri = user.getImgUri();
+                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
+
+                //Display user name
+                rusernametxt.setText(user.getDisplayname());
+
                 ruserdisplayname = user.getDisplayname();
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AgreementActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewOfferSentActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -117,7 +126,7 @@ public class AgreementActivity extends AppCompatActivity {
                 OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
 
                 //Display description
-                offerdesctxt.setText(offer.getAgreementdesc());
+                requestdesctxt.setText(offer.getOfferdesc());
 
                 postid = offer.getPostid();
 
@@ -125,39 +134,38 @@ public class AgreementActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AgreementActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewOfferSentActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
             }
         });
 
+
+        viewprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(ViewOfferSentActivity.this, ViewProfileActivity.class);
+                //Pass info to next activity
+                i.putExtra("ruserid", ruserid);
+                startActivity(i);
+
+            }
+        });
 
         acceptoffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                //Yes button clicked
-                                confirmAgreement();
-                                Toast.makeText(AgreementActivity.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
+               // FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(offerdesctxt.getText().toString().trim());
+                FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(2);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
 
-                                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
-                                finish();
-                                break;
+                Toast.makeText(ViewOfferSentActivity.this, "Your acceptance has been sent to the user", Toast.LENGTH_SHORT).show();
 
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
-                        }
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(AgreementActivity.this);
-                builder.setMessage("Please ensure that you have received the correct item and in good condition").setPositiveButton("Confirm", dialogClickListener)
-                        .setNegativeButton("Cancel", dialogClickListener).show();
-
+                startActivity(new Intent(ViewOfferSentActivity.this, BorrowerRecordsActivity.class));
+                finish();
 
             }
         });
@@ -165,24 +173,7 @@ public class AgreementActivity extends AppCompatActivity {
 
     }
 
-    public void confirmAgreement(){
-        String agreement = offerdesctxt.getText().toString().trim();
-/*
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
-    */
-        FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(4);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(4);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
-
-
-    }
-
-    //////////////////Top Right Menu//////////////////////
+    ////////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -196,13 +187,13 @@ public class AgreementActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(AgreementActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(ViewOfferSentActivity.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(AgreementActivity.this, SettingsActivity.class));
+                startActivity(new Intent(ViewOfferSentActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

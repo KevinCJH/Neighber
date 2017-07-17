@@ -72,29 +72,16 @@
 
     </LinearLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgView"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        app:civ_border_color="#ffffff"
-        app:civ_border_width="2dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="15dp" />
-
-
-
     <TextView
-        android:id="@+id/txt1"
+        android:id="@+id/txt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
         android:textStyle="bold"
         android:textSize="24dp"
         android:text="Agreement and Condition of Item"
-        android:layout_below="@+id/imgView"
-        android:layout_alignStart="@+id/imgView" />
+        android:layout_marginTop="66dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/offerdesc"
@@ -103,11 +90,11 @@
         android:maxLines="5"
         android:textSize="24dp"
         android:lines="3"
-        android:hint="Offer Description"
+        android:hint="Agreement for both parties"
         android:inputType="textMultiLine"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/txt1"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/txt2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="24dp" />
 
     <Button
         android:id="@+id/acceptoffer"
@@ -119,39 +106,6 @@
         android:layout_marginBottom="16dp"
         android:layout_above="@+id/linearLayout5"
         android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/rusernameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:layout_gravity="center_vertical"
-        android:layout_row="1"
-        android:text="User Name"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:layout_marginEnd="34dp"
-        android:layout_alignTop="@+id/imgView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="21dp" />
-
-    <Button
-        style="?android:textAppearanceSmall"
-        android:id="@+id/viewprofile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:layout_gravity="center_vertical"
-        android:layout_row="4"
-        android:background="@color/colorPrimary"
-        android:text="Profile"
-        android:textColor="@color/white"
-        android:maxLines="1"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/rusernameTxt"
-        android:layout_alignStart="@+id/rusernameTxt"
-        android:layout_alignEnd="@+id/rusernameTxt" />
-
 
 
 </RelativeLayout>

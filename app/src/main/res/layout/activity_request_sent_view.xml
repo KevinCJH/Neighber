@@ -102,7 +102,7 @@
         android:maxLines="5"
         android:textSize="24dp"
         android:lines="3"
-        android:hint="An agreement for you to lend the item"
+        android:hint="A mutual agreement for you to lend the item."
         android:inputType="textMultiLine"
         android:layout_above="@+id/acceptoffer"
         android:layout_alignParentStart="true" />

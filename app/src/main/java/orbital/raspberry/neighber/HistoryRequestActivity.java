@@ -161,7 +161,7 @@ public class HistoryRequestActivity extends AppCompatActivity {
 
                 final OfferToLendPost offer = offers.get(position);
 
-                    CharSequence options[] = new CharSequence[]{"View Borrower Profile", "Rate this User", "Delete this Record"};
+                    CharSequence options[] = new CharSequence[]{"View Lender Profile", "Rate this User", "Delete this Record"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRequestActivity.this);
                     builder.setTitle("Options");

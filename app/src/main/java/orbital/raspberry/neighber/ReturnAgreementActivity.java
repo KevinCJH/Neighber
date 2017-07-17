@@ -97,11 +97,10 @@ public class ReturnAgreementActivity extends AppCompatActivity {
                 String returnagreement = returndesc.getText().toString().trim();
 
                 FirebaseDatabase.getInstance().getReference("offertoborrow").child(agreementid).child("returnagreementdesc").setValue(returnagreement);
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(agreementid).child("status").setValue(3);
-                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(3);
+                FirebaseDatabase.getInstance().getReference("offertoborrow").child(agreementid).child("status").setValue(5);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(5);
 
-
-                Toast.makeText(ReturnAgreementActivity.this, "The user has been informed that you wish to return the loaned item", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReturnAgreementActivity.this, "Please meet up with user to return the item", Toast.LENGTH_LONG).show();
 
                 finish();
 

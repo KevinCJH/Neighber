@@ -145,7 +145,8 @@ public class WriteOfferActivity extends AppCompatActivity {
                 //Create new offertoborrowpost object
                 OfferToBorrowPost newoffer = new OfferToBorrowPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
 
-                newoffer.setAgreementdesc(offerdescTxt.getText().toString().trim());
+                //newoffer.setAgreementdesc(offerdescTxt.getText().toString().trim());
+                newoffer.setOfferdesc(offerdescTxt.getText().toString().trim());
 
                 //Add post to database
                 mDatabase.child(recordid).setValue(newoffer);
@@ -158,7 +159,7 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
 
-                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may edit/delete the offer in the Records(Lending) tab", Toast.LENGTH_LONG).show();
+                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may view/delete the offer in the Records(Lending) tab", Toast.LENGTH_LONG).show();
 
                 startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
                 finish();
