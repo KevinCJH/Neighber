@@ -9,8 +9,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +36,8 @@ public class MainActivity2 extends AppCompatActivity {
     private TextView browsereq, browseoff;
     private List<Post> posts;
     private ListView listViewRequests;
+    private EditText searchtxt;
+    private Button searchbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +111,10 @@ public class MainActivity2 extends AppCompatActivity {
 
         //////////////////////End Navigation////////////////////////////
 
+        searchtxt = (EditText) findViewById(R.id.searchtxt);
+        searchbtn = (Button) findViewById(R.id.searchbtn);
+
+
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
         //attaching value event listener
@@ -157,6 +166,48 @@ public class MainActivity2 extends AppCompatActivity {
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
+
+            }
+        });
+
+
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String query = searchtxt.getText().toString().trim();
+                int found = 0;
+
+                for(Post p : posts){
+
+                    String splitname[] = p.getItemname().split(" ");
+
+                    for(int i=0; i<splitname.length; i++) {
+
+                        if (splitname[i].equals(query)) {
+
+                            String requesterid = p.getUserid();
+                            String postid = p.getPostid();
+
+                            found = 1;
+
+                            Intent i2 = new Intent(MainActivity2.this, PostActivity.class);
+                            i2.putExtra("ruserid", requesterid);
+                            i2.putExtra("rpostid", postid);
+                            startActivity(i2);
+
+                            break;
+                        }
+                    }
+
+                    if(found == 1){
+                        break;
+                    }
+
+                }
+                if(found == 0) {
+                    Toast.makeText(MainActivity2.this, "No such items found", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

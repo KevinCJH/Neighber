@@ -35,7 +35,8 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ViewProfileActivity" />
         <activity android:name=".AddNewActivity" />
-        <activity android:name=".MainActivity2" />
+        <activity android:name=".MainActivity2"
+                  android:windowSoftInputMode="adjustPan" />
         <activity android:name=".BorrowerRecordsActivity" />
         <activity android:name=".WriteOfferActivity" />
         <activity android:name=".WriteOfferActivity2" />

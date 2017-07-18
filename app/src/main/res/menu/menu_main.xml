@@ -8,12 +8,6 @@
         android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="withText" />
     <item
-        android:id="@+id/action_help"
-        android:orderInCategory="100"
-        android:title="Help"
-        android:icon="@drawable/ic_help_black_24dp"
-        app:showAsAction="withText" />
-    <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="Logout"
