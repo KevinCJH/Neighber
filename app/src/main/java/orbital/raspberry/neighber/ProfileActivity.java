@@ -71,14 +71,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ProfileActivity.this, MainActivity.class));
-                finish();
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ProfileActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
@@ -86,14 +85,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ProfileActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ProfileActivity.this, ChatListActivity.class));
             }
         });
 
@@ -236,7 +234,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -250,8 +248,13 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(ProfileActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(ProfileActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -9,8 +9,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,8 +34,10 @@ public class MainActivity2 extends AppCompatActivity {
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private TextView browsereq, browseoff;
-    private List<Post> requests;
+    private List<Post> posts;
     private ListView listViewRequests;
+    private EditText searchtxt;
+    private Button searchbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,7 @@ public class MainActivity2 extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        requests = new ArrayList<>();
+        posts = new ArrayList<>();
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
 
@@ -59,7 +64,6 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity2.this, MainActivity.class));
-                finish();
             }
         });
 
@@ -80,7 +84,7 @@ public class MainActivity2 extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity2.this, BorrowerRecordsActivity.class));
             }
         });
 
@@ -88,14 +92,13 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity2.this, AddNewActivity.class));
-                finish();
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity2.this, ChatListActivity.class));
             }
         });
 
@@ -103,11 +106,14 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity2.this, ProfileActivity.class));
-                finish();
             }
         });
 
         //////////////////////End Navigation////////////////////////////
+
+        searchtxt = (EditText) findViewById(R.id.searchtxt);
+        searchbtn = (Button) findViewById(R.id.searchbtn);
+
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
@@ -117,27 +123,27 @@ public class MainActivity2 extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 //clearing the previous list
-                requests.clear();
+                posts.clear();
 
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    Post request = postSnapshot.getValue(Post.class);
+                    Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 1
-                        if(request.getPosttype() == 2) {
+                        if(post.getPosttype() == 2 && post.getStatus() == 1) {
 
-                            String datetime = getDate(request.getTimestamp());
+                            String datetime = getDate(post.getTimestamp());
 
-                            request.setDatetime(datetime);
+                            post.setDatetime(datetime);
 
                             //adding to the list
-                            requests.add(request);
+                            posts.add(post);
                         }
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainActivity2.this, requests);
+                RequestList reqAdapter = new RequestList(MainActivity2.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -151,16 +157,57 @@ public class MainActivity2 extends AppCompatActivity {
         listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post request = requests.get(position);
+                Post post = posts.get(position);
                 //Toast.makeText(MainActivity.this, "Item: " + request.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
-                String requesterid = request.getUserid();
-                String postid = request.getPostid();
+                String requesterid = post.getUserid();
+                String postid = post.getPostid();
 
                 Intent i = new Intent(MainActivity2.this, PostActivity.class);
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
-                finish();
+
+            }
+        });
+
+
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String query = searchtxt.getText().toString().trim();
+                int found = 0;
+
+                for(Post p : posts){
+
+                    String splitname[] = p.getItemname().split(" ");
+
+                    for(int i=0; i<splitname.length; i++) {
+
+                        if (splitname[i].equals(query)) {
+
+                            String requesterid = p.getUserid();
+                            String postid = p.getPostid();
+
+                            found = 1;
+
+                            Intent i2 = new Intent(MainActivity2.this, PostActivity.class);
+                            i2.putExtra("ruserid", requesterid);
+                            i2.putExtra("rpostid", postid);
+                            startActivity(i2);
+
+                            break;
+                        }
+                    }
+
+                    if(found == 1){
+                        break;
+                    }
+
+                }
+                if(found == 0) {
+                    Toast.makeText(MainActivity2.this, "No such items found", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -174,7 +221,7 @@ public class MainActivity2 extends AppCompatActivity {
         return date;
     }
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -188,8 +235,13 @@ public class MainActivity2 extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(MainActivity2.this, LoginpageActivity.class));
+                Intent i = new Intent(MainActivity2.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(MainActivity2.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

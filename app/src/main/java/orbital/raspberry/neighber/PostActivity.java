@@ -28,11 +28,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PostActivity extends AppCompatActivity {
 
-    private String ruserid, rpostid;
+    private String ruserid, rpostid, ruserdisplayname;
     private TextView rusernametxt, itemnametxt, postdesctxt;
     private CircleImageView ruserimg;
     private TextView browse, records, addnew, chat, profile;
     private Button viewprofile, writeoffer;
+    private int posttype;
 
     private FirebaseAuth auth;
 
@@ -64,14 +65,13 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PostActivity.this, MainActivity.class));
-                finish();
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(PostActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
@@ -79,14 +79,13 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PostActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(PostActivity.this, ChatListActivity.class));
             }
         });
 
@@ -94,7 +93,6 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PostActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -102,6 +100,10 @@ public class PostActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+
+        if(auth.getCurrentUser().getUid().toString().equals(ruserid)){
+            writeoffer.setVisibility(View.GONE);
+        }
 
         final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
         uDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -115,6 +117,8 @@ public class PostActivity extends AppCompatActivity {
 
                 //Display user name
                 rusernametxt.setText(user.getDisplayname());
+
+                ruserdisplayname = user.getDisplayname();
 
             }
 
@@ -133,11 +137,14 @@ public class PostActivity extends AppCompatActivity {
                 //Display post item name and description
 
                 if(post.getPosttype() == 1) {
-                    itemnametxt.setText("I need an/a " + post.getItemname());
+                    itemnametxt.setText("I need " + post.getItemname());
                 }else {
-                    itemnametxt.setText("I can lend an/a " + post.getItemname());
+                    itemnametxt.setText("I can lend " + post.getItemname());
+                    writeoffer.setText("Write Request");
                 }
                 postdesctxt.setText(post.getPostdesc());
+
+                posttype = post.getPosttype();
 
             }
 
@@ -160,10 +167,33 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        writeoffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(posttype == 1) {
+                    Intent i = new Intent(PostActivity.this, WriteOfferActivity.class);
+                    //Pass info to next activity
+                    i.putExtra("ruserid", ruserid);
+                    i.putExtra("rpostid", rpostid);
+                    i.putExtra("ruserdisplayname", ruserdisplayname);
+                    startActivity(i);
+                }else if(posttype == 2){
+                    Intent i = new Intent(PostActivity.this, WriteOfferActivity2.class);
+                    //Pass info to next activity
+                    i.putExtra("ruserid", ruserid);
+                    i.putExtra("rpostid", rpostid);
+                    i.putExtra("ruserdisplayname", ruserdisplayname);
+                    startActivity(i);
+                }
+
+            }
+        });
+
 
     }
 
-    //////////////////Top Right Menu//////////////////////
+    ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -177,8 +207,13 @@ public class PostActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(PostActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(PostActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(PostActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

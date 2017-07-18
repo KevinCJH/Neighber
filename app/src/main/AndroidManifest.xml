@@ -34,10 +34,39 @@
         <activity android:name=".SignupActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ViewProfileActivity" />
-        <activity android:name=".BorrowingActivity" />
         <activity android:name=".AddNewActivity" />
-        <activity android:name=".MainActivity2" />
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".MainActivity2"
+                  android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".BorrowerRecordsActivity" />
+        <activity android:name=".WriteOfferActivity" />
+        <activity android:name=".WriteOfferActivity2" />
+        <activity android:name=".EditPostActivity" />
+        <activity android:name=".ViewOfferActivity" />
+        <activity android:name=".AgreementActivity" />
+        <activity android:name=".AgreementActivity2" />
+        <activity android:name=".ReturnAgreementActivity" />
+        <activity android:name=".ReturnAgreementActivity2" />
+        <activity android:name=".ReturnAgreementAcceptActivity" />
+        <activity android:name=".ReturnAgreementAcceptActivity2" />
+        <activity android:name=".LenderRecordsActivity" />
+        <activity android:name=".ViewRequestActivity" />
+        <activity android:name=".ViewOfferSentActivity" />
+        <activity android:name=".ViewRequestSentActivity" />
+        <activity android:name=".HistoryRecordsActivity" />
+        <activity android:name=".HistoryRequestActivity" />
+        <activity android:name=".HistoryOfferActivity" />
+        <activity android:name=".RateUserActivity" />
+        <activity android:name=".OfferRateUserActivity" />
+        <activity android:name=".RequestRateUserActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".ChangeEmailActivity" />
+        <activity android:name=".SendAgreementActivity" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".ChatListActivity" />
+        <activity android:name=".ChatListActivity2" />
+        <activity android:name=".ChatListActivity3" />
+
     </application>
 
 </manifest>

@@ -77,11 +77,10 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_select_24dp"
+            android:drawableTop="@drawable/ic_search_black_24dp"
             android:text="Browse"
             android:textAlignment="center"
             android:onClick="onClick"
-            android:textColor="@color/colorPrimary"
             android:clickable="true"
             android:layout_weight="1"
             android:layout_width="0dp" />

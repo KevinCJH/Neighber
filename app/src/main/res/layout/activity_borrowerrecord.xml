@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Top Nav Bar -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/grey"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout4">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_borrowing"
+            android:drawableTop="@drawable/ic_arrow_downward_select_24dp"
+            android:text="Borrowing (In)"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_lending"
+            android:drawableTop="@drawable/ic_arrow_upward_black_24dp"
+            android:text="Lending (Out)"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_history"
+            android:drawableTop="@drawable/ic_history_black_24dp"
+            android:text="History"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+
+        </LinearLayout>
+
+
+    <!-- Bottom Nav Bar -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/grey"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout5">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_browse"
+            android:drawableTop="@drawable/ic_search_black_24dp"
+            android:text="Browse"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_records"
+            android:drawableTop="@drawable/ic_library_books_select_24dp"
+            android:text="Records"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_addnew"
+            android:drawableTop="@drawable/ic_add_circle_black_24dp"
+            android:text="Add"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_chat"
+            android:drawableTop="@drawable/ic_chat_black_24dp"
+            android:text="Chat"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/action_profile"
+            android:drawableTop="@drawable/ic_person_outline_black_24dp"
+            android:text="My Profile"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:text="Your Requests(Posted):"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_below="@+id/linearLayout4"
+        android:id="@+id/textViewPost" />
+
+    <ListView
+        android:id="@+id/listRequest"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewPost" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:text="Your Requests(Sent):"
+        android:layout_below="@+id/listRequest"
+        android:id="@+id/textViewPost2" />
+
+    <ListView
+        android:id="@+id/listRequest2"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewPost2" />
+
+
+</RelativeLayout>

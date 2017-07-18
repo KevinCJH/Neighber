@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,14 +56,13 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddNewActivity.this, MainActivity.class));
-                finish();
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(AddNewActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
@@ -76,7 +76,7 @@ public class AddNewActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(AddNewActivity.this, ChatListActivity.class));
             }
         });
 
@@ -84,7 +84,6 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddNewActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -100,15 +99,34 @@ public class AddNewActivity extends AppCompatActivity {
         final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
         final String userid = currentFirebaseUser.getUid();
 
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+               if(position == 0){
+                   postdescTxt.setHint("Add description for your Request");
+                   submitBtn.setText("Submit Request");
+               }else{
+                   postdescTxt.setHint("Add description for your Offer");
+                   submitBtn.setText("Submit Offer");
+               }
+            }
+        });
+
+
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                ProgressDialog pd = new ProgressDialog(AddNewActivity.this);
+                pd.setMessage("Submitting...");
+                pd.show();
+
                 // get unique post id from firebase
                 String postid = mDatabase.push().getKey();
 
+                //Get the post type based on which item is selected in the spinner
                 int postType = spinner.getSelectedIndex() + 1;
 
                 //Create newpost object
@@ -121,7 +139,9 @@ public class AddNewActivity extends AppCompatActivity {
                 //Add timestamp to the post
                 mDatabase.child(postid).child("timestamp").setValue(ServerValue.TIMESTAMP);
 
-                Toast.makeText(AddNewActivity.this, "Request Submitted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in the Records tab", Toast.LENGTH_LONG).show();
+
+                pd.dismiss();
 
                 startActivity(new Intent(AddNewActivity.this, MainActivity.class));
                 finish();
@@ -145,8 +165,13 @@ public class AddNewActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(AddNewActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(AddNewActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(AddNewActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

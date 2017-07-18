@@ -36,6 +36,7 @@
         android:layout_below="@+id/imgView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
+        android:maxLines="1"
         android:textSize="24dp"
         android:inputType="textPersonName"
         android:hint="Change Display Name" />

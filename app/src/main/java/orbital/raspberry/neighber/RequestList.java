@@ -13,12 +13,12 @@ import java.util.List;
 public class RequestList extends ArrayAdapter<Post> {
 
     private Activity context;
-    List<Post> requests;
+    List<Post> posts;
 
-    public RequestList(Activity context, List<Post> requests) {
-        super(context, R.layout.layout_request_list, requests);
+    public RequestList(Activity context, List<Post> posts) {
+        super(context, R.layout.layout_request_list, posts);
         this.context = context;
-        this.requests = requests;
+        this.posts = posts;
     }
 
     @Override
@@ -26,13 +26,12 @@ public class RequestList extends ArrayAdapter<Post> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.layout_request_list, null, true);
 
-        TextView textViewName = (TextView) listViewItem.findViewById(R.id.itemnameTxt);
-     //   TextView textViewDate = (TextView) listViewItem.findViewById(R.id.postdateTxt);
-        TextView textViewPostby = (TextView) listViewItem.findViewById(R.id.postbyTxt);
+        TextView itemname = (TextView) listViewItem.findViewById(R.id.itemnameTxt);
+        TextView datetime = (TextView) listViewItem.findViewById(R.id.datetimeTxt);
 
-        Post request = requests.get(position);
-        textViewName.setText(request.getItemname());
-        textViewPostby.setText(request.getDatetime());
+        Post post = posts.get(position);
+        itemname.setText(post.getItemname());
+        datetime.setText(post.getDatetime());
 
         return listViewItem;
     }

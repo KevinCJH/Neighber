@@ -45,7 +45,6 @@ public class ViewProfileActivity extends AppCompatActivity {
     //creating reference to firebase storage
     private FirebaseAuth auth;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +64,13 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ViewProfileActivity.this, MainActivity.class));
-                finish();
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ViewProfileActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
@@ -80,14 +78,13 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ViewProfileActivity.this, AddNewActivity.class));
-                finish();
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ViewProfileActivity.this, ChatListActivity.class));
             }
         });
 
@@ -95,7 +92,6 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ViewProfileActivity.this, ProfileActivity.class));
-                finish();
             }
         });
 
@@ -139,7 +135,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     }
 
-    //////////////////Top Right Menu//////////////////////
+    ////////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -153,8 +149,13 @@ public class ViewProfileActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                startActivity(new Intent(ViewProfileActivity.this, LoginpageActivity.class));
+                Intent i = new Intent(ViewProfileActivity.this, LoginpageActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(ViewProfileActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
