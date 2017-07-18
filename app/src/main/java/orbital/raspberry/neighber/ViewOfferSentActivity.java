@@ -30,6 +30,9 @@ public class ViewOfferSentActivity extends AppCompatActivity {
     private TextView browse, records, addnew, chat, profile;
     private Button viewprofile, acceptoffer;
     private String postid;
+    private String userid;
+    private String otherimgurl;
+    private String userimgurl;
 
     private FirebaseAuth auth;
 
@@ -80,7 +83,7 @@ public class ViewOfferSentActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ViewOfferSentActivity.this, ChatListActivity.class));
             }
         });
 
@@ -96,6 +99,8 @@ public class ViewOfferSentActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
+        userid = auth.getCurrentUser().getUid();
+
         final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
         uDatabase.child(ruserid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -106,10 +111,29 @@ public class ViewOfferSentActivity extends AppCompatActivity {
                 String imageUri = user.getImgUri();
                 Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
 
+                otherimgurl = imageUri;
+
                 //Display user name
                 rusernametxt.setText(user.getDisplayname());
 
                 ruserdisplayname = user.getDisplayname();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ViewOfferSentActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        final DatabaseReference u2Database = FirebaseDatabase.getInstance().getReference("users");
+        u2Database.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                //Display profile picture of user
+                userimgurl = user.getImgUri();
 
             }
 
@@ -161,6 +185,19 @@ public class ViewOfferSentActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
+
+                //Create a chat room
+                DatabaseReference cDatabase = FirebaseDatabase.getInstance().getReference("chatmessage");
+                String chatroomid = cDatabase.push().getKey();
+
+                FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("chatid").setValue(chatroomid);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("chatid").setValue(chatroomid);
+
+                FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("otherimg").setValue(userimgurl);
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherimg").setValue(otherimgurl);
+
+
+                ////
 
                 Toast.makeText(ViewOfferSentActivity.this, "Your acceptance has been sent to the user", Toast.LENGTH_SHORT).show();
 

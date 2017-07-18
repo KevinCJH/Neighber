@@ -76,7 +76,7 @@ public class SendAgreementActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(SendAgreementActivity.this, ChatListActivity.class));
             }
         });
 

@@ -72,7 +72,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(WriteOfferActivity2.this, ChatListActivity.class));
             }
         });
 

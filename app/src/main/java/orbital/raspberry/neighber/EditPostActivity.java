@@ -70,7 +70,7 @@ public class EditPostActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(EditPostActivity.this, ChatListActivity.class));
             }
         });
 

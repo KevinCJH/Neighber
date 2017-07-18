@@ -106,7 +106,7 @@ public class HistoryRequestActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(HistoryRequestActivity.this, ChatListActivity.class));
             }
         });
 

@@ -20,6 +20,8 @@ public class OfferToBorrowPost {
     private int status;
     private int rated;
     private String offerdesc;
+    private String chatid;
+    private String otherimg;
 
     public OfferToBorrowPost(){}
 
@@ -105,6 +107,14 @@ public class OfferToBorrowPost {
 
     public String getOfferdesc(){
         return offerdesc;
+    }
+
+    public String getChatid(){
+        return chatid;
+    }
+
+    public String getOtherimg(){
+        return otherimg;
     }
 
 }

@@ -43,7 +43,7 @@ public class RecordsOfferList2 extends ArrayAdapter<OfferToBorrowPost> {
                 break;
             case 3:
                 status.setText("Status: Collection of Item");
-                offernum.setText("Send To: " + offer.getTargetname());
+                offernum.setText("Deliver To: " + offer.getTargetname());
                 break;
             case 4:
                 status.setText("Status: Lending in Progress");

@@ -23,6 +23,8 @@ public class Post {
     //For list view
     private String datetime;
     private int rated;
+    private String chatid;
+    private String otherimg;
 
     public Post(){}
 
@@ -103,6 +105,14 @@ public class Post {
 
     public int getRated(){
         return rated;
+    }
+
+    public String getChatid(){
+        return chatid;
+    }
+
+    public String getOtherimg(){
+        return otherimg;
     }
 
 }

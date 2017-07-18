@@ -39,7 +39,7 @@ public class RecordsList2 extends ArrayAdapter<Post> {
                 break;
             case 2:
                 status.setText("Status: Collection of Item");
-                offernum.setText("Send To: " + post.getOthername());
+                offernum.setText("Deliver To: " + post.getOthername());
                 break;
             case 3:
                 status.setText("Status: Lending in Progress");

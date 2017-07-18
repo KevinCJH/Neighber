@@ -84,7 +84,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ViewProfileActivity.this, ChatListActivity.class));
             }
         });
 

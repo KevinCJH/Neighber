@@ -83,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(SettingsActivity.this, ChatListActivity.class));
             }
         });
 
@@ -135,7 +135,7 @@ public class SettingsActivity extends AppCompatActivity {
         changeEm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(SettingsActivity.this, ChangeEmailActivity.class));
             }
         });
 

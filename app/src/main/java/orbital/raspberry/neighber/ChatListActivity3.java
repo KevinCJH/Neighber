@@ -3,7 +3,6 @@ package orbital.raspberry.neighber;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,32 +18,32 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
-public class MainActivity2 extends AppCompatActivity {
+public class ChatListActivity3 extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
-    private TextView browsereq, browseoff;
-    private List<Post> posts;
-    private ListView listViewRequests;
+    private List<ChatItem> chats;
+    private ListView chatList;
+    private String userid;
+    private TextView post, lend, borrow;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_chatlist3);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        posts = new ArrayList<>();
+        userid = auth.getCurrentUser().getUid();
 
-        listViewRequests = (ListView) findViewById(R.id.listRequest);
+        chats = new ArrayList<>();
+
+        chatList = (ListView) findViewById(R.id.listchat);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -52,91 +51,97 @@ public class MainActivity2 extends AppCompatActivity {
         chat = (TextView) findViewById(R.id.action_chat);
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
-        browsereq = (TextView) findViewById(R.id.action_browse_request);
-        browseoff = (TextView) findViewById(R.id.action_browse_offer);
+        post = (TextView) findViewById(R.id.action_post);
+        lend = (TextView) findViewById(R.id.action_lend);
+        borrow = (TextView) findViewById(R.id.action_borrow);
 
-        browsereq.setOnClickListener(new View.OnClickListener() {
+        post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, MainActivity.class));
+                startActivity(new Intent(ChatListActivity3.this, ChatListActivity.class));
+
             }
         });
 
-        browseoff.setOnClickListener(new View.OnClickListener() {
+        lend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            }
+        });
 
+        borrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChatListActivity3.this, ChatListActivity2.class));
             }
         });
 
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ChatListActivity3.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ChatListActivity3.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, AddNewActivity.class));
+                startActivity(new Intent(ChatListActivity3.this, AddNewActivity.class));
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, ChatListActivity.class));
+
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, ProfileActivity.class));
+                startActivity(new Intent(ChatListActivity3.this, ProfileActivity.class));
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
+
+        final DatabaseReference rDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
 
         //attaching value event listener
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        rDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 //clearing the previous list
-                posts.clear();
+                chats.clear();
 
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    Post post = postSnapshot.getValue(Post.class);
+                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
 
-                    //If post type is request aka 1
-                        if(post.getPosttype() == 2 && post.getStatus() == 1) {
+                    if(offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)) {
 
-                            String datetime = getDate(post.getTimestamp());
+                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), 0);
+                        chats.add(newchat);
 
-                            post.setDatetime(datetime);
-
-                            //adding to the list
-                            posts.add(post);
-                        }
+                    }
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainActivity2.this, posts);
+                ChatList reqAdapter = new ChatList(ChatListActivity3.this, chats);
                 //attaching adapter to the listview
-                listViewRequests.setAdapter(reqAdapter);
+                chatList.setAdapter(reqAdapter);
+
             }
 
             @Override
@@ -145,17 +150,15 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
-        listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+        chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = posts.get(position);
-                //Toast.makeText(MainActivity.this, "Item: " + request.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
-                String requesterid = post.getUserid();
-                String postid = post.getPostid();
+                ChatItem chat = chats.get(position);
 
-                Intent i = new Intent(MainActivity2.this, PostActivity.class);
-                i.putExtra("ruserid", requesterid);
-                i.putExtra("rpostid", postid);
+               Intent i = new Intent(ChatListActivity3.this, ChatActivity.class);
+                i.putExtra("chatroomid", chat.getChatroomid());
                 startActivity(i);
 
             }
@@ -163,12 +166,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
-    public String getDate(long time) {
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(time);
-        String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
-        return date;
-    }
+
 
     ///////////////////Top Right Menu//////////////////////
     @Override
@@ -184,13 +182,13 @@ public class MainActivity2 extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(MainActivity2.this, LoginpageActivity.class);
+                Intent i = new Intent(ChatListActivity3.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(MainActivity2.this, SettingsActivity.class));
+                startActivity(new Intent(ChatListActivity3.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,9 +1,11 @@
 package orbital.raspberry.neighber;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,11 +27,15 @@ public class ChatActivity extends AppCompatActivity {
     private String userid;
     private String username;
     private FirebaseListAdapter<ChatMessage> adapter;
+    private String chatroomid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Intent i = getIntent();
+        chatroomid = i.getStringExtra("chatroomid");
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -52,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-        final DatabaseReference cDatabase = FirebaseDatabase.getInstance().getReference("chatmessage").child("itemA");
+        final DatabaseReference cDatabase = FirebaseDatabase.getInstance().getReference("chatmessage").child(chatroomid);
 
         FloatingActionButton fab =
                 (FloatingActionButton)findViewById(R.id.fab);
@@ -91,7 +97,7 @@ public class ChatActivity extends AppCompatActivity {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-                R.layout.message, FirebaseDatabase.getInstance().getReference("chatmessage").child("itemA")) {
+                R.layout.message, FirebaseDatabase.getInstance().getReference("chatmessage").child(chatroomid)) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Get references to the views of message.xml
@@ -113,4 +119,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     }
+
+
+    //////////////////End top menu////////////////////////
 }

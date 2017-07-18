@@ -85,7 +85,7 @@ public class PostActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(PostActivity.this, ChatListActivity.class));
             }
         });
 

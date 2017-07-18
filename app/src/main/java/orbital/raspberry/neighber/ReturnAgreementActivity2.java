@@ -65,7 +65,7 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ReturnAgreementActivity2.this, ChatListActivity.class));
             }
         });
 

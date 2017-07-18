@@ -81,7 +81,7 @@ public class OfferRateUserActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(OfferRateUserActivity.this, ChatListActivity.class));
             }
         });
 

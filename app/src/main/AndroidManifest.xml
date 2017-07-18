@@ -59,8 +59,13 @@
         <activity android:name=".RequestRateUserActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".ChangeEmailActivity" />
         <activity android:name=".SendAgreementActivity" />
         <activity android:name=".ChatActivity" />
+        <activity android:name=".ChatListActivity" />
+        <activity android:name=".ChatListActivity2" />
+        <activity android:name=".ChatListActivity3" />
+
     </application>
 
 </manifest>

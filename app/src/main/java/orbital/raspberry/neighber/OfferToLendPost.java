@@ -22,6 +22,8 @@ public class OfferToLendPost {
     private long timestamp;
     private int status;
     private int rated;
+    private String chatid;
+    private String otherimg;
 
     public OfferToLendPost(){}
 
@@ -107,6 +109,14 @@ public class OfferToLendPost {
 
     public int getRated(){
         return rated;
+    }
+
+    public String getChatid(){
+        return chatid;
+    }
+
+    public String getOtherimg(){
+        return otherimg;
     }
 
 }

@@ -106,7 +106,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(BorrowerRecordsActivity.this, ChatListActivity.class));
             }
         });
 

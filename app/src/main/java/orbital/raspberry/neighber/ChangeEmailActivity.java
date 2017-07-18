@@ -1,14 +1,10 @@
 package orbital.raspberry.neighber;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,20 +26,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ChangePasswordActivity extends AppCompatActivity {
+public class ChangeEmailActivity extends AppCompatActivity {
 
     private String userid;
     private TextView browse, records, addnew, chat, profile;
     private Button submitBtn;
-    private EditText opw, npw;
-    private String email, oldpw, newpw;
+    private EditText pw, newemail;
+    private String email, password, newemailaddress;
 
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_changepassword);
+        setContentView(R.layout.activity_changeemail);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -55,43 +51,43 @@ public class ChangePasswordActivity extends AppCompatActivity {
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChangePasswordActivity.this, MainActivity.class));
+                startActivity(new Intent(ChangeEmailActivity.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChangePasswordActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ChangeEmailActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChangePasswordActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ChangeEmailActivity.this, AddNewActivity.class));
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChangePasswordActivity.this, ChatListActivity.class));
+                startActivity(new Intent(ChangeEmailActivity.this, ChatListActivity.class));
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChangePasswordActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ChangeEmailActivity.this, ProfileActivity.class));
             }
         });
 
         //////////////////////End Navigation////////////////////////////
 
         submitBtn = (Button)findViewById(R.id.savechange);
-        opw = (EditText)findViewById(R.id.oldpw);
-        npw = (EditText)findViewById(R.id.newpw);
+        pw = (EditText)findViewById(R.id.password);
+        newemail = (EditText)findViewById(R.id.newemail);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -110,7 +106,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ChangePasswordActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChangeEmailActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -119,17 +115,17 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                oldpw = opw.getText().toString().trim();
-                newpw = npw.getText().toString().trim();
+                password = pw.getText().toString().trim();
+                newemailaddress = newemail.getText().toString().trim();
 
-                final ProgressDialog pd = new ProgressDialog(ChangePasswordActivity.this);
-                pd.setMessage("Changing Password...");
+                final ProgressDialog pd = new ProgressDialog(ChangeEmailActivity.this);
+                pd.setMessage("Changing Email Address...");
                 pd.show();
 
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 AuthCredential credential = EmailAuthProvider
-                        .getCredential(email, oldpw);
+                        .getCredential(email, password);
 
                 // Prompt the user to re-provide their sign-in credentials
                 user.reauthenticate(credential)
@@ -137,22 +133,23 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    user.updatePassword(newpw).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    user.updateEmail(newemailaddress).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                FirebaseDatabase.getInstance().getReference("users").child(userid).child("email").setValue(newemailaddress);
                                                 pd.dismiss();
-                                                Toast.makeText(ChangePasswordActivity.this, "Password Changed Successfully", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(ChangeEmailActivity.this, "Email Changed Successfully", Toast.LENGTH_LONG).show();
                                                 finish();
                                             } else {
                                                 pd.dismiss();
-                                                Toast.makeText(ChangePasswordActivity.this, "Failed to update password", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(ChangeEmailActivity.this, "Failed to update email", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
                                 } else {
                                     pd.dismiss();
-                                    Toast.makeText(ChangePasswordActivity.this, "Authentication failed, password is incorrect", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ChangeEmailActivity.this, "Authentication failed, password is incorrect", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -192,7 +189,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(ChangePasswordActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(ChangeEmailActivity.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
