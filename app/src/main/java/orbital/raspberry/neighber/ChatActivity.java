@@ -28,6 +28,7 @@ public class ChatActivity extends AppCompatActivity {
     private String username;
     private FirebaseListAdapter<ChatMessage> adapter;
     private String chatroomid;
+    private String itemname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,9 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         chatroomid = i.getStringExtra("chatroomid");
+        itemname = i.getStringExtra("itemname");
+
+        getSupportActionBar().setTitle(itemname);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -68,14 +72,16 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EditText input = (EditText)findViewById(R.id.input);
 
-                // Read the input field and push a new instance
-                // of ChatMessage to the Firebase database
+                if(!input.getText().toString().trim().isEmpty()) {
 
-                String msgid = cDatabase.push().getKey();
+                    // Read the input field and push a new instance
+                    // of ChatMessage to the Firebase database
 
-                ChatMessage msg = new ChatMessage(msgid, input.getText().toString().trim(), username);
+                    String msgid = cDatabase.push().getKey();
 
-                cDatabase.child(msgid).setValue(msg);
+                    ChatMessage msg = new ChatMessage(msgid, input.getText().toString().trim(), username, userid);
+
+                    cDatabase.child(msgid).setValue(msg);
 
                 /*
                 FirebaseDatabase.getInstance()
@@ -87,8 +93,9 @@ public class ChatActivity extends AppCompatActivity {
                                         .getDisplayName())
                         );
 */
-                // Clear the input
-                input.setText("");
+                    // Clear the input
+                    input.setText("");
+                }
             }
         });
 

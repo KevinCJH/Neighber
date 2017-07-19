@@ -74,6 +74,17 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/itemnametxt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:inputType="textPersonName"
+        android:hint="Item Name"
+        android:textStyle="bold"
+        android:layout_marginTop="31dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/infotxt"
@@ -83,8 +94,8 @@
         android:inputType="textPersonName"
         android:hint="Description of your request"
         android:textStyle="bold"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/posttype"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/itemnametxt"
         android:layout_alignParentStart="true" />
 
     <EditText

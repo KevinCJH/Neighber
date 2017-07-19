@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private List<Post> posts;
     private ListView listViewRequests;
     private static boolean calledAlready = false;
+    private EditText searchtxt;
+    private Button searchbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
         if (!calledAlready)
         {
@@ -68,14 +72,13 @@ public class MainActivity extends AppCompatActivity {
         browsereq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity.this, MainActivity2.class));
             }
         });
 
         browseoff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MainActivity2.class));
             }
         });
 
@@ -116,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
 
         //////////////////////End Navigation////////////////////////////
 
+        searchtxt = (EditText) findViewById(R.id.searchtxt);
+        searchbtn = (Button) findViewById(R.id.searchbtn);
+
+
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
         //attaching value event listener
@@ -132,15 +139,15 @@ public class MainActivity extends AppCompatActivity {
                     Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 1
-                        if(post.getPosttype() == 1 && post.getStatus() == 1) {
+                    if(post.getPosttype() == 2 && post.getStatus() == 1) {
 
-                            String datetime = getDate(post.getTimestamp());
+                        String datetime = getDate(post.getTimestamp());
 
-                            post.setDatetime(datetime);
+                        post.setDatetime(datetime);
 
-                            //adding to the list
-                            posts.add(post);
-                        }
+                        //adding to the list
+                        posts.add(post);
+                    }
                 }
 
                 //creating adapter
@@ -159,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Post post = posts.get(position);
-                //Toast.makeText(MainActivity.this, "Item: " + post.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Item: " + request.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
                 String requesterid = post.getUserid();
                 String postid = post.getPostid();
 
@@ -167,6 +174,48 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
+
+            }
+        });
+
+
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String query = searchtxt.getText().toString().trim();
+                int found = 0;
+
+                for(Post p : posts){
+
+                    String splitname[] = p.getItemname().split(" ");
+
+                    for(int i=0; i<splitname.length; i++) {
+
+                        if (splitname[i].equals(query)) {
+
+                            String requesterid = p.getUserid();
+                            String postid = p.getPostid();
+
+                            found = 1;
+
+                            Intent i2 = new Intent(MainActivity.this, PostActivity.class);
+                            i2.putExtra("ruserid", requesterid);
+                            i2.putExtra("rpostid", postid);
+                            startActivity(i2);
+
+                            break;
+                        }
+                    }
+
+                    if(found == 1){
+                        break;
+                    }
+
+                }
+                if(found == 0) {
+                    Toast.makeText(MainActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

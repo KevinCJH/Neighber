@@ -8,11 +8,13 @@ public class ChatMessage {
     private String messageUser;
     private long messageTime;
     private String messageid;
+    private String userid;
 
-    public ChatMessage(String messageid, String messageText, String messageUser) {
+    public ChatMessage(String messageid, String messageText, String messageUser, String userid) {
         this.messageText = messageText;
         this.messageUser = messageUser;
         this.messageid = messageid;
+        this.userid = userid;
 
         // Initialize to current time
         messageTime = new Date().getTime();
@@ -48,6 +50,10 @@ public class ChatMessage {
 
     public String getMessageid(){
         return messageid;
+    }
+
+    public String getUserid(){
+        return userid;
     }
 
 }

@@ -29,6 +29,7 @@ public class WriteOfferActivity extends AppCompatActivity {
     private int rrecordcount;
     private Button submitBtn;
     private EditText offerdescTxt;
+    private TextView itemnameTxt;
 
     private FirebaseAuth auth;
 
@@ -89,6 +90,7 @@ public class WriteOfferActivity extends AppCompatActivity {
 
         submitBtn = (Button)findViewById(R.id.submitRequest);
         offerdescTxt = (EditText)findViewById(R.id.offerdesc);
+        itemnameTxt = (TextView) findViewById(R.id.itemnametxt) ;
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -120,6 +122,8 @@ public class WriteOfferActivity extends AppCompatActivity {
                 Post post = dataSnapshot.getValue(Post.class);
 
                 ritemname = post.getItemname();
+
+                itemnameTxt.setText("Item: " + ritemname);
 
                 rrecordcount = post.getRecordcount();
 

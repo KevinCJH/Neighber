@@ -140,7 +140,7 @@ public class PostActivity extends AppCompatActivity {
                     itemnametxt.setText("I need " + post.getItemname());
                 }else {
                     itemnametxt.setText("I can lend " + post.getItemname());
-                    writeoffer.setText("Write Request");
+                    writeoffer.setText("Send Request");
                 }
                 postdesctxt.setText(post.getPostdesc());
 

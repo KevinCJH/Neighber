@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
     android:layout_height="match_parent">
 
     <!-- Top Nav Bar -->
@@ -16,6 +17,18 @@
 
         <TextView
             android:layout_height="wrap_content"
+            android:id="@+id/action_browse_offer"
+            android:drawableTop="@drawable/ic_arrow_downward_select_24dp"
+            android:textColor="@color/colorPrimary"
+            android:text="Browse Items"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
             android:id="@+id/action_browse_request"
             android:drawableTop="@drawable/ic_arrow_upward_black_24dp"
             android:text="Browse Requests"
@@ -25,17 +38,6 @@
             android:layout_weight="1"
             android:layout_width="0dp" />
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse_offer"
-            android:drawableTop="@drawable/ic_arrow_downward_select_24dp"
-            android:textColor="@color/colorPrimary"
-            android:text="Browse Offers"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
 
         </LinearLayout>
 

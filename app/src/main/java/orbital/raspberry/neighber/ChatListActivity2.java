@@ -160,6 +160,7 @@ public class ChatListActivity2 extends AppCompatActivity {
 
                Intent i = new Intent(ChatListActivity2.this, ChatActivity.class);
                 i.putExtra("chatroomid", chat.getChatroomid());
+                i.putExtra("itemname", chat.getItemname());
                 startActivity(i);
 
             }

@@ -16,6 +16,17 @@
 
         <TextView
             android:layout_height="wrap_content"
+            android:id="@+id/action_browse_offer"
+            android:drawableTop="@drawable/ic_arrow_downward_black_24dp"
+            android:text="Browse Items"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
             android:id="@+id/action_browse_request"
             android:drawableTop="@drawable/ic_arrow_upward_select_24dp"
             android:textColor="@color/colorPrimary"
@@ -26,16 +37,7 @@
             android:layout_weight="1"
             android:layout_width="0dp" />
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse_offer"
-            android:drawableTop="@drawable/ic_arrow_downward_black_24dp"
-            android:text="Browse Offers"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
+
 
         </LinearLayout>
 
