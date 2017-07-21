@@ -197,6 +197,27 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 final Post post = posts.get(position);
 
+                //DELETE DIALOG
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).removeValue();
+                                deleteRecords(post.getPostid());
+                                posts.remove(position);
+                                Toast.makeText(BorrowerRecordsActivity.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+
                 //Status pending
                 if(post.getStatus() == 1) {
 
@@ -223,10 +244,10 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     startActivity(i);
                                     break;
                                 case 2:
-                                    FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).removeValue();
-                                    deleteRecords(post.getPostid());
-                                    posts.remove(position);
-                                    Toast.makeText(BorrowerRecordsActivity.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
+                                            .setNegativeButton("Cancel", dialogClickListener).show();
+
                                     break;
                             }
                         }
@@ -236,14 +257,37 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 //wait for agreement
                 else if(post.getStatus() == 2) {
-                    //TODO
-                    //Chat and View profile
+
+                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                    i1.putExtra("chatroomid", post.getChatid());
+                                    i1.putExtra("itemname", post.getItemname());
+                                    startActivity(i1);
+                                    break;
+                                case 1:
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i2.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i2);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+
                 }
 
                 //accept agreement
                 else if(post.getStatus() == 3) {
 
-                    CharSequence options[] = new CharSequence[]{"View the agreement"};
+                    CharSequence options[] = new CharSequence[]{"View item agreement", "Chat with user", "View lender profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
                     builder.setTitle("Options");
@@ -257,6 +301,17 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     i1.putExtra("rofferid", post.getAgreementid());
                                     startActivity(i1);
                                     break;
+                                case 1:
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", post.getChatid());
+                                    i2.putExtra("itemname", post.getItemname());
+                                    startActivity(i2);
+                                    break;
+                                case 2:
+                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i3);
+                                    break;
                             }
                         }
                     });
@@ -267,7 +322,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                 //borrowing in progress
                 else if(post.getStatus() == 4) {
 
-                    CharSequence options[] = new CharSequence[]{"Return Item", "View lender profile"};
+                    CharSequence options[] = new CharSequence[]{"Return Item", "Chat with user", "View lender profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
                     builder.setTitle("Options");
@@ -282,9 +337,15 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     startActivity(i1);
                                     break;
                                 case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i2.putExtra("ruserid", post.getOtherid());
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", post.getChatid());
+                                    i2.putExtra("itemname", post.getItemname());
                                     startActivity(i2);
+                                    break;
+                                case 2:
+                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i3);
                                     break;
                             }
                         }
@@ -296,12 +357,15 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             }
         });
 
+////////////////////////////////////////////////////////////////////////////////////
+
 
         listViewRequests2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 final OfferToLendPost offer = offers.get(position);
+
 
                 final DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference("posts");
                 pDatabase.child(offer.getPostid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -317,6 +381,29 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                         Toast.makeText(BorrowerRecordsActivity.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+                //DELETE DIALOG
+                final DialogInterface.OnClickListener dialogClickListener2 = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                FirebaseDatabase.getInstance().getReference("offertolend").child(offer.getRecordid()).removeValue();
+                                rrecordcount -= 1;
+                                FirebaseDatabase.getInstance().getReference("posts").child(offer.getPostid()).child("recordcount").setValue(rrecordcount);
+                                offers.remove(position);
+                                Toast.makeText(BorrowerRecordsActivity.this, "Request has been deleted", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+                /////
 
                 //Status pending
                 if(offer.getStatus() == 1) {
@@ -337,11 +424,10 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     startActivity(i);
                                     break;
                                 case 1:
-                                    FirebaseDatabase.getInstance().getReference("offertolend").child(offer.getRecordid()).removeValue();
-                                    rrecordcount -= 1;
-                                    FirebaseDatabase.getInstance().getReference("posts").child(offer.getPostid()).child("recordcount").setValue(rrecordcount);
-                                    offers.remove(position);
-                                    Toast.makeText(BorrowerRecordsActivity.this, "Request has been deleted", Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
+                                            .setNegativeButton("Cancel", dialogClickListener2).show();
+
                                     break;
                             }
                         }
@@ -353,7 +439,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 else if(offer.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"View Agreement", "View lender profile"};
+                    CharSequence options[] = new CharSequence[]{"View Agreement", "Chat with user", "View lender profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
                     builder.setTitle("Options");
@@ -368,9 +454,15 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     startActivity(i1);
                                     break;
                                 case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i2.putExtra("ruserid", offer.getTargetid());
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", offer.getChatid());
+                                    i2.putExtra("itemname", offer.getItemname());
                                     startActivity(i2);
+                                    break;
+                                case 2:
+                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i3);
                                     break;
                             }
                         }
@@ -382,7 +474,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 else if(offer.getStatus() == 3) {
 
-                    CharSequence options[] = new CharSequence[]{"Return Item", "View lender profile"};
+                    CharSequence options[] = new CharSequence[]{"Return Item", "Chat with user", "View lender profile"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
                     builder.setTitle("Options");
@@ -397,9 +489,15 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     startActivity(i1);
                                     break;
                                 case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i2.putExtra("ruserid", offer.getTargetid());
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", offer.getChatid());
+                                    i2.putExtra("itemname", offer.getItemname());
                                     startActivity(i2);
+                                    break;
+                                case 2:
+                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i3);
                                     break;
                             }
                         }

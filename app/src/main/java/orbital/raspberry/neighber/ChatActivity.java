@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +42,9 @@ public class ChatActivity extends AppCompatActivity {
         chatroomid = i.getStringExtra("chatroomid");
         itemname = i.getStringExtra("itemname");
 
-        getSupportActionBar().setTitle(itemname);
+        getSupportActionBar().setTitle("Item: " + itemname);
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -95,6 +100,7 @@ public class ChatActivity extends AppCompatActivity {
 */
                     // Clear the input
                     input.setText("");
+
                 }
             }
         });
@@ -123,6 +129,7 @@ public class ChatActivity extends AppCompatActivity {
         };
 
         listOfMessages.setAdapter(adapter);
+        //listOfMessages.setSelection(adapter.getCount() - 1);
 
 
     }
