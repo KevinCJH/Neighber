@@ -166,6 +166,24 @@ public class HistoryRecordsActivity extends AppCompatActivity {
 
                 final Post post = posts.get(position);
 
+                //DELETE DIALOG
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).child("status").setValue(8);
+                                posts.remove(position);
+                                Toast.makeText(HistoryRecordsActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
                 //Status pending
                 if(post.getPosttype() == 1) {
 
@@ -193,9 +211,9 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                                     }
                                     break;
                                 case 2:
-                                    FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).child("status").setValue(8);
-                                    posts.remove(position);
-                                    Toast.makeText(HistoryRecordsActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(HistoryRecordsActivity.this);
+                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
+                                            .setNegativeButton("Cancel", dialogClickListener).show();
                                     break;
                             }
                         }
@@ -228,9 +246,9 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                                     }
                                     break;
                                 case 2:
-                                    FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).child("status").setValue(8);
-                                    posts.remove(position);
-                                    Toast.makeText(HistoryRecordsActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builderde2 = new AlertDialog.Builder(HistoryRecordsActivity.this);
+                                    builderde2.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
+                                            .setNegativeButton("Cancel", dialogClickListener).show();
                                     break;
                             }
                         }

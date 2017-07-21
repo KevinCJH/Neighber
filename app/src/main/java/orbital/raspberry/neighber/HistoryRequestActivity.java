@@ -161,6 +161,24 @@ public class HistoryRequestActivity extends AppCompatActivity {
 
                 final OfferToLendPost offer = offers.get(position);
 
+                //DELETE DIALOG
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                FirebaseDatabase.getInstance().getReference("offertolend").child(offer.getRecordid()).child("status").setValue(8);
+                                offers.remove(position);
+                                Toast.makeText(HistoryRequestActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
                     CharSequence options[] = new CharSequence[]{"View Lender Profile", "Rate this User", "Delete this Record"};
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRequestActivity.this);
@@ -185,9 +203,10 @@ public class HistoryRequestActivity extends AppCompatActivity {
                                     }
                                     break;
                                 case 2:
-                                    FirebaseDatabase.getInstance().getReference("offertolend").child(offer.getRecordid()).child("status").setValue(8);
-                                    offers.remove(position);
-                                    Toast.makeText(HistoryRequestActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(HistoryRequestActivity.this);
+                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
+                                            .setNegativeButton("Cancel", dialogClickListener).show();
+
                                     break;
                             }
                         }

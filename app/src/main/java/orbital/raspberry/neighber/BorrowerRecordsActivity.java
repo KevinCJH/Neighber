@@ -353,6 +353,34 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                     builder.show();
                 }
 
+                //return in progress
+                else if(post.getStatus() == 5) {
+
+                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", post.getChatid());
+                                    i2.putExtra("itemname", post.getItemname());
+                                    startActivity(i2);
+                                    break;
+                                case 1:
+                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i3);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
 
             }
         });
@@ -495,6 +523,36 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                     startActivity(i2);
                                     break;
                                 case 2:
+                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i3);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
+
+                //Status returning
+
+                else if(offer.getStatus() == 4) {
+
+                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", offer.getChatid());
+                                    i2.putExtra("itemname", offer.getItemname());
+                                    startActivity(i2);
+                                    break;
+                                case 1:
                                     Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
                                     i3.putExtra("ruserid", offer.getTargetid());
                                     startActivity(i3);
