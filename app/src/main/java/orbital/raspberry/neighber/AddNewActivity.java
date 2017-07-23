@@ -103,11 +103,11 @@ public class AddNewActivity extends AppCompatActivity {
 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                if(position == 0){
-                   postdescTxt.setHint("Add description for your Request");
-                   submitBtn.setText("Submit Request");
+                   postdescTxt.setHint("Provide description for your request. Eg. Duration of borrow?");
+                   submitBtn.setText("Post Request");
                }else{
-                   postdescTxt.setHint("Add description for your Offer");
-                   submitBtn.setText("Submit Offer");
+                   postdescTxt.setHint("Provide description for your offer. Eg. Size of item?");
+                   submitBtn.setText("Post Offer");
                }
             }
         });

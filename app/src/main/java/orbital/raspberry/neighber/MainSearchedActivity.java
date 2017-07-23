@@ -1,12 +1,10 @@
 package orbital.raspberry.neighber;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.*;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.text.method.TextKeyListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,32 +28,32 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainSearchedActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private TextView browsereq, browseoff;
     private List<Post> posts;
+    private List<Post> fulllist;
     private ListView listViewRequests;
-    private static boolean calledAlready = false;
     private EditText searchtxt;
     private Button searchbtn;
+    private String searchkey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        if (!calledAlready)
-        {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            calledAlready = true;
-        }
+        //Get search string
+        Intent i = getIntent();
+        searchkey = i.getStringExtra("searchkey");
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
         posts = new ArrayList<>();
+        fulllist = new ArrayList<>();
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
 
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         browsereq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MainActivity2.class));
+                startActivity(new Intent(MainSearchedActivity.this, MainActivity2.class));
             }
         });
 
@@ -92,28 +89,28 @@ public class MainActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(MainSearchedActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddNewActivity.class));
+                startActivity(new Intent(MainSearchedActivity.this, AddNewActivity.class));
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ChatListActivity.class));
+                startActivity(new Intent(MainSearchedActivity.this, ChatListActivity.class));
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                startActivity(new Intent(MainSearchedActivity.this, ProfileActivity.class));
             }
         });
 
@@ -122,6 +119,20 @@ public class MainActivity extends AppCompatActivity {
         searchtxt = (EditText) findViewById(R.id.searchtxt);
         searchbtn = (Button) findViewById(R.id.searchbtn);
 
+        searchtxt.setText(searchkey);
+
+        searchtxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // Always use a TextKeyListener when clearing a TextView to prevent android
+                    // warnings in the log
+                    TextKeyListener.clear((searchtxt).getText());
+
+                }
+            }
+        });
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
@@ -138,8 +149,25 @@ public class MainActivity extends AppCompatActivity {
                     //getting artist
                     Post post = postSnapshot.getValue(Post.class);
 
+                    //Found reset for every search
+                    int found = 0;
+
+                    //Perform search
+                    String splitname[] = post.getItemname().split(" ");
+
+                    for(int i=0; i<splitname.length; i++) {
+
+                        if (splitname[i].toLowerCase().equals(searchkey.toLowerCase())) {
+
+                            //Set found to 1 meaning item exist
+                            found = 1;
+
+                            break;
+                        }
+                    }
+
                     //If post type is request aka 1
-                    if(post.getPosttype() == 2 && post.getStatus() == 1) {
+                    if(post.getPosttype() == 2 && post.getStatus() == 1 && found == 1) {
 
                         String datetime = getDate(post.getTimestamp());
 
@@ -147,11 +175,17 @@ public class MainActivity extends AppCompatActivity {
 
                         //adding to the list
                         posts.add(post);
+
                     }
+
+                    if(post.getPosttype() == 2 && post.getStatus() == 1){
+                        fulllist.add(post);
+                    }
+
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainActivity.this, posts);
+                RequestList reqAdapter = new RequestList(MainSearchedActivity.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -170,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 String requesterid = post.getUserid();
                 String postid = post.getPostid();
 
-                Intent i = new Intent(MainActivity.this, PostActivity.class);
+                Intent i = new Intent(MainSearchedActivity.this, PostActivity.class);
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
@@ -186,8 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 String query = searchtxt.getText().toString().trim();
                 int found = 0;
 
-                //If found at least one, repopulate the list
-                for(Post p : posts){
+                for(Post p : fulllist){
 
                     String splitname[] = p.getItemname().split(" ");
 
@@ -195,11 +228,15 @@ public class MainActivity extends AppCompatActivity {
 
                         if (splitname[i].toLowerCase().equals(query.toLowerCase())) {
 
+                            String requesterid = p.getUserid();
+                            String postid = p.getPostid();
+
                             found = 1;
 
-                            Intent i2 = new Intent(MainActivity.this, MainSearchedActivity.class);
+                            Intent i2 = new Intent(MainSearchedActivity.this, MainSearchedActivity.class);
                             i2.putExtra("searchkey", query);
                             startActivity(i2);
+                            finish();
 
                             break;
                         }
@@ -211,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 if(found == 0) {
-                    Toast.makeText(MainActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainSearchedActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -240,13 +277,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(MainActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(MainSearchedActivity.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                startActivity(new Intent(MainSearchedActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
