@@ -79,48 +79,61 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="24dp"
-        android:hint="Item Name"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
+        android:text="You are"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="19dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignStart="@+id/infotxt" />
 
     <TextView
         android:id="@+id/infotxt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:hint="Offer and Condition of Loan"
-        android:textStyle="bold"
-        android:layout_marginTop="37dp"
+        android:textSize="20dp"
+        android:text="Offer and Condition of Loan"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="27dp"
         android:layout_below="@+id/itemnametxt"
-        android:layout_alignParentStart="true" />
+        android:layout_alignStart="@+id/offerdesc" />
 
     <EditText
         android:id="@+id/offerdesc"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:maxLines="5"
         android:textSize="24dp"
         android:lines="3"
-        android:hint="Example: This item has some scratches on the side, but is working perfectly. Expect item to be return in the same condition"
+        android:hint="Example: This item has some scratches on the side, but is working perfectly."
         android:inputType="textMultiLine"
+        android:layout_marginTop="18dp"
         android:layout_below="@+id/infotxt"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:layout_alignStart="@+id/submitRequest" />
 
     <Button
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Upload Item Photo"
+        android:id="@+id/takephoto"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/offerdesc"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:textAppearanceSmall"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Send Offer"
         android:id="@+id/submitRequest"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_above="@+id/linearLayout3"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:layout_below="@+id/takephoto"
+        android:layout_alignStart="@+id/takephoto"
+        android:layout_marginTop="19dp" />
 
 
 

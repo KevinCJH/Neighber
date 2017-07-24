@@ -25,10 +25,11 @@ public class Post {
     private int rated;
     private String chatid;
     private String otherimg;
+    private int category;
 
     public Post(){}
 
-    public Post(String postid, String userid, String itemname, String postdesc, int posttype){
+    public Post(String postid, String userid, String itemname, String postdesc, int posttype, int category){
         this.postid = postid;
         this.userid = userid;
         this.itemname = itemname;
@@ -37,6 +38,7 @@ public class Post {
         recordcount = 0;
         status = 1;
         rated = 0;
+        this.category = category;
     }
 
     public String getPostid() {
@@ -113,6 +115,10 @@ public class Post {
 
     public String getOtherimg(){
         return otherimg;
+    }
+
+    public int getCategory(){
+        return category;
     }
 
 }

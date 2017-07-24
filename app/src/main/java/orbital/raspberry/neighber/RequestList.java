@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RequestList extends ArrayAdapter<Post> {
 
@@ -28,10 +31,14 @@ public class RequestList extends ArrayAdapter<Post> {
 
         TextView itemname = (TextView) listViewItem.findViewById(R.id.itemnameTxt);
         TextView datetime = (TextView) listViewItem.findViewById(R.id.datetimeTxt);
+        ImageView imgview = (ImageView) listViewItem.findViewById(R.id.imgView);
+
 
         Post post = posts.get(position);
         itemname.setText(post.getItemname());
         datetime.setText(post.getDatetime());
+
+        imgview.setImageResource(R.mipmap.ic_launcher);
 
         return listViewItem;
     }

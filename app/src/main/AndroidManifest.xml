@@ -30,8 +30,13 @@
             android:label="@string/title_activity_post"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MainSearchedActivity" />
+        <activity android:name=".MainActivity"
+                  android:windowSoftInputMode="adjustPan"
+            >
+        </activity>
+        <activity android:name=".MainSearchedActivity"
+                  android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".SignupActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ViewProfileActivity" />

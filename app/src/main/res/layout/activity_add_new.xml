@@ -74,41 +74,56 @@
 
     </LinearLayout>
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/posttype"
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/itemnameTxt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimary"
+        android:text="I want to..."
+        android:layout_marginTop="24dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/catTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimary"
+        android:text="Choose a category..."
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/postdesc"
+        android:layout_alignStart="@+id/postdesc" />
 
     <EditText
         android:id="@+id/itemname"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textSize="18dp"
         android:inputType="textPersonName"
         android:hint="Name of Item"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/posttype"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/borrowtype"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp" />
 
     <EditText
         android:id="@+id/postdesc"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:maxLines="5"
-        android:textSize="24dp"
-        android:lines="4"
+        android:textSize="18dp"
+        android:lines="2"
         android:hint="Add description for your Request"
         android:inputType="textMultiLine"
         android:layout_below="@+id/itemname"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:layout_alignStart="@+id/itemname" />
 
     <Button
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Post Request"
         android:id="@+id/submitRequest"
@@ -116,9 +131,98 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:layout_above="@+id/linearLayout3"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:layout_alignStart="@+id/catTxt"
+        android:layout_marginBottom="13dp" />
 
+    <Button
+        android:id="@+id/borrowtype"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Borrow"
+        android:textSize="12dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/fadeorange"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/itemnameTxt"
+        android:layout_alignStart="@+id/itemname"
+        android:layout_marginStart="35dp" />
+
+    <Button
+        android:id="@+id/lendtype"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Lend"
+        android:textSize="12dp"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/fadeorange"
+        android:layout_alignBaseline="@+id/borrowtype"
+        android:layout_alignBottom="@+id/borrowtype"
+        android:layout_toEndOf="@+id/borrowtype" />
+
+<!-- CATEGORY -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/fadeorange"
+        android:id="@+id/category"
+        android:layout_marginBottom="12dp"
+        android:layout_above="@+id/submitRequest"
+        android:layout_alignParentStart="true">
+
+    <TextView
+        android:id="@+id/worktools"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/ic_launcher"
+        android:textAlignment="center"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:text="Worktools"
+        android:textColor="@color/colorPrimary"
+        android:layout_above="@+id/submitRequest"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/kitchen"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/ic_launcher"
+        android:textColor="@color/colorPrimary"
+        android:text="Kitchen"
+        android:layout_alignBaseline="@+id/worktools"
+        android:layout_alignBottom="@+id/worktools"
+        android:layout_alignStart="@+id/borrowtype" />
+
+    <TextView
+        android:id="@+id/furniture"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/ic_launcher"
+        android:text="Furniture"
+        android:layout_alignBaseline="@+id/others"
+        android:layout_alignBottom="@+id/others"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/others"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/ic_launcher"
+        android:text="Others"
+        android:layout_alignBaseline="@+id/kitchen"
+        android:layout_alignBottom="@+id/kitchen"
+        android:layout_alignEnd="@+id/lendtype" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

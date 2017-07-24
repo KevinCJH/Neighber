@@ -27,7 +27,7 @@ public class WriteOfferActivity extends AppCompatActivity {
     private String ruserid, rpostid, ritemname, ruserdisplayname;
     private TextView browse, records, addnew, chat, profile;
     private int rrecordcount;
-    private Button submitBtn;
+    private Button submitBtn, takephoto;
     private EditText offerdescTxt;
     private TextView itemnameTxt;
 
@@ -89,6 +89,7 @@ public class WriteOfferActivity extends AppCompatActivity {
         //////////////////////End Navigation////////////////////////////
 
         submitBtn = (Button)findViewById(R.id.submitRequest);
+        takephoto = (Button)findViewById(R.id.takephoto);
         offerdescTxt = (EditText)findViewById(R.id.offerdesc);
         itemnameTxt = (TextView) findViewById(R.id.itemnametxt) ;
 
@@ -123,7 +124,7 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 ritemname = post.getItemname();
 
-                itemnameTxt.setText("Item: " + ritemname);
+                itemnameTxt.setText("You are lending: " + ritemname + " \nTo: " + userdisplayname[0]);
 
                 rrecordcount = post.getRecordcount();
 
@@ -167,6 +168,14 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
                 finish();
+
+            }
+        });
+
+        takephoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(WriteOfferActivity.this, "Feature coming soon!", Toast.LENGTH_LONG).show();
 
             }
         });

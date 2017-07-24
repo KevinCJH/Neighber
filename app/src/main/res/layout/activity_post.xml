@@ -74,59 +74,86 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgView"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         app:civ_border_color="#ffffff"
         app:civ_border_width="2dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="15dp" />
+        android:layout_alignParentStart="true" />
 
 
+    <TextView
+        android:id="@+id/textView0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        android:text="I can:"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignStart="@+id/sendoffer" />
 
     <TextView
         android:id="@+id/itemnameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/imgView"
-        android:layout_below="@+id/imgView"
-        android:layout_marginTop="27dp"
-        android:textStyle="bold"
         android:textSize="24dp"
-        android:text="Item Name" />
+        android:text="Item Name"
+        android:layout_below="@+id/textView0"
+        android:layout_alignStart="@+id/textView0" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
         android:text="Description:"
+        android:layout_marginTop="24dp"
         android:layout_below="@+id/itemnameTxt"
-        android:layout_alignStart="@+id/itemnameTxt"
-        android:layout_marginTop="23dp" />
+        android:layout_alignStart="@+id/itemnameTxt" />
 
     <TextView
         android:id="@+id/postdescTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="21dp"
         android:textSize="24dp"
-        android:textStyle="bold"
-        android:text="Post Description" />
+        android:text="Post Description"
+        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:drawableStart="@drawable/ic_access_time_black_24dp"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/imgView"
+        android:layout_alignStart="@+id/imgView" />
+
+    <TextView
+        android:id="@+id/datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:layout_marginLeft="3dp"
+        android:text="Datetime"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2" />
 
     <Button
         android:id="@+id/sendoffer"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:text="Write Offer"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="19dp"
         android:layout_above="@+id/linearLayout5"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/rusernameTxt"
@@ -137,16 +164,15 @@
         android:layout_row="1"
         android:text="User Name"
         android:textSize="24dp"
-        android:textStyle="bold"
-        android:layout_marginEnd="34dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="19dp"
         android:layout_alignTop="@+id/imgView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="21dp" />
+        android:layout_alignEnd="@+id/sendoffer" />
 
     <Button
         style="?android:textAppearanceSmall"
         android:id="@+id/viewprofile"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_gravity="center_vertical"
@@ -155,10 +181,8 @@
         android:text="Profile"
         android:textColor="@color/white"
         android:maxLines="1"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/rusernameTxt"
-        android:layout_alignStart="@+id/rusernameTxt"
-        android:layout_alignEnd="@+id/rusernameTxt" />
+        android:layout_alignBottom="@+id/imgView"
+        android:layout_alignStart="@+id/rusernameTxt" />
 
 
 

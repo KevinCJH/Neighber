@@ -121,7 +121,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
 
                 ritemname = post.getItemname();
 
-                itemnameTxt.setText("Item: " + ritemname);
+                itemnameTxt.setText("You are borrowing: " + ritemname);
 
                 rrecordcount = post.getRecordcount();
 

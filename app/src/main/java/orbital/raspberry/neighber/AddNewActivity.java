@@ -2,6 +2,7 @@ package orbital.raspberry.neighber;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,10 +30,14 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 public class AddNewActivity extends AppCompatActivity {
 
     private TextView browse, records, addnew, chat, profile;
-    private Button submitBtn;
+    private TextView worktools, kitchen, furniture, others;
+    private Button submitBtn, lendtype, borrowtype;
     private EditText itemnameTxt, postdescTxt;
     private String userName;
-    private MaterialSpinner spinner;
+    //1 for borrow, 2 for lending
+    private int posttype;
+    //1 for worktool, 2 for kitchen, 3 for furniture, 4 for others
+    private int categorytype;
 
     private FirebaseAuth auth;
 
@@ -40,10 +45,6 @@ public class AddNewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new);
-
-        //Set up spinner
-        spinner = (MaterialSpinner) findViewById(R.id.posttype);
-        spinner.setItems("I want to request for something", "I want to lend my stuff");
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -92,6 +93,17 @@ public class AddNewActivity extends AppCompatActivity {
         submitBtn = (Button)findViewById(R.id.submitRequest);
         itemnameTxt = (EditText)findViewById(R.id.itemname);
         postdescTxt = (EditText)findViewById(R.id.postdesc);
+        lendtype = (Button)findViewById(R.id.lendtype);
+        borrowtype = (Button)findViewById(R.id.borrowtype);
+
+        worktools = (TextView) findViewById(R.id.worktools);
+        kitchen = (TextView) findViewById(R.id.kitchen);
+        furniture = (TextView) findViewById(R.id.furniture);
+        others = (TextView) findViewById(R.id.others);
+
+        posttype = 1;
+
+        categorytype = 4;
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -99,6 +111,101 @@ public class AddNewActivity extends AppCompatActivity {
         final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
         final String userid = currentFirebaseUser.getUid();
 
+        worktools.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categorytype = 1;
+                worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+
+                kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+
+            }
+        });
+
+        kitchen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categorytype = 2;
+                kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+
+                worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+
+            }
+        });
+
+        furniture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categorytype = 3;
+                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+
+                worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+
+            }
+        });
+
+        others.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categorytype = 4;
+                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+
+                worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+
+            }
+        });
+
+        borrowtype.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postdescTxt.setHint("Provide description for your request. Eg. Duration of borrow?");
+                submitBtn.setText("Post Request");
+                posttype = 1;
+                lendtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                lendtype.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                borrowtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                borrowtype.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+            }
+        });
+
+        lendtype.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postdescTxt.setHint("Provide description for your offer. Eg. Size of item?");
+                submitBtn.setText("Post Offer");
+                posttype = 2;
+                lendtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                lendtype.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                borrowtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                borrowtype.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+
+            }
+        });
+        /*
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
@@ -110,7 +217,7 @@ public class AddNewActivity extends AppCompatActivity {
                    submitBtn.setText("Post Offer");
                }
             }
-        });
+        }); */
 
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
@@ -127,11 +234,11 @@ public class AddNewActivity extends AppCompatActivity {
                 String postid = mDatabase.push().getKey();
 
                 //Get the post type based on which item is selected in the spinner
-                int postType = spinner.getSelectedIndex() + 1;
+            //    int postType = spinner.getSelectedIndex() + 1;
 
                 //Create newpost object
                 Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                        postdescTxt.getText().toString().trim(), postType);
+                        postdescTxt.getText().toString().trim(), posttype, categorytype);
 
                 //Add post to database
                 mDatabase.child(postid).setValue(newpost);
