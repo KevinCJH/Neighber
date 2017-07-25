@@ -30,7 +30,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 public class AddNewActivity extends AppCompatActivity {
 
     private TextView browse, records, addnew, chat, profile;
-    private TextView worktools, kitchen, furniture, others;
+    private TextView worktools, kitchen, cleaning, more;
     private Button submitBtn, lendtype, borrowtype;
     private EditText itemnameTxt, postdescTxt;
     private String userName;
@@ -38,6 +38,9 @@ public class AddNewActivity extends AppCompatActivity {
     private int posttype;
     //1 for worktool, 2 for kitchen, 3 for furniture, 4 for others
     private int categorytype;
+    public static final int GRID_REQUEST = 1;
+
+
 
     private FirebaseAuth auth;
 
@@ -98,12 +101,12 @@ public class AddNewActivity extends AppCompatActivity {
 
         worktools = (TextView) findViewById(R.id.worktools);
         kitchen = (TextView) findViewById(R.id.kitchen);
-        furniture = (TextView) findViewById(R.id.furniture);
-        others = (TextView) findViewById(R.id.others);
+        cleaning = (TextView) findViewById(R.id.cleaning);
+        more = (TextView) findViewById(R.id.more);
 
         posttype = 1;
 
-        categorytype = 4;
+        categorytype = 0;
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -115,15 +118,14 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 categorytype = 1;
-                worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                worktools.setBackground(ContextCompat.getDrawable(AddNewActivity.this,R.drawable.navborder));
 
                 kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
                 kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
-                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
-                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                cleaning.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                cleaning.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                more.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                more.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
 
             }
         });
@@ -132,49 +134,51 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 categorytype = 2;
-                kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                kitchen.setBackground(ContextCompat.getDrawable(AddNewActivity.this,R.drawable.navborder));
 
                 worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
                 worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
-                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
-                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                cleaning.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                cleaning.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                more.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                more.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
 
             }
         });
 
-        furniture.setOnClickListener(new View.OnClickListener() {
+        cleaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 categorytype = 3;
-                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                cleaning.setBackground(ContextCompat.getDrawable(AddNewActivity.this,R.drawable.navborder));
 
                 worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
                 worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
                 kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
                 kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
-                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                more.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                more.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
 
             }
         });
 
-        others.setOnClickListener(new View.OnClickListener() {
+        more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                categorytype = 4;
-                others.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                others.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                /*
+                categorytype = 4;*/
+                more.setBackground(ContextCompat.getDrawable(AddNewActivity.this,R.drawable.navborder));
 
                 worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
                 worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
                 kitchen.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
                 kitchen.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
-                furniture.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
-                furniture.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+                cleaning.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
+                cleaning.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
+
+                Intent intent = new Intent(AddNewActivity.this, GridActivity.class);
+                startActivityForResult(intent,GRID_REQUEST);
+
 
             }
         });
@@ -246,7 +250,7 @@ public class AddNewActivity extends AppCompatActivity {
                 //Add timestamp to the post
                 mDatabase.child(postid).child("timestamp").setValue(ServerValue.TIMESTAMP);
 
-                Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in the Records tab", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in My Profiles tab", Toast.LENGTH_LONG).show();
 
                 pd.dismiss();
 
@@ -256,6 +260,70 @@ public class AddNewActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GRID_REQUEST) {
+            if(resultCode == RESULT_OK) {
+                int num = data.getIntExtra("categorynum", 0);
+
+                //Toast.makeText(AddNewActivity.this, "Category: " + num, Toast.LENGTH_LONG).show();
+
+                switch(num) {
+                    case 4:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.office, 0, 0);
+                        more.setText("Office");
+                        categorytype = 4;
+                        break;
+                    case 5:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.party, 0, 0);
+                        more.setText("Party");
+                        categorytype = 5;
+                        break;
+                    case 6:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.furniture, 0, 0);
+                        more.setText("Furniture");
+                        categorytype = 6;
+                        break;
+                    case 7:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.shirtf, 0, 0);
+                        more.setText("Women's");
+                        categorytype = 7;
+                        break;
+                    case 8:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.shirtm, 0, 0);
+                        more.setText("Men's");
+                        categorytype = 8;
+                        break;
+                    case 9:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.sports, 0, 0);
+                        more.setText("Sports");
+                        categorytype = 9;
+                        break;
+                    case 10:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.electrical, 0, 0);
+                        more.setText("Electronics");
+                        categorytype = 10;
+                        break;
+                    case 11:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.food, 0, 0);
+                        more.setText("Food");
+                        categorytype = 11;
+                        break;
+                    case 0:
+                        more.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.others, 0, 0);
+                        more.setText("Others");
+                        categorytype = 0;
+                        break;
+
+                }
+
+            }
+            if (resultCode == RESULT_CANCELED) {
+                //showError("The selection was cancelled");
+            }
+        }
     }
 
     //////////////////Top Right Menu//////////////////////

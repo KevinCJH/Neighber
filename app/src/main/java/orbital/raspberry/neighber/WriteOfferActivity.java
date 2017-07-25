@@ -124,7 +124,7 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 ritemname = post.getItemname();
 
-                itemnameTxt.setText("You are lending: " + ritemname + " \nTo: " + userdisplayname[0]);
+                itemnameTxt.setText("You are offering: " + ritemname);
 
                 rrecordcount = post.getRecordcount();
 

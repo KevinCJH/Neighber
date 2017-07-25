@@ -38,7 +38,44 @@ public class RequestList extends ArrayAdapter<Post> {
         itemname.setText(post.getItemname());
         datetime.setText(post.getDatetime());
 
-        imgview.setImageResource(R.mipmap.ic_launcher);
+        switch(post.getCategory()){
+            case 0:
+                imgview.setImageResource(R.mipmap.others);
+                break;
+            case 1:
+                imgview.setImageResource(R.mipmap.worktools);
+                break;
+            case 2:
+                imgview.setImageResource(R.mipmap.kitchen);
+                break;
+            case 3:
+                imgview.setImageResource(R.mipmap.cleaning);
+                break;
+            case 4:
+                imgview.setImageResource(R.mipmap.office);
+                break;
+            case 5:
+                imgview.setImageResource(R.mipmap.party);
+                break;
+            case 6:
+                imgview.setImageResource(R.mipmap.furniture);
+                break;
+            case 7:
+                imgview.setImageResource(R.mipmap.shirtf);
+                break;
+            case 8:
+                imgview.setImageResource(R.mipmap.shirtm);
+                break;
+            case 9:
+                imgview.setImageResource(R.mipmap.sports);
+                break;
+            case 10:
+                imgview.setImageResource(R.mipmap.electrical);
+                break;
+            case 11:
+                imgview.setImageResource(R.mipmap.food);
+                break;
+        }
 
         return listViewItem;
     }

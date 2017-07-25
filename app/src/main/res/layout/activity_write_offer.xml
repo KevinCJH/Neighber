@@ -81,20 +81,22 @@
         android:textSize="24dp"
         android:text="You are"
         android:textColor="@color/colorPrimary"
-        android:layout_marginTop="19dp"
+        android:gravity="center"
+        android:layout_marginTop="31dp"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/infotxt" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/infotxt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textSize="20dp"
         android:text="Offer and Condition of Loan"
         android:textColor="@color/colorPrimary"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="52dp"
         android:layout_below="@+id/itemnametxt"
-        android:layout_alignStart="@+id/offerdesc" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/offerdesc"
@@ -105,9 +107,8 @@
         android:lines="3"
         android:hint="Example: This item has some scratches on the side, but is working perfectly."
         android:inputType="textMultiLine"
-        android:layout_marginTop="18dp"
         android:layout_below="@+id/infotxt"
-        android:layout_alignStart="@+id/submitRequest" />
+        android:layout_alignStart="@+id/takephoto" />
 
     <Button
         style="?android:textAppearanceSmall"
@@ -118,7 +119,7 @@
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="36dp"
         android:layout_below="@+id/offerdesc"
         android:layout_centerHorizontal="true" />
 

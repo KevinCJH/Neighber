@@ -78,8 +78,8 @@
         android:layout_height="120dp"
         app:civ_border_color="#ffffff"
         app:civ_border_width="2dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="22dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -91,9 +91,9 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20dp"
         android:text="I can:"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/textView2"
-        android:layout_alignStart="@+id/sendoffer" />
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/datetime"
+        android:layout_alignStart="@+id/datetime" />
 
     <TextView
         android:id="@+id/itemnameTxt"
@@ -113,7 +113,7 @@
         android:text="Description:"
         android:layout_marginTop="24dp"
         android:layout_below="@+id/itemnameTxt"
-        android:layout_alignStart="@+id/itemnameTxt" />
+        android:layout_alignStart="@+id/sendoffer" />
 
     <TextView
         android:id="@+id/postdescTxt"
@@ -124,25 +124,18 @@
         android:layout_below="@+id/textView"
         android:layout_alignStart="@+id/textView" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:drawableStart="@drawable/ic_access_time_black_24dp"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/imgView"
-        android:layout_alignStart="@+id/imgView" />
 
     <TextView
         android:id="@+id/datetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_access_time_black_24dp"
         android:textSize="18dp"
         android:layout_marginLeft="3dp"
         android:text="Datetime"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2" />
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/imgView"
+        android:layout_alignStart="@+id/textView" />
 
     <Button
         android:id="@+id/sendoffer"
@@ -151,9 +144,9 @@
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:text="Write Offer"
-        android:layout_marginBottom="19dp"
-        android:layout_above="@+id/linearLayout5"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/postdescTxt"
+        android:layout_alignStart="@+id/imgView"
+        android:layout_marginTop="50dp" />
 
     <TextView
         android:id="@+id/rusernameTxt"
@@ -164,10 +157,9 @@
         android:layout_row="1"
         android:text="User Name"
         android:textSize="24dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="19dp"
         android:layout_alignTop="@+id/imgView"
-        android:layout_alignEnd="@+id/sendoffer" />
+        android:layout_alignEnd="@+id/sendoffer"
+        android:layout_marginEnd="25dp" />
 
     <Button
         style="?android:textAppearanceSmall"
@@ -182,7 +174,8 @@
         android:textColor="@color/white"
         android:maxLines="1"
         android:layout_alignBottom="@+id/imgView"
-        android:layout_alignStart="@+id/rusernameTxt" />
+        android:layout_alignStart="@+id/rusernameTxt"
+        android:layout_marginBottom="20dp" />
 
 
 

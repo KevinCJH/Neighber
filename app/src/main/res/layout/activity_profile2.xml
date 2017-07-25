@@ -176,8 +176,8 @@
             android:textColor="@color/colorPrimary"
             android:textAlignment="center"
             android:gravity="center"
-            android:background="@color/white"
             android:onClick="onClick"
+            android:background="@drawable/navborder"
             android:clickable="true"
             android:layout_weight="1"
             android:layout_width="0dp" />
@@ -187,7 +187,7 @@
             android:id="@+id/action_browse_request"
             android:textColor="@color/colorPrimary"
             android:text="Items Requested"
-            android:background="@drawable/navborder"
+            android:background="@color/white"
             android:textAlignment="center"
             android:onClick="onClick"
             android:gravity="center"

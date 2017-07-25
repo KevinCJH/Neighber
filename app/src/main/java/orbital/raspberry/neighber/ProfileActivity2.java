@@ -5,12 +5,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Rating;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,16 +17,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +41,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity2 extends AppCompatActivity {
     private Button saveChange;
     private CircleImageView imgView;
     private int PICK_IMAGE_REQUEST = 111;
@@ -69,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile2);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -83,42 +79,43 @@ public class ProfileActivity extends AppCompatActivity {
         offers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity2.this, ProfileActivity.class));
+                finish();
             }
         });
 
         requests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, ProfileActivity2.class));
-                finish();
+
             }
         });
 
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                startActivity(new Intent(ProfileActivity2.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ProfileActivity2.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ProfileActivity2.this, AddNewActivity.class));
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, ChatListActivity.class));
+                startActivity(new Intent(ProfileActivity2.this, ChatListActivity.class));
             }
         });
 
@@ -177,7 +174,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(ProfileActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity2.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -196,8 +193,8 @@ public class ProfileActivity extends AppCompatActivity {
                     //getting artist
                     Post post = postSnapshot.getValue(Post.class);
 
-                    //If post type is request aka 2
-                    if(post.getPosttype() == 2 && post.getUserid().toString().equals(userid) && post.getStatus() <= 4) {
+                    //If post type is request aka 1
+                    if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() <= 5) {
 
                         //adding to the list
                         posts.add(post);
@@ -206,7 +203,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                RecordsList2 reqAdapter = new RecordsList2(ProfileActivity.this, posts);
+                RecordsList reqAdapter = new RecordsList(ProfileActivity2.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -234,7 +231,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).removeValue();
                                 deleteRecords(post.getPostid());
                                 posts.remove(position);
-                                Toast.makeText(ProfileActivity.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity2.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -243,15 +240,14 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     }
                 };
-                /////
 
 
                 //Status pending
                 if(post.getStatus() == 1) {
 
-                    CharSequence options[] = new CharSequence[]{"View Requests", "Update this Post", "Delete this Post"};
+                    CharSequence options[] = new CharSequence[]{"View Offer", "Update this Post", "Delete this Post"};
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity2.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
@@ -259,22 +255,23 @@ public class ProfileActivity extends AppCompatActivity {
                             switch (pos) {
                                 case 0:
                                     if (post.getRecordcount() <= 0) {
-                                        Toast.makeText(ProfileActivity.this, "No requests were made to you", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProfileActivity2.this, "No offers were made to you", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Intent i = new Intent(ProfileActivity.this, ViewRequestActivity.class);
+                                        Intent i = new Intent(ProfileActivity2.this, ViewOfferActivity.class);
                                         i.putExtra("rpostid", post.getPostid());
                                         startActivity(i);
                                     }
                                     break;
                                 case 1:
-                                    Intent i = new Intent(ProfileActivity.this, EditPostActivity.class);
+                                    Intent i = new Intent(ProfileActivity2.this, EditPostActivity.class);
                                     i.putExtra("rpostid", post.getPostid());
                                     startActivity(i);
                                     break;
                                 case 2:
-                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(ProfileActivity.this);
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(ProfileActivity2.this);
                                     builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
                                             .setNegativeButton("Cancel", dialogClickListener).show();
+
                                     break;
                             }
                         }
@@ -282,26 +279,25 @@ public class ProfileActivity extends AppCompatActivity {
                     builder.show();
                 }
 
-                //Status agreement
-
+                //wait for agreement
                 else if(post.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"Chat with user", "View borrower profile"};
+                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity2.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
-                                    Intent i1 = new Intent(ProfileActivity.this, ChatActivity.class);
+                                    Intent i1 = new Intent(ProfileActivity2.this, ChatActivity.class);
                                     i1.putExtra("chatroomid", post.getChatid());
                                     i1.putExtra("itemname", post.getItemname());
                                     startActivity(i1);
                                     break;
                                 case 1:
-                                    Intent i2 = new Intent(ProfileActivity.this, ViewProfileActivity.class);
+                                    Intent i2 = new Intent(ProfileActivity2.this, ViewProfileActivity.class);
                                     i2.putExtra("ruserid", post.getOtherid());
                                     startActivity(i2);
                                     break;
@@ -309,36 +305,99 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
                     builder.show();
+
                 }
 
-                //Status returning
+                //accept agreement
+                else if(post.getStatus() == 3) {
 
-                else if(post.getStatus() == 4) {
+                    CharSequence options[] = new CharSequence[]{"View item agreement", "Chat with user", "View lender profile"};
 
-                    CharSequence options[] = new CharSequence[]{"View return agreement","Chat with user", "View borrower profile"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity2.this);
                     builder.setTitle("Options");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
                             switch (pos) {
                                 case 0:
-                                    Intent i = new Intent(ProfileActivity.this, ReturnAgreementAcceptActivity2.class);
-                                    i.putExtra("rpostid", post.getPostid());
-                                    i.putExtra("rofferid", post.getAgreementid());
-                                    startActivity(i);
-                                    break;
-                                case 1:
-                                    Intent i1 = new Intent(ProfileActivity.this, ChatActivity.class);
-                                    i1.putExtra("chatroomid", post.getChatid());
-                                    i1.putExtra("itemname", post.getItemname());
+                                    Intent i1 = new Intent(ProfileActivity2.this, AgreementActivity.class);
+                                    i1.putExtra("ruserid", post.getOtherid());
+                                    i1.putExtra("rofferid", post.getAgreementid());
                                     startActivity(i1);
                                     break;
-                                case 2:
-                                    Intent i2 = new Intent(ProfileActivity.this, ViewProfileActivity.class);
-                                    i2.putExtra("ruserid", post.getOtherid());
+                                case 1:
+                                    Intent i2 = new Intent(ProfileActivity2.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", post.getChatid());
+                                    i2.putExtra("itemname", post.getItemname());
                                     startActivity(i2);
+                                    break;
+                                case 2:
+                                    Intent i3 = new Intent(ProfileActivity2.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i3);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+
+                }
+
+                //borrowing in progress
+                else if(post.getStatus() == 4) {
+
+                    CharSequence options[] = new CharSequence[]{"Return Item", "Chat with user", "View lender profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity2.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i1 = new Intent(ProfileActivity2.this, ReturnAgreementActivity.class);
+                                    i1.putExtra("agreementid", post.getAgreementid());
+                                    i1.putExtra("postid", post.getPostid());
+                                    startActivity(i1);
+                                    break;
+                                case 1:
+                                    Intent i2 = new Intent(ProfileActivity2.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", post.getChatid());
+                                    i2.putExtra("itemname", post.getItemname());
+                                    startActivity(i2);
+                                    break;
+                                case 2:
+                                    Intent i3 = new Intent(ProfileActivity2.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i3);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
+                //return in progress
+                else if(post.getStatus() == 5) {
+
+                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity2.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i2 = new Intent(ProfileActivity2.this, ChatActivity.class);
+                                    i2.putExtra("chatroomid", post.getChatid());
+                                    i2.putExtra("itemname", post.getItemname());
+                                    startActivity(i2);
+                                    break;
+                                case 1:
+                                    Intent i3 = new Intent(ProfileActivity2.this, ViewProfileActivity.class);
+                                    i3.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i3);
                                     break;
                             }
                         }
@@ -349,6 +408,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+
 ///////////////////////////////END LIST ITEM//////////////////
 
         pd = new ProgressDialog(this);
@@ -394,20 +454,20 @@ public class ProfileActivity extends AppCompatActivity {
                                 pd.dismiss();
                                 @SuppressWarnings("VisibleForTests") String dlurl = taskSnapshot.getDownloadUrl().toString();
                                 mDatabase.child(userid).child("imguri").setValue(dlurl);
-                                Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity2.this, "Changes Saved", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 pd.dismiss();
-                                Toast.makeText(ProfileActivity.this, "Fail to upload image" + e, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity2.this, "Fail to upload image" + e, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }else{
-                        Toast.makeText(ProfileActivity.this, "Please choose an image", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity2.this, "Please choose an image", Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity2.this, "Changes Saved", Toast.LENGTH_SHORT).show();
                     pd.dismiss();
                 }
 
@@ -486,13 +546,13 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(ProfileActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(ProfileActivity2.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+                startActivity(new Intent(ProfileActivity2.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
