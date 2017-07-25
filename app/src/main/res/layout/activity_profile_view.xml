@@ -11,20 +11,8 @@
         android:layout_width="match_parent"
         android:id="@+id/profilebox"
         android:background="@color/colorPrimary"
-        android:layout_height="205dp">
+        android:layout_height="180dp">
 
-    <Button
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        android:drawableTop="@drawable/ic_edit_24dp"
-        android:id="@+id/saveChange"
-        android:textColor="@android:color/white"
-        android:background="@drawable/btnborder"
-        android:textStyle="bold"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgView"
@@ -37,17 +25,15 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="11dp" />
 
-    <EditText
+    <TextView
         android:id="@+id/displayname"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
         android:maxLines="1"
         android:textSize="18dp"
-        android:inputType="textPersonName"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
-        android:hint="Change Display Name"
+        android:text="Display Name"
         android:layout_alignTop="@+id/imgView"
         android:layout_toEndOf="@+id/imgView"
         android:layout_marginStart="15dp" />
@@ -58,7 +44,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:paddingLeft="5dp"
         android:textSize="14dp"
         android:text="Email"
         android:layout_below="@+id/displayname"
@@ -74,7 +59,7 @@
         android:scaleY="0.3"
         android:isIndicator="true"
         android:theme="@style/RatingBar"
-        android:layout_marginEnd="31dp"
+        android:layout_marginEnd="36dp"
         android:layout_below="@+id/email"
         android:layout_alignParentEnd="true" />
 
@@ -83,7 +68,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:paddingLeft="5dp"
         android:textSize="14dp"
         android:text="Ratings: "
         android:layout_alignBottom="@+id/rating"
@@ -149,12 +133,11 @@
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/action_profile"
-            android:drawableTop="@drawable/ic_person_outline_select_24dp"
+            android:drawableTop="@drawable/ic_person_outline_black_24dp"
             android:text="My Profile"
             android:textAlignment="center"
             android:onClick="onClick"
             android:clickable="true"
-            android:textColor="@color/colorPrimary"
             android:layout_weight="1"
             android:layout_width="0dp" />
 

@@ -59,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView requests, offers;
     private List<Post> posts;
     private ListView listViewRequests;
+    private int editmode;
 
 
     //creating reference to firebase storage
@@ -70,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        editmode = 0;
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -141,6 +144,8 @@ public class ProfileActivity extends AppCompatActivity {
         ratingbar = (RatingBar) findViewById(R.id.rating);
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
+
+        displayname.setEnabled(false);
 
         posts = new ArrayList<>();
 
@@ -358,11 +363,16 @@ public class ProfileActivity extends AppCompatActivity {
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imgclickflag = true;
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+
+                if(editmode == 1) {
+
+                    imgclickflag = true;
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+
+                }
             }
         });
 
@@ -372,47 +382,60 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                pd.show();
+                if(editmode == 0){
+                    editmode = 1;
+                    displayname.setEnabled(true);
+                    saveChange.setText("Save Changes");
+                }else {
 
-                //If display name is changed
-                if(!userdata[0].equals(displayname.getText().toString().trim())){
-                    mDatabase.child(userid).child("displayname").setValue(displayname.getText().toString().trim());
-                }
+                    pd.show();
 
-                //If image has been modified
-                if(imgclickflag) {
-                    if (filePath != null) {
-
-                        StorageReference childRef = storageRef.child(userid + ".jpg");
-
-                        //uploading the image
-                        UploadTask uploadTask = childRef.putFile(filePath);
-
-                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                pd.dismiss();
-                                @SuppressWarnings("VisibleForTests") String dlurl = taskSnapshot.getDownloadUrl().toString();
-                                mDatabase.child(userid).child("imguri").setValue(dlurl);
-                                Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                pd.dismiss();
-                                Toast.makeText(ProfileActivity.this, "Fail to upload image" + e, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }else{
-                        Toast.makeText(ProfileActivity.this, "Please choose an image", Toast.LENGTH_SHORT).show();
+                    //If display name is changed
+                    if (!userdata[0].equals(displayname.getText().toString().trim())) {
+                        mDatabase.child(userid).child("displayname").setValue(displayname.getText().toString().trim());
                     }
-                }else{
-                    Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
-                    pd.dismiss();
+
+                    //If image has been modified
+                    if (imgclickflag) {
+                        if (filePath != null) {
+
+                            StorageReference childRef = storageRef.child(userid + ".jpg");
+
+                            //uploading the image
+                            UploadTask uploadTask = childRef.putFile(filePath);
+
+                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    pd.dismiss();
+                                    @SuppressWarnings("VisibleForTests") String dlurl = taskSnapshot.getDownloadUrl().toString();
+                                    mDatabase.child(userid).child("imguri").setValue(dlurl);
+                                    Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    pd.dismiss();
+                                    Toast.makeText(ProfileActivity.this, "Fail to upload image" + e, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(ProfileActivity.this, "Please choose an image", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                        editmode = 0;
+                        displayname.setEnabled(false);
+                        saveChange.setText("Edit");
+                    }
+
                 }
 
             }
         });
+
+
     }
 
     //Return the image from user gallery and set it into image view

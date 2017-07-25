@@ -152,7 +152,7 @@ public class PostActivity extends AppCompatActivity {
                 }else {
                     posttypeTxt.setText("Offering:");
                     itemnametxt.setText(post.getItemname());
-                    writeoffer.setText("Send Request");
+                    writeoffer.setText("Write Request");
                 }
                 postdesctxt.setText(post.getPostdesc());
 

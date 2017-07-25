@@ -1,12 +1,7 @@
 package orbital.raspberry.neighber;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
@@ -14,25 +9,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,7 +29,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ViewProfileActivity extends AppCompatActivity {
+public class ViewProfileActivity2 extends AppCompatActivity {
 
     private CircleImageView imgView;
     private TextView displayname, email, ratings;
@@ -59,7 +46,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_view);
+        setContentView(R.layout.activity_profile_view2);
 
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
@@ -76,13 +63,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         offers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            }
-        });
-
-        requests.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(ViewProfileActivity.this, ViewProfileActivity2.class);
+                Intent i = new Intent(ViewProfileActivity2.this, ViewProfileActivity.class);
                 //Pass info to next activity
                 i.putExtra("ruserid", ruserid);
                 startActivity(i);
@@ -90,38 +71,45 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
         });
 
+        requests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ViewProfileActivity.this, MainActivity.class));
+                startActivity(new Intent(ViewProfileActivity2.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ViewProfileActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ViewProfileActivity2.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ViewProfileActivity.this, AddNewActivity.class));
+                startActivity(new Intent(ViewProfileActivity2.this, AddNewActivity.class));
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ViewProfileActivity.this, ChatListActivity.class));
+                startActivity(new Intent(ViewProfileActivity2.this, ChatListActivity.class));
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ViewProfileActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ViewProfileActivity2.this, ProfileActivity.class));
             }
         });
 
@@ -162,7 +150,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ViewProfileActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewProfileActivity2.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -182,7 +170,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                     Post post = postSnapshot.getValue(Post.class);
 
                     //If post type is request aka 2
-                    if(post.getPosttype() == 2 && post.getUserid().toString().equals(ruserid) && post.getStatus() == 1) {
+                    if(post.getPosttype() == 1 && post.getUserid().toString().equals(ruserid) && post.getStatus() == 1) {
 
                         String datetime = getDate(post.getTimestamp());
 
@@ -195,7 +183,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(ViewProfileActivity.this, posts);
+                RequestList reqAdapter = new RequestList(ViewProfileActivity2.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -214,7 +202,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 String requesterid = post.getUserid();
                 String postid = post.getPostid();
 
-                Intent i = new Intent(ViewProfileActivity.this, PostActivity.class);
+                Intent i = new Intent(ViewProfileActivity2.this, PostActivity.class);
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
@@ -246,13 +234,13 @@ public class ViewProfileActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(ViewProfileActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(ViewProfileActivity2.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(ViewProfileActivity.this, SettingsActivity.class));
+                startActivity(new Intent(ViewProfileActivity2.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class WriteOfferActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_write_offer);
 
         //Get userid based on which item was click in the previous activity
@@ -44,7 +46,7 @@ public class WriteOfferActivity extends AppCompatActivity {
         rpostid = i.getStringExtra("rpostid");
         ruserdisplayname = i.getStringExtra("ruserdisplayname");
 
-        //////////////Navigations/////////////
+    /*    //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
         chat = (TextView) findViewById(R.id.action_chat);
@@ -84,7 +86,7 @@ public class WriteOfferActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(WriteOfferActivity.this, ProfileActivity.class));
             }
-        });
+        }); */
 
         //////////////////////End Navigation////////////////////////////
 

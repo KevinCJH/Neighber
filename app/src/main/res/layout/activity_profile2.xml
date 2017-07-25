@@ -11,13 +11,14 @@
         android:layout_width="match_parent"
         android:id="@+id/profilebox"
         android:background="@color/colorPrimary"
-        android:layout_height="220dp">
+        android:layout_height="205dp">
 
     <Button
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Changes"
+        android:text="Edit"
+        android:drawableTop="@drawable/ic_edit_24dp"
         android:id="@+id/saveChange"
         android:textColor="@android:color/white"
         android:background="@drawable/btnborder"
