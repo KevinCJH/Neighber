@@ -30,7 +30,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
     private TextView browse, records, addnew, chat, profile;
     private TextView borrowing, lending, history;
     private List<Post> posts;
-    private List<OfferToBorrowPost> offers;
+    private List<Send> offers;
     private ListView listViewRequests, listViewRequests2;
     private String userid;
     private int rrecordcount;
@@ -155,7 +155,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
         });
 
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -168,9 +168,9 @@ public class LenderRecordsActivity extends AppCompatActivity {
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
-                    if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 5) {
+                    if(offer.getSendtype() == 2 && offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 5) {
 
                         //adding to the list
                         offers.add(offer);
@@ -327,7 +327,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final OfferToBorrowPost offer = offers.get(position);
+                final Send offer = offers.get(position);
 
                 final DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference("posts");
                 pDatabase.child(offer.getPostid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -351,7 +351,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
-                                FirebaseDatabase.getInstance().getReference("offertoborrow").child(offer.getRecordid()).removeValue();
+                                FirebaseDatabase.getInstance().getReference("send").child(offer.getRecordid()).removeValue();
                                 rrecordcount -= 1;
                                 FirebaseDatabase.getInstance().getReference("posts").child(offer.getPostid()).child("recordcount").setValue(rrecordcount);
                                 offers.remove(position);
@@ -533,7 +533,7 @@ public class LenderRecordsActivity extends AppCompatActivity {
 
     public void deleteRecords(final String postid){
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -542,12 +542,12 @@ public class LenderRecordsActivity extends AppCompatActivity {
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
                     String recordid = offer.getRecordid();
 
                     if(offer.getPostid().equals(postid)){
-                        FirebaseDatabase.getInstance().getReference("offertolend").child(recordid).removeValue();
+                        FirebaseDatabase.getInstance().getReference("send").child(recordid).removeValue();
                     }
 
                 }

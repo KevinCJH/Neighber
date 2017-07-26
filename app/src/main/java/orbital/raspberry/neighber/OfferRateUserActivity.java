@@ -148,7 +148,7 @@ public class OfferRateUserActivity extends AppCompatActivity {
 
                 FirebaseDatabase.getInstance().getReference("users").child(ruserid).child("ratings").setValue(userrating);
                 FirebaseDatabase.getInstance().getReference("users").child(ruserid).child("totalvote").setValue(newtotalrater);
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(rrecordid).child("rated").setValue(1);
+                FirebaseDatabase.getInstance().getReference("send").child(rrecordid).child("rated").setValue(1);
 
                 pd.dismiss();
 

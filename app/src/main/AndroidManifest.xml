@@ -50,8 +50,10 @@
         <activity android:name=".WriteOfferActivity2"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:label="Write Request"/>
-        <activity android:name=".EditPostActivity" />
-        <activity android:name=".ViewOfferActivity" />
+        <activity android:name=".EditPostActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+        <activity android:name=".ViewOfferActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
         <activity android:name=".AgreementActivity" />
         <activity android:name=".AgreementActivity2" />
         <activity android:name=".ReturnAgreementActivity" />
@@ -59,7 +61,8 @@
         <activity android:name=".ReturnAgreementAcceptActivity" />
         <activity android:name=".ReturnAgreementAcceptActivity2" />
         <activity android:name=".LenderRecordsActivity" />
-        <activity android:name=".ViewRequestActivity" />
+        <activity android:name=".ViewRequestActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
         <activity android:name=".ViewOfferSentActivity" />
         <activity android:name=".ViewRequestSentActivity" />
         <activity android:name=".HistoryRecordsActivity" />

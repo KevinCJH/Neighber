@@ -2,113 +2,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:padding="10dp"
     android:layout_height="match_parent">
 
-    <!-- Bottom Nav Bar -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/grey"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout3">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_black_24dp"
-            android:text="Browse"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_select_24dp"
-            android:text="Records"
-            android:textColor="@color/colorPrimary"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_addnew"
-            android:drawableTop="@drawable/ic_add_circle_black_24dp"
-            android:text="Add"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_chat"
-            android:drawableTop="@drawable/ic_chat_black_24dp"
-            android:text="Chat"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_profile"
-            android:drawableTop="@drawable/ic_person_outline_black_24dp"
-            android:text="My Profile"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-    </LinearLayout>
 
     <EditText
         android:id="@+id/itemname"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textSize="24dp"
         android:inputType="textPersonName"
         android:hint="Name of Item"
         android:layout_marginTop="23dp"
-        android:layout_below="@+id/posttype"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/textView7"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/postdesc"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:maxLines="5"
         android:textSize="24dp"
         android:lines="4"
         android:hint="Edit description for your request"
         android:inputType="textMultiLine"
+        android:layout_marginTop="14dp"
         android:layout_below="@+id/itemname"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:layout_alignStart="@+id/itemname" />
 
     <Button
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Save Changes"
         android:id="@+id/submitRequest"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_above="@+id/linearLayout3"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:layout_below="@+id/postdesc"
+        android:layout_alignStart="@+id/postdesc"
+        android:layout_marginTop="34dp" />
 
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:text="Update Post"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

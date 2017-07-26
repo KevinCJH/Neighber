@@ -29,11 +29,11 @@ public class HistoryRecordsActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
-    private TextView borrowing, lending, history;
+    private TextView active, history;
     private List<Post> posts;
-    private ListView listViewRequests;
+    private List<Send> offers;
+    private ListView listViewRequests, listViewRequests2;
     private String userid;
-    private Button requestbtn, offerbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +46,11 @@ public class HistoryRecordsActivity extends AppCompatActivity {
         userid = auth.getCurrentUser().getUid();
 
         posts = new ArrayList<>();
+        offers = new ArrayList<>();
+
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
-        requestbtn = (Button) findViewById(R.id.viewrequest);
-        offerbtn = (Button) findViewById(R.id.viewoffer);
+        listViewRequests2 = (ListView) findViewById(R.id.listRequest2);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -57,21 +58,13 @@ public class HistoryRecordsActivity extends AppCompatActivity {
         chat = (TextView) findViewById(R.id.action_chat);
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
-        borrowing = (TextView) findViewById(R.id.action_borrowing);
-        lending = (TextView) findViewById(R.id.action_lending);
+        active = (TextView) findViewById(R.id.action_active);
         history = (TextView) findViewById(R.id.action_history);
 
-        borrowing.setOnClickListener(new View.OnClickListener() {
+        active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HistoryRecordsActivity.this, BorrowerRecordsActivity.class));
-            }
-        });
-
-        lending.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, LenderRecordsActivity.class));
             }
         });
 
@@ -152,6 +145,50 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                 HistoryList reqAdapter = new HistoryList(HistoryRecordsActivity.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        ////////////////////////////////
+
+        final DatabaseReference sDatabase = FirebaseDatabase.getInstance().getReference("send");
+
+        //attaching value event listener
+        sDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //clearing the previous list
+                offers.clear();
+
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    Send offer = postSnapshot.getValue(Send.class);
+
+                    //If post type is request aka 1
+                    if(offer.getSendtype() == 2 && offer.getOwnerid().toString().equals(userid) && offer.getStatus() == 6) {
+
+                        //adding to the list
+                        offers.add(offer);
+
+                    }else if(offer.getSendtype() == 1 && offer.getOwnerid().toString().equals(userid) && offer.getStatus() == 5){
+
+                        //adding to the list
+                        offers.add(offer);
+
+                    }
+                }
+
+                //creating adapter
+                HistoryOfferList reqAdapter = new HistoryOfferList(HistoryRecordsActivity.this, offers);
+                //attaching adapter to the listview
+                listViewRequests2.setAdapter(reqAdapter);
             }
 
             @Override
@@ -261,6 +298,109 @@ public class HistoryRecordsActivity extends AppCompatActivity {
             }
         });
 
+
+        listViewRequests2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final Send offer = offers.get(position);
+
+                //DELETE DIALOG
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                FirebaseDatabase.getInstance().getReference("send").child(offer.getRecordid()).child("status").setValue(8);
+                                offers.remove(position);
+                                Toast.makeText(HistoryRecordsActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                //Request
+                if(offer.getSendtype() == 1) {
+
+                    CharSequence options[] = new CharSequence[]{"View Lender Profile", "Rate this User", "Delete this Record"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i = new Intent(HistoryRecordsActivity.this, ViewProfileActivity.class);
+                                    i.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i);
+                                    break;
+                                case 1:
+                                    if(offer.getRated() == 0) {
+                                        Intent i2 = new Intent(HistoryRecordsActivity.this, OfferRateUserActivity.class);
+                                        i2.putExtra("ruserid", offer.getTargetid());
+                                        i2.putExtra("rrecordid", offer.getRecordid());
+                                        startActivity(i2);
+                                    }else{
+                                        Toast.makeText(HistoryRecordsActivity.this, "Already rated this user.", Toast.LENGTH_SHORT).show();
+                                    }
+                                    break;
+                                case 2:
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(HistoryRecordsActivity.this);
+                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
+                                            .setNegativeButton("Cancel", dialogClickListener).show();
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+
+                }else{
+
+                    CharSequence options[] = new CharSequence[]{"View Borrower Profile", "Rate this User", "Delete this Record"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecordsActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i = new Intent(HistoryRecordsActivity.this, ViewProfileActivity.class);
+                                    i.putExtra("ruserid", offer.getTargetid());
+                                    startActivity(i);
+                                    break;
+                                case 1:
+                                    if(offer.getRated() == 0) {
+                                        Intent i2 = new Intent(HistoryRecordsActivity.this, OfferRateUserActivity.class);
+                                        i2.putExtra("ruserid", offer.getTargetid());
+                                        i2.putExtra("rrecordid", offer.getRecordid());
+                                        startActivity(i2);
+                                    }else{
+                                        Toast.makeText(HistoryRecordsActivity.this, "Already rated this user.", Toast.LENGTH_SHORT).show();
+                                    }
+                                    break;
+                                case 2:
+                                    AlertDialog.Builder builderde2 = new AlertDialog.Builder(HistoryRecordsActivity.this);
+                                    builderde2.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
+                                            .setNegativeButton("Cancel", dialogClickListener).show();
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+
+                }
+
+            }
+        });
+
+
+/*
         requestbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -274,7 +414,7 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                 startActivity(new Intent(HistoryRecordsActivity.this, HistoryOfferActivity.class));
             }
         });
-
+*/
 
     }
 

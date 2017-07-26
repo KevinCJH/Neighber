@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class OfferList2 extends ArrayAdapter<OfferToLendPost> {
+public class OfferList2 extends ArrayAdapter<Send> {
 
     private Activity context;
-    List<OfferToLendPost> offers;
+    List<Send> offers;
 
-    public OfferList2(Activity context, List<OfferToLendPost> offers) {
+    public OfferList2(Activity context, List<Send> offers) {
         super(context, R.layout.layout_offer_list, offers);
         this.context = context;
         this.offers = offers;
@@ -28,7 +28,7 @@ public class OfferList2 extends ArrayAdapter<OfferToLendPost> {
         TextView username = (TextView) listViewItem.findViewById(R.id.usernameTxt);
         TextView datetime = (TextView) listViewItem.findViewById(R.id.datetimeTxt);
 
-        OfferToLendPost offer = offers.get(position);
+        Send offer = offers.get(position);
         username.setText(offer.getOwnername());
         datetime.setText(offer.getDatetime());
 

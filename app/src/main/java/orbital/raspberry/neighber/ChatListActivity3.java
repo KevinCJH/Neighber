@@ -114,7 +114,7 @@ public class ChatListActivity3 extends AppCompatActivity {
         //////////////////////End Navigation////////////////////////////
 
 
-        final DatabaseReference rDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference rDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         rDatabase.addValueEventListener(new ValueEventListener() {
@@ -127,9 +127,9 @@ public class ChatListActivity3 extends AppCompatActivity {
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
-                    if(offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)) {
+                    if(offer.getSendtype() == 2 && offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)) {
 
                         ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), 0);
                         chats.add(newchat);

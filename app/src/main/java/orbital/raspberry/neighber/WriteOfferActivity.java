@@ -140,7 +140,7 @@ public class WriteOfferActivity extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +150,7 @@ public class WriteOfferActivity extends AppCompatActivity {
                 String recordid = mDatabase.push().getKey();
 
                 //Create new offertoborrowpost object
-                OfferToBorrowPost newoffer = new OfferToBorrowPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
+                Send newoffer = new Send(2, recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
 
                 //newoffer.setAgreementdesc(offerdescTxt.getText().toString().trim());
                 newoffer.setOfferdesc(offerdescTxt.getText().toString().trim());
@@ -166,9 +166,9 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
 
-                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may view/delete the offer in the Records(Lending) tab", Toast.LENGTH_LONG).show();
+                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may view/delete the offer in the Records tab", Toast.LENGTH_LONG).show();
 
-                startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
+                startActivity(new Intent(WriteOfferActivity.this, MainActivity2.class));
                 finish();
 
             }

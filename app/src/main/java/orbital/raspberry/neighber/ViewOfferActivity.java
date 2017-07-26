@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,13 +33,14 @@ public class ViewOfferActivity extends AppCompatActivity {
     private String rpostid;
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
-    private List<OfferToBorrowPost> offers;
+    private List<Send> offers;
     private ListView listViewRequests;
     private String userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_view_offer);
 
         //Get userid based on which item was click in the previous activity
@@ -54,52 +56,8 @@ public class ViewOfferActivity extends AppCompatActivity {
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
 
-        //////////////Navigations/////////////
-        records = (TextView) findViewById(R.id.action_records);
-        addnew = (TextView) findViewById(R.id.action_addnew);
-        chat = (TextView) findViewById(R.id.action_chat);
-        profile = (TextView) findViewById(R.id.action_profile);
-        browse = (TextView) findViewById(R.id.action_browse);
 
-
-        browse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewOfferActivity.this, MainActivity.class));
-            }
-        });
-
-        records.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewOfferActivity.this, BorrowerRecordsActivity.class));
-            }
-        });
-
-        addnew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewOfferActivity.this, AddNewActivity.class));
-            }
-        });
-
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewOfferActivity.this, ChatListActivity.class));
-            }
-        });
-
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewOfferActivity.this, ProfileActivity.class));
-            }
-        });
-
-        //////////////////////End Navigation////////////////////////////
-
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -112,10 +70,10 @@ public class ViewOfferActivity extends AppCompatActivity {
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
                     //If offer is under this post id then display it
-                        if(offer.getPostid().equals(rpostid)) {
+                        if(offer.getSendtype() == 2 && offer.getPostid().equals(rpostid)) {
 
                             String datetime = getDate(offer.getTimestamp());
 
@@ -143,7 +101,7 @@ public class ViewOfferActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final OfferToBorrowPost offer = offers.get(position);
+                final Send offer = offers.get(position);
 
                 Intent i = new Intent(ViewOfferActivity.this, ViewOfferSentActivity.class);
                 i.putExtra("ruserid", offer.getOwnerid());
@@ -163,33 +121,6 @@ public class ViewOfferActivity extends AppCompatActivity {
         return date;
     }
 
-    ////////////////////Top Right Menu//////////////////////
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                // to do logout action
-                auth.signOut();
-                Intent i = new Intent(ViewOfferActivity.this, LoginpageActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(ViewOfferActivity.this, SettingsActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //////////////////End top menu////////////////////////
 
 
 }

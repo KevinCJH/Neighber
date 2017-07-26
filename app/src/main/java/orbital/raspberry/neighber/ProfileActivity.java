@@ -460,7 +460,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void deleteRecords(final String postid){
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -469,12 +469,12 @@ public class ProfileActivity extends AppCompatActivity {
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
                     String recordid = offer.getRecordid();
 
                     if(offer.getPostid().equals(postid)){
-                        FirebaseDatabase.getInstance().getReference("offertolend").child(recordid).removeValue();
+                        FirebaseDatabase.getInstance().getReference("send").child(recordid).removeValue();
                     }
 
                 }

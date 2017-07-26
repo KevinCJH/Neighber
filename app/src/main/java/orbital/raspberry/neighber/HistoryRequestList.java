@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class HistoryRequestList extends ArrayAdapter<OfferToLendPost> {
+public class HistoryRequestList extends ArrayAdapter<Send> {
 
     private Activity context;
-    List<OfferToLendPost> offers;
+    List<Send> offers;
 
-    public HistoryRequestList(Activity context, List<OfferToLendPost> offers) {
+    public HistoryRequestList(Activity context, List<Send> offers) {
         super(context, R.layout.layout_records_list, offers);
         this.context = context;
         this.offers = offers;
@@ -29,7 +29,7 @@ public class HistoryRequestList extends ArrayAdapter<OfferToLendPost> {
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);
         TextView status = (TextView) listViewItem.findViewById(R.id.statusTxt);
 
-        OfferToLendPost offer = offers.get(position);
+        Send offer = offers.get(position);
         itemname.setText(offer.getItemname());
 
         status.setText("");

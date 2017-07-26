@@ -110,11 +110,11 @@ public class AgreementActivity extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
+                Send offer = dataSnapshot.getValue(Send.class);
 
                 //Display description
                 offerdesctxt.setText(offer.getAgreementdesc());
@@ -143,7 +143,6 @@ public class AgreementActivity extends AppCompatActivity {
                                 confirmAgreement();
                                 Toast.makeText(AgreementActivity.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
 
-                                startActivity(new Intent(AgreementActivity.this, BorrowerRecordsActivity.class));
                                 finish();
                                 break;
 
@@ -172,12 +171,12 @@ public class AgreementActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(2);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(agreement);
     */
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(4);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(4);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(4);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(agreement);
 
 
     }

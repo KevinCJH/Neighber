@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class RecordsOfferList2 extends ArrayAdapter<OfferToBorrowPost> {
+public class RecordsOfferList2 extends ArrayAdapter<Send> {
 
     private Activity context;
-    List<OfferToBorrowPost> offers;
+    List<Send> offers;
 
-    public RecordsOfferList2(Activity context, List<OfferToBorrowPost> offers) {
+    public RecordsOfferList2(Activity context, List<Send> offers) {
         super(context, R.layout.layout_records_list, offers);
         this.context = context;
         this.offers = offers;
@@ -29,7 +29,7 @@ public class RecordsOfferList2 extends ArrayAdapter<OfferToBorrowPost> {
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);
         TextView status = (TextView) listViewItem.findViewById(R.id.statusTxt);
 
-        OfferToBorrowPost offer = offers.get(position);
+        Send offer = offers.get(position);
         itemname.setText(offer.getItemname());
 
         switch(offer.getStatus()){
@@ -38,8 +38,8 @@ public class RecordsOfferList2 extends ArrayAdapter<OfferToBorrowPost> {
                 offernum.setText("From: " + offer.getTargetname());
                 break;
             case 2:
-                status.setText("Status: Offer Accepted");
-                offernum.setText("From: " + offer.getTargetname());
+                status.setText("Status: Please Write Agreement for Lending");
+                offernum.setText("Offer accepted by: " + offer.getTargetname());
                 break;
             case 3:
                 status.setText("Status: Collection of Item");

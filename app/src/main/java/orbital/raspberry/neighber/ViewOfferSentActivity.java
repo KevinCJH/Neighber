@@ -143,11 +143,11 @@ public class ViewOfferSentActivity extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
+                Send offer = dataSnapshot.getValue(Send.class);
 
                 //Display description
                 requestdesctxt.setText(offer.getOfferdesc());
@@ -180,8 +180,8 @@ public class ViewOfferSentActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
-               // FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(offerdesctxt.getText().toString().trim());
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(2);
+               // FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(offerdesctxt.getText().toString().trim());
+                FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(2);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
@@ -190,10 +190,10 @@ public class ViewOfferSentActivity extends AppCompatActivity {
                 DatabaseReference cDatabase = FirebaseDatabase.getInstance().getReference("chatmessage");
                 String chatroomid = cDatabase.push().getKey();
 
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("chatid").setValue(chatroomid);
+                FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("chatid").setValue(chatroomid);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("chatid").setValue(chatroomid);
 
-                FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("otherimg").setValue(userimgurl);
+                FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("otherimg").setValue(userimgurl);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherimg").setValue(otherimgurl);
 
 
@@ -201,7 +201,7 @@ public class ViewOfferSentActivity extends AppCompatActivity {
 
                 Toast.makeText(ViewOfferSentActivity.this, "Your acceptance has been sent to the user", Toast.LENGTH_SHORT).show();
 
-                startActivity(new Intent(ViewOfferSentActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(ViewOfferSentActivity.this, ProfileActivity2.class));
                 finish();
 
             }

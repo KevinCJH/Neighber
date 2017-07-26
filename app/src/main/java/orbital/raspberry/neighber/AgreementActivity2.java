@@ -108,11 +108,11 @@ public class AgreementActivity2 extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                OfferToLendPost offer = dataSnapshot.getValue(OfferToLendPost.class);
+                Send offer = dataSnapshot.getValue(Send.class);
 
                 //Display description
                 offerdesctxt.setText(offer.getAgreementdesc());
@@ -141,7 +141,6 @@ public class AgreementActivity2 extends AppCompatActivity {
                                 confirmAgreement();
                                 Toast.makeText(AgreementActivity2.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
 
-                                startActivity(new Intent(AgreementActivity2.this, BorrowerRecordsActivity.class));
                                 finish();
                                 break;
 
@@ -167,8 +166,8 @@ public class AgreementActivity2 extends AppCompatActivity {
         String agreement = offerdesctxt.getText().toString().trim();
 
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(3);
-        FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("status").setValue(3);
-        FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("agreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(3);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(agreement);
     }
 
     //////////////////Top Right Menu//////////////////////

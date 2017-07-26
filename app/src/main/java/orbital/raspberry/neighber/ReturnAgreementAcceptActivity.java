@@ -93,11 +93,11 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
+                Send offer = dataSnapshot.getValue(Send.class);
 
                 //Display description
                 offerdesctxt.setText(offer.getReturnagreementdesc());
@@ -123,7 +123,6 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
                                 //Yes button clicked
                                 confirmAgreement();
                                 Toast.makeText(ReturnAgreementAcceptActivity.this, "Item has been returned to you successfully", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(ReturnAgreementAcceptActivity.this, LenderRecordsActivity.class));
                                 finish();
                                 break;
 
@@ -149,8 +148,8 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
         String agreement = offerdesctxt.getText().toString().trim();
 
         FirebaseDatabase.getInstance().getReference("posts").child(rpostid).child("status").setValue(6);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(6);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("returnagreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(6);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("returnagreementdesc").setValue(agreement);
     }
 
     ///////////////////Top Right Menu//////////////////////
