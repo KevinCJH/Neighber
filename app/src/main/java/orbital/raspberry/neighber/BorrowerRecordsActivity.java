@@ -284,6 +284,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity2.class);
                                         i1.putExtra("agreementid", offer.getRecordid());
                                         i1.putExtra("postid", offer.getPostid());
+                                        i1.putExtra("ruserid", offer.getTargetid());
                                         startActivity(i1);
                                         break;
                                     case 1:

@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,8 +30,6 @@ public class ViewRequestSentActivity extends AppCompatActivity {
     private String ruserid, rofferid, ruserdisplayname;
     private TextView rusernametxt, requestdesctxt ;
     private EditText offerdesctxt;
-    private CircleImageView ruserimg;
-    private TextView browse, records, addnew, chat, profile;
     private Button viewprofile, acceptoffer;
     private String postid;
     private String userid;
@@ -42,6 +41,7 @@ public class ViewRequestSentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_request_sent_view);
 
         //Get userid based on which item was click in the previous activity
@@ -51,54 +51,10 @@ public class ViewRequestSentActivity extends AppCompatActivity {
 
         rusernametxt = (TextView) findViewById(R.id.rusernameTxt);
         offerdesctxt = (EditText) findViewById(R.id.offerdesc);
-        ruserimg = (CircleImageView) findViewById(R.id.imgView);
         viewprofile = (Button) findViewById(R.id.viewprofile);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
         requestdesctxt = (TextView) findViewById(R.id.requestdesc);
 
-        //////////////Navigations/////////////
-        records = (TextView) findViewById(R.id.action_records);
-        addnew = (TextView) findViewById(R.id.action_addnew);
-        chat = (TextView) findViewById(R.id.action_chat);
-        profile = (TextView) findViewById(R.id.action_profile);
-        browse = (TextView) findViewById(R.id.action_browse);
-
-        browse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewRequestSentActivity.this, MainActivity.class));
-            }
-        });
-
-        records.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewRequestSentActivity.this, BorrowerRecordsActivity.class));
-            }
-        });
-
-        addnew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewRequestSentActivity.this, AddNewActivity.class));
-            }
-        });
-
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewRequestSentActivity.this, ChatListActivity.class));
-            }
-        });
-
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ViewRequestSentActivity.this, ProfileActivity.class));
-            }
-        });
-
-        //////////////////////End Navigation////////////////////////////
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -113,10 +69,10 @@ public class ViewRequestSentActivity extends AppCompatActivity {
 
                 //Display profile picture of user
                 String imageUri = user.getImgUri();
-                Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
+               // Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
 
                 //Display user name
-                rusernametxt.setText(user.getDisplayname());
+                rusernametxt.setText("Request by: " + user.getDisplayname());
 
                 ruserdisplayname = user.getDisplayname();
 

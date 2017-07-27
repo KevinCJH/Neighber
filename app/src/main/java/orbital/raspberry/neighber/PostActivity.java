@@ -176,10 +176,14 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(PostActivity.this, ViewProfileActivity.class);
-                //Pass info to next activity
-                i.putExtra("ruserid", ruserid);
-                startActivity(i);
+                if(auth.getCurrentUser().getUid().toString().equals(ruserid)){
+                    startActivity(new Intent(PostActivity.this, ProfileActivity.class));
+                }else {
+                    Intent i = new Intent(PostActivity.this, ViewProfileActivity.class);
+                    //Pass info to next activity
+                    i.putExtra("ruserid", ruserid);
+                    startActivity(i);
+                }
 
             }
         });

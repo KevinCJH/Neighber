@@ -362,6 +362,7 @@ public class ProfileActivity2 extends AppCompatActivity {
                                     Intent i1 = new Intent(ProfileActivity2.this, ReturnAgreementActivity.class);
                                     i1.putExtra("agreementid", post.getAgreementid());
                                     i1.putExtra("postid", post.getPostid());
+                                    i1.putExtra("ruserid", post.getOtherid());
                                     startActivity(i1);
                                     break;
                                 case 1:

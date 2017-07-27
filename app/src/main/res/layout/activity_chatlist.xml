@@ -15,38 +15,31 @@
         android:id="@+id/linearLayout4">
 
         <TextView
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:id="@+id/action_post"
-            android:drawableTop="@drawable/ic_library_books_select_24dp"
-            android:text="Posted (In/Out)"
+            android:text="Your Post"
             android:textColor="@color/colorPrimary"
             android:textAlignment="center"
+            android:background="@color/white"
+            android:gravity="center"
             android:onClick="onClick"
             android:clickable="true"
             android:layout_weight="1"
             android:layout_width="0dp" />
 
         <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_borrow"
-            android:drawableTop="@drawable/ic_arrow_downward_black_24dp"
-            android:text="Borrowing (In)"
+            android:layout_height="50dp"
+            android:id="@+id/action_active"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/navborder"
+            android:gravity="center"
+            android:text="Your Offer/Request"
             android:textAlignment="center"
             android:onClick="onClick"
             android:clickable="true"
             android:layout_weight="1"
             android:layout_width="0dp" />
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_lend"
-            android:drawableTop="@drawable/ic_arrow_upward_black_24dp"
-            android:text="Lending (Out)"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
 
 
     </LinearLayout>

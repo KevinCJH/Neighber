@@ -5,38 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
+    android:padding="10dp"
     tools:context="orbital.raspberry.neighber.ProfileActivity">
-
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgView"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        app:civ_border_color="#ffffff"
-        app:civ_border_width="2dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp" />
-
-    <TextView
-        android:id="@+id/displayname"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:text="User Name"
-        android:paddingLeft="5dp"
-        android:layout_below="@+id/imgView"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="29dp" />
 
 
     <RatingBar
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:theme="@style/RatingBarRate"
         android:numStars="5"
         android:stepSize="0.1"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="25dp"
         android:layout_below="@+id/ratingvalue"
         android:layout_centerHorizontal="true" />
 
@@ -45,93 +25,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
+        android:textColor="@color/colorPrimary"
         android:textSize="20dp"
         android:text="Please Rate the User: "
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/displayname"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Submit Rating"
         android:id="@+id/submitRating"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
-        android:layout_marginBottom="8dp"
         android:textStyle="bold"
-        android:layout_above="@+id/linearLayout"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/rating"
+        android:layout_centerHorizontal="true" />
 
-
-    <!-- Nav Bar -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/grey"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_black_24dp"
-            android:text="Browse"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_select_24dp"
-            android:text="Records"
-            android:textColor="@color/colorPrimary"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_addnew"
-            android:drawableTop="@drawable/ic_add_circle_black_24dp"
-            android:text="Add"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_chat"
-            android:drawableTop="@drawable/ic_chat_black_24dp"
-            android:text="Chat"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_profile"
-            android:drawableTop="@drawable/ic_person_outline_black_24dp"
-            android:text="My Profile"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-    </LinearLayout>
 
 
 

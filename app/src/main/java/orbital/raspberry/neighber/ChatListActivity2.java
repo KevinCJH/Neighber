@@ -28,7 +28,7 @@ public class ChatListActivity2 extends AppCompatActivity {
     private List<ChatItem> chats;
     private ListView chatList;
     private String userid;
-    private TextView post, lend, borrow;
+    private TextView post, active;
 
 
     @Override
@@ -52,26 +52,17 @@ public class ChatListActivity2 extends AppCompatActivity {
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
         post = (TextView) findViewById(R.id.action_post);
-        lend = (TextView) findViewById(R.id.action_lend);
-        borrow = (TextView) findViewById(R.id.action_borrow);
+        active = (TextView) findViewById(R.id.action_active);
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChatListActivity2.this, ChatListActivity.class));
-
             }
         });
 
-        lend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChatListActivity2.this, ChatListActivity3.class));
 
-            }
-        });
-
-        borrow.setOnClickListener(new View.OnClickListener() {
+        active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -133,7 +124,11 @@ public class ChatListActivity2 extends AppCompatActivity {
 
                     if(offer.getSendtype() == 1 && offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)) {
 
-                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), 0);
+                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype());
+                        chats.add(newchat);
+                    }
+                    else if(offer.getSendtype() == 2 && offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)){
+                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype());
                         chats.add(newchat);
                     }
                 }

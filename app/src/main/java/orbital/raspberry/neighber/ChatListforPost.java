@@ -38,9 +38,9 @@ public class ChatListforPost extends ArrayAdapter<ChatItem> {
         itemname.setText("Item: " + chat.getItemname());
         username.setText("User: " + chat.getOthername());
         if(chat.getPosttype() == 1) {
-            posttype.setText("Borrowing");
+            posttype.setText("You are Borrowing");
         }else{
-            posttype.setText("Lending");
+            posttype.setText("You are Lending");
         }
         Picasso.with(context).load(chat.getOtherimguri()).placeholder(R.mipmap.defaultprofile).into(imgview);
 

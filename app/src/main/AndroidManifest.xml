@@ -27,62 +27,104 @@
         </activity>
         <activity
             android:name=".PostActivity" />
+
         <activity android:name=".ResetPasswordActivity" />
+
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".MainSearchedActivity"
             android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".SignupActivity" />
+
         <activity android:name=".ProfileActivity"
                   android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".ViewProfileActivity" />
         <activity android:name=".ViewProfileActivity2" />
         <activity android:name=".AddNewActivity" />
+
         <activity
             android:name=".MainActivity2"
             android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".BorrowerRecordsActivity" />
+
         <activity android:name=".WriteOfferActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
-            android:label="Write Offer"/>
+                    android:theme="@style/Theme.AppCompat.Light.Dialog"
+                    android:label="Write Offer"/>
+
         <activity android:name=".WriteOfferActivity2"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
-            android:label="Write Request"/>
+                     android:theme="@style/Theme.AppCompat.Light.Dialog"
+                    android:label="Write Request"/>
+
         <activity android:name=".EditPostActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+                   android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
         <activity android:name=".ViewOfferActivity"
+                  android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
+        <activity android:name=".AgreementActivity"
+                    android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
+        <activity android:name=".AgreementActivity2"
+                     android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
+        <activity android:name=".ReturnAgreementActivity"
+                    android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
+        <activity android:name=".ReturnAgreementActivity2"
+                 android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
+        <activity android:name=".ReturnAgreementAcceptActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-        <activity android:name=".AgreementActivity" />
-        <activity android:name=".AgreementActivity2" />
-        <activity android:name=".ReturnAgreementActivity" />
-        <activity android:name=".ReturnAgreementActivity2" />
-        <activity android:name=".ReturnAgreementAcceptActivity" />
-        <activity android:name=".ReturnAgreementAcceptActivity2" />
+
+        <activity android:name=".ReturnAgreementAcceptActivity2"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
         <activity android:name=".LenderRecordsActivity" />
+
         <activity android:name=".ViewRequestActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-        <activity android:name=".ViewOfferSentActivity" />
-        <activity android:name=".ViewRequestSentActivity" />
+
+        <activity android:name=".ViewOfferSentActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
+        <activity android:name=".ViewRequestSentActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
         <activity android:name=".HistoryRecordsActivity" />
         <activity android:name=".HistoryRequestActivity" />
         <activity android:name=".HistoryOfferActivity" />
-        <activity android:name=".RateUserActivity" />
-        <activity android:name=".OfferRateUserActivity" />
+
+        <activity android:name=".RateUserActivity"
+                 android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
+        <activity android:name=".OfferRateUserActivity"
+                  android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
         <activity android:name=".RequestRateUserActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".ChangeEmailActivity" />
-        <activity android:name=".SendAgreementActivity" />
+
+        <activity android:name=".SendAgreementActivity"
+                    android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+
         <activity android:name=".ChatActivity" />
         <activity android:name=".ChatListActivity" />
         <activity android:name=".ChatListActivity2" />
         <activity android:name=".ChatListActivity3" />
+
         <activity android:name=".ProfileActivity2"
                   android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".GridActivity"
                   android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
     </application>
 
 </manifest>
