@@ -1,87 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
-    <!-- Bottom Nav Bar -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/grey"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout3">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_select_24dp"
-            android:textColor="@color/colorPrimary"
-            android:text="Browse"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_black_24dp"
-            android:text="Records"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_addnew"
-            android:drawableTop="@drawable/ic_add_circle_black_24dp"
-            android:text="Add"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_chat"
-            android:drawableTop="@drawable/ic_chat_black_24dp"
-            android:text="Chat"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_profile"
-            android:drawableTop="@drawable/ic_person_outline_black_24dp"
-            android:text="My Profile"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-    </LinearLayout>
 
     <TextView
         android:id="@+id/itemnametxt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:hint="Item Name"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:text="You are"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -89,38 +22,53 @@
         android:id="@+id/infotxt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:hint="Offer and Condition of Loan"
-        android:textStyle="bold"
-        android:layout_marginTop="37dp"
+        android:gravity="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:text="Offer and Condition of Loan"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="52dp"
         android:layout_below="@+id/itemnametxt"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/offerdesc"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:maxLines="5"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:lines="3"
-        android:hint="Example: This item has some scratches on the side, but is working perfectly. Expect item to be return in the same condition"
+        android:hint="Example: This item has some scratches on the side, but is working perfectly."
         android:inputType="textMultiLine"
+        android:layout_marginTop="13dp"
         android:layout_below="@+id/infotxt"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:layout_alignStart="@+id/takephoto" />
 
     <Button
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Upload Item Photo"
+        android:id="@+id/takephoto"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/offerdesc"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:textAppearanceSmall"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Send Offer"
         android:id="@+id/submitRequest"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_above="@+id/linearLayout3"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:layout_below="@+id/takephoto"
+        android:layout_alignStart="@+id/takephoto"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="19dp" />
 
 
 

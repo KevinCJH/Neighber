@@ -28,7 +28,7 @@ public class ChatListActivity2 extends AppCompatActivity {
     private List<ChatItem> chats;
     private ListView chatList;
     private String userid;
-    private TextView post, lend, borrow;
+    private TextView post, active;
 
 
     @Override
@@ -52,26 +52,17 @@ public class ChatListActivity2 extends AppCompatActivity {
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
         post = (TextView) findViewById(R.id.action_post);
-        lend = (TextView) findViewById(R.id.action_lend);
-        borrow = (TextView) findViewById(R.id.action_borrow);
+        active = (TextView) findViewById(R.id.action_active);
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChatListActivity2.this, ChatListActivity.class));
-
             }
         });
 
-        lend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChatListActivity2.this, ChatListActivity3.class));
 
-            }
-        });
-
-        borrow.setOnClickListener(new View.OnClickListener() {
+        active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -116,7 +107,7 @@ public class ChatListActivity2 extends AppCompatActivity {
         //////////////////////End Navigation////////////////////////////
 
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -129,11 +120,15 @@ public class ChatListActivity2 extends AppCompatActivity {
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
-                    if(offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)) {
+                    if(offer.getSendtype() == 1 && offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)) {
 
-                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), 0);
+                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype(), offer.getLastmsg(), offer.getPostid(), offer.getRecordid());
+                        chats.add(newchat);
+                    }
+                    else if(offer.getSendtype() == 2 && offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)){
+                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype(), offer.getLastmsg(), offer.getPostid(), offer.getRecordid());
                         chats.add(newchat);
                     }
                 }
@@ -161,6 +156,8 @@ public class ChatListActivity2 extends AppCompatActivity {
                Intent i = new Intent(ChatListActivity2.this, ChatActivity.class);
                 i.putExtra("chatroomid", chat.getChatroomid());
                 i.putExtra("itemname", chat.getItemname());
+                i.putExtra("offerid", chat.getOfferid());
+                i.putExtra("postid", chat.getPostid());
                 startActivity(i);
 
             }

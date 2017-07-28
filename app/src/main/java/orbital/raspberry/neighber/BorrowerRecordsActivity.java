@@ -28,10 +28,9 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
-    private TextView borrowing, lending, history;
-    private List<Post> posts;
-    private List<OfferToLendPost> offers;
-    private ListView listViewRequests, listViewRequests2;
+    private TextView active, history;
+    private List<Send> offers;
+    private ListView listViewRequests2;
     private String userid;
     private int rrecordcount;
 
@@ -45,10 +44,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
         userid = auth.getCurrentUser().getUid();
 
-        posts = new ArrayList<>();
         offers = new ArrayList<>();
 
-        listViewRequests = (ListView) findViewById(R.id.listRequest);
         listViewRequests2 = (ListView) findViewById(R.id.listRequest2);
 
         //////////////Navigations/////////////
@@ -57,23 +54,16 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
         chat = (TextView) findViewById(R.id.action_chat);
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
-        borrowing = (TextView) findViewById(R.id.action_borrowing);
-        lending = (TextView) findViewById(R.id.action_lending);
+        active = (TextView) findViewById(R.id.action_active);
         history = (TextView) findViewById(R.id.action_history);
 
-        borrowing.setOnClickListener(new View.OnClickListener() {
+        active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        lending.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BorrowerRecordsActivity.this, LenderRecordsActivity.class));
-            }
-        });
 
         history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,44 +109,9 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
         //////////////////////End Navigation////////////////////////////
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
-
-        //attaching value event listener
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                //clearing the previous list
-                posts.clear();
-
-                //iterating through all the nodes
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //getting artist
-                    Post post = postSnapshot.getValue(Post.class);
-
-                    //If post type is request aka 1
-                        if(post.getPosttype() == 1 && post.getUserid().toString().equals(userid) && post.getStatus() <= 5) {
-
-                            //adding to the list
-                            posts.add(post);
-
-                        }
-                }
-
-                //creating adapter
-                RecordsList reqAdapter = new RecordsList(BorrowerRecordsActivity.this, posts);
-                //attaching adapter to the listview
-                listViewRequests.setAdapter(reqAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -169,15 +124,20 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
-                    if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 4) {
+                    if(offer.getSendtype() == 1 && offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 4) {
 
                         //adding to the list
                         offers.add(offer);
 
                     }
-                }
+                    else if(offer.getSendtype() == 2 && offer.getOwnerid().toString().equals(userid) && offer.getStatus() <= 5) {
+                        //adding to the list
+                        offers.add(offer);
+                    }
+
+                    }
 
                 //creating adapter
                 RecordsOfferList oAdapter = new RecordsOfferList(BorrowerRecordsActivity.this, offers);
@@ -191,199 +151,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             }
         });
 
-        listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final Post post = posts.get(position);
-
-                //DELETE DIALOG
-                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                //Yes button clicked
-                                FirebaseDatabase.getInstance().getReference("posts").child(post.getPostid()).removeValue();
-                                deleteRecords(post.getPostid());
-                                posts.remove(position);
-                                Toast.makeText(BorrowerRecordsActivity.this, "Post has been deleted", Toast.LENGTH_SHORT).show();
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
-                        }
-                    }
-                };
-
-
-                //Status pending
-                if(post.getStatus() == 1) {
-
-                    CharSequence options[] = new CharSequence[]{"View Offer", "Update this Post", "Delete this Post"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    if (post.getRecordcount() <= 0) {
-                                        Toast.makeText(BorrowerRecordsActivity.this, "No offers were made to you", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Intent i = new Intent(BorrowerRecordsActivity.this, ViewOfferActivity.class);
-                                        i.putExtra("rpostid", post.getPostid());
-                                        startActivity(i);
-                                    }
-                                    break;
-                                case 1:
-                                    Intent i = new Intent(BorrowerRecordsActivity.this, EditPostActivity.class);
-                                    i.putExtra("rpostid", post.getPostid());
-                                    startActivity(i);
-                                    break;
-                                case 2:
-                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener)
-                                            .setNegativeButton("Cancel", dialogClickListener).show();
-
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
-                }
-
-                //wait for agreement
-                else if(post.getStatus() == 2) {
-
-                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
-                                    i1.putExtra("chatroomid", post.getChatid());
-                                    i1.putExtra("itemname", post.getItemname());
-                                    startActivity(i1);
-                                    break;
-                                case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i2.putExtra("ruserid", post.getOtherid());
-                                    startActivity(i2);
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
-
-                }
-
-                //accept agreement
-                else if(post.getStatus() == 3) {
-
-                    CharSequence options[] = new CharSequence[]{"View item agreement", "Chat with user", "View lender profile"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, AgreementActivity.class);
-                                    i1.putExtra("ruserid", post.getOtherid());
-                                    i1.putExtra("rofferid", post.getAgreementid());
-                                    startActivity(i1);
-                                    break;
-                                case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
-                                    i2.putExtra("chatroomid", post.getChatid());
-                                    i2.putExtra("itemname", post.getItemname());
-                                    startActivity(i2);
-                                    break;
-                                case 2:
-                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i3.putExtra("ruserid", post.getOtherid());
-                                    startActivity(i3);
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
-
-                }
-
-                //borrowing in progress
-                else if(post.getStatus() == 4) {
-
-                    CharSequence options[] = new CharSequence[]{"Return Item", "Chat with user", "View lender profile"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity.class);
-                                    i1.putExtra("agreementid", post.getAgreementid());
-                                    i1.putExtra("postid", post.getPostid());
-                                    startActivity(i1);
-                                    break;
-                                case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
-                                    i2.putExtra("chatroomid", post.getChatid());
-                                    i2.putExtra("itemname", post.getItemname());
-                                    startActivity(i2);
-                                    break;
-                                case 2:
-                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i3.putExtra("ruserid", post.getOtherid());
-                                    startActivity(i3);
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
-                }
-
-                //return in progress
-                else if(post.getStatus() == 5) {
-
-                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
-                                    i2.putExtra("chatroomid", post.getChatid());
-                                    i2.putExtra("itemname", post.getItemname());
-                                    startActivity(i2);
-                                    break;
-                                case 1:
-                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i3.putExtra("ruserid", post.getOtherid());
-                                    startActivity(i3);
-                                    break;
-                            }
-                        }
-                    });
-                    builder.show();
-                }
-
-
-            }
-        });
 
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -392,7 +160,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final OfferToLendPost offer = offers.get(position);
+                final Send offer = offers.get(position);
 
 
                 final DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference("posts");
@@ -410,157 +178,357 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                     }
                 });
 
+                //If send type is request
+                if(offer.getSendtype() == 1) {
 
-                //DELETE DIALOG
-                final DialogInterface.OnClickListener dialogClickListener2 = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                //Yes button clicked
-                                FirebaseDatabase.getInstance().getReference("offertolend").child(offer.getRecordid()).removeValue();
-                                rrecordcount -= 1;
-                                FirebaseDatabase.getInstance().getReference("posts").child(offer.getPostid()).child("recordcount").setValue(rrecordcount);
-                                offers.remove(position);
-                                Toast.makeText(BorrowerRecordsActivity.this, "Request has been deleted", Toast.LENGTH_SHORT).show();
-                                break;
+                    //DELETE DIALOG
+                    final DialogInterface.OnClickListener dialogClickListener2 = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    //Yes button clicked
+                                    FirebaseDatabase.getInstance().getReference("send").child(offer.getRecordid()).removeValue();
+                                    rrecordcount -= 1;
+                                    FirebaseDatabase.getInstance().getReference("posts").child(offer.getPostid()).child("recordcount").setValue(rrecordcount);
+                                    offers.remove(position);
+                                    Toast.makeText(BorrowerRecordsActivity.this, "Request has been deleted", Toast.LENGTH_SHORT).show();
+                                    break;
 
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
                         }
+                    };
+                    /////
+
+                    //Status pending
+                    if (offer.getStatus() == 1) {
+
+                        CharSequence options[] = new CharSequence[]{"View Post", "Delete this Request"};
+                        final int newnumrecord;
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i = new Intent(BorrowerRecordsActivity.this, PostActivity.class);
+                                        i.putExtra("rpostid", offer.getPostid());
+                                        i.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i);
+                                        break;
+                                    case 1:
+                                        AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                                        builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
+                                                .setNegativeButton("Cancel", dialogClickListener2).show();
+
+                                        break;
+                                }
+                            }
+                        });
+                        builder.show();
                     }
-                };
-                /////
 
-                //Status pending
-                if(offer.getStatus() == 1) {
+                    //Status Agreement
 
-                    CharSequence options[] = new CharSequence[]{"View Post", "Delete this Request"};
-                    final int newnumrecord;
+                    else if (offer.getStatus() == 2) {
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        CharSequence options[] = new CharSequence[]{"View Agreement", "Chat with user", "View lender profile"};
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i1 = new Intent(BorrowerRecordsActivity.this, AgreementActivity2.class);
+                                        i1.putExtra("ruserid", offer.getTargetid());
+                                        i1.putExtra("rofferid", offer.getRecordid());
+                                        startActivity(i1);
+                                        break;
+                                    case 1:
+                                        Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                        i2.putExtra("chatroomid", offer.getChatid());
+                                        i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
+                                        startActivity(i2);
+                                        break;
+                                    case 2:
+                                        Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                        i3.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i3);
+                                        break;
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
+
+                    //Status borrowing
+
+                    else if (offer.getStatus() == 3) {
+
+                        CharSequence options[] = new CharSequence[]{"Return Item", "Chat with user", "View lender profile"};
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity2.class);
+                                        i1.putExtra("agreementid", offer.getRecordid());
+                                        i1.putExtra("postid", offer.getPostid());
+                                        i1.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i1);
+                                        break;
+                                    case 1:
+                                        Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                        i2.putExtra("chatroomid", offer.getChatid());
+                                        i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
+                                        startActivity(i2);
+                                        break;
+                                    case 2:
+                                        Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                        i3.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i3);
+                                        break;
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
+
+
+                    //Status returning
+
+                    else if (offer.getStatus() == 4) {
+
+                        CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                        i2.putExtra("chatroomid", offer.getChatid());
+                                        i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
+                                        startActivity(i2);
+                                        break;
+                                    case 1:
+                                        Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                        i3.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i3);
+                                        break;
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
+
+                }else{
+
+                    //DELETE DIALOG
+                    final DialogInterface.OnClickListener dialogClickListener2 = new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i = new Intent(BorrowerRecordsActivity.this, PostActivity.class);
-                                    i.putExtra("rpostid", offer.getPostid());
-                                    i.putExtra("ruserid", offer.getTargetid());
-                                    startActivity(i);
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    //Yes button clicked
+                                    FirebaseDatabase.getInstance().getReference("send").child(offer.getRecordid()).removeValue();
+                                    rrecordcount -= 1;
+                                    FirebaseDatabase.getInstance().getReference("posts").child(offer.getPostid()).child("recordcount").setValue(rrecordcount);
+                                    offers.remove(position);
+                                    Toast.makeText(BorrowerRecordsActivity.this, "Offer has been deleted", Toast.LENGTH_SHORT).show();
                                     break;
-                                case 1:
-                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
-                                            .setNegativeButton("Cancel", dialogClickListener2).show();
 
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
                                     break;
                             }
                         }
-                    });
-                    builder.show();
-                }
+                    };
+                    /////
 
-                //Status Agreement
+                    //Status pending
+                    if(offer.getStatus() == 1) {
 
-                else if(offer.getStatus() == 2) {
+                        CharSequence options[] = new CharSequence[]{"View Post", "Delete this Offer"};
+                        final int newnumrecord;
 
-                    CharSequence options[] = new CharSequence[]{"View Agreement", "Chat with user", "View lender profile"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, AgreementActivity2.class);
-                                    i1.putExtra("ruserid", offer.getTargetid());
-                                    i1.putExtra("rofferid", offer.getRecordid());
-                                    startActivity(i1);
-                                    break;
-                                case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
-                                    i2.putExtra("chatroomid", offer.getChatid());
-                                    i2.putExtra("itemname", offer.getItemname());
-                                    startActivity(i2);
-                                    break;
-                                case 2:
-                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i3.putExtra("ruserid", offer.getTargetid());
-                                    startActivity(i3);
-                                    break;
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i = new Intent(BorrowerRecordsActivity.this, PostActivity.class);
+                                        i.putExtra("rpostid", offer.getPostid());
+                                        i.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i);
+                                        break;
+                                    case 1:
+                                        AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                                        builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
+                                                .setNegativeButton("Cancel", dialogClickListener2).show();
+                                        break;
+                                }
                             }
-                        }
-                    });
-                    builder.show();
-                }
+                        });
+                        builder.show();
+                    }
 
-                //Status borrowing
+                    //Status send Agreement
 
-                else if(offer.getStatus() == 3) {
+                    else if(offer.getStatus() == 2) {
 
-                    CharSequence options[] = new CharSequence[]{"Return Item", "Chat with user", "View lender profile"};
+                        CharSequence options[] = new CharSequence[]{"Write agreement for item","Chat with user", "View borrower profile"};
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i1 = new Intent(BorrowerRecordsActivity.this, ReturnAgreementActivity2.class);
-                                    i1.putExtra("agreementid", offer.getRecordid());
-                                    i1.putExtra("postid", offer.getPostid());
-                                    startActivity(i1);
-                                    break;
-                                case 1:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
-                                    i2.putExtra("chatroomid", offer.getChatid());
-                                    i2.putExtra("itemname", offer.getItemname());
-                                    startActivity(i2);
-                                    break;
-                                case 2:
-                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i3.putExtra("ruserid", offer.getTargetid());
-                                    startActivity(i3);
-                                    break;
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i1 = new Intent(BorrowerRecordsActivity.this, SendAgreementActivity.class);
+                                        i1.putExtra("ruserid", offer.getTargetid());
+                                        i1.putExtra("rofferid", offer.getRecordid());
+                                        startActivity(i1);
+                                        break;
+                                    case 1:
+                                        Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                        i2.putExtra("chatroomid", offer.getChatid());
+                                        i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
+                                        startActivity(i2);
+                                        break;
+                                    case 2:
+                                        Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                        i3.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i3);
+                                        break;
+                                }
                             }
-                        }
-                    });
-                    builder.show();
-                }
+                        });
+                        builder.show();
 
+                    }
 
-                //Status returning
+                    //Status wait for accept agreement
 
-                else if(offer.getStatus() == 4) {
+                    else if(offer.getStatus() == 3) {
+                        CharSequence options[] = new CharSequence[]{"Chat with user", "View borrower profile"};
 
-                    CharSequence options[] = new CharSequence[]{"Chat with user", "View lender profile"};
-
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
-                    builder.setTitle("Options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            switch (pos) {
-                                case 0:
-                                    Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
-                                    i2.putExtra("chatroomid", offer.getChatid());
-                                    i2.putExtra("itemname", offer.getItemname());
-                                    startActivity(i2);
-                                    break;
-                                case 1:
-                                    Intent i3 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
-                                    i3.putExtra("ruserid", offer.getTargetid());
-                                    startActivity(i3);
-                                    break;
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                        i1.putExtra("chatroomid", offer.getChatid());
+                                        i1.putExtra("itemname", offer.getItemname());
+                                        i1.putExtra("offerid", offer.getRecordid());
+                                        i1.putExtra("postid", offer.getPostid());
+                                        startActivity(i1);
+                                        break;
+                                    case 1:
+                                        Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                        i2.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i2);
+                                        break;
+                                }
                             }
-                        }
-                    });
-                    builder.show();
+                        });
+                        builder.show();
+                    }
+
+
+                    //Status lending
+
+                    else if(offer.getStatus() == 4) {
+
+                        CharSequence options[] = new CharSequence[]{"Chat with user", "View borrower profile"};
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                        i1.putExtra("chatroomid", offer.getChatid());
+                                        i1.putExtra("itemname", offer.getItemname());
+                                        i1.putExtra("offerid", offer.getRecordid());
+                                        i1.putExtra("postid", offer.getPostid());
+                                        startActivity(i1);
+                                        break;
+                                    case 1:
+                                        Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                        i2.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i2);
+                                        break;
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
+
+                    //Status returning
+
+                    else if(offer.getStatus() == 5) {
+
+                        CharSequence options[] = new CharSequence[]{"View return agreement", "Chat with user", "View borrower profile"};
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        Intent i = new Intent(BorrowerRecordsActivity.this, ReturnAgreementAcceptActivity.class);
+                                        i.putExtra("rpostid", offer.getPostid());
+                                        i.putExtra("rofferid", offer.getRecordid());
+                                        startActivity(i);
+                                        break;
+                                    case 1:
+                                        Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
+                                        i1.putExtra("chatroomid", offer.getChatid());
+                                        i1.putExtra("itemname", offer.getItemname());
+                                        i1.putExtra("offerid", offer.getRecordid());
+                                        i1.putExtra("postid", offer.getPostid());
+                                        startActivity(i1);
+                                        break;
+                                    case 2:
+                                        Intent i2 = new Intent(BorrowerRecordsActivity.this, ViewProfileActivity.class);
+                                        i2.putExtra("ruserid", offer.getTargetid());
+                                        startActivity(i2);
+                                        break;
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
                 }
 
 
@@ -573,7 +541,7 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
     public void deleteRecords(final String postid){
 
-        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         oDatabase.addValueEventListener(new ValueEventListener() {
@@ -582,12 +550,12 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToBorrowPost offer = postSnapshot.getValue(OfferToBorrowPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
                     String recordid = offer.getRecordid();
 
                     if(offer.getPostid().equals(postid)){
-                        FirebaseDatabase.getInstance().getReference("offertoborrow").child(recordid).removeValue();
+                        FirebaseDatabase.getInstance().getReference("send").child(recordid).removeValue();
                     }
 
                 }

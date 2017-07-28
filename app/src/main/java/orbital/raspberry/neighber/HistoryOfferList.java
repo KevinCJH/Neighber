@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class HistoryOfferList extends ArrayAdapter<OfferToBorrowPost> {
+public class HistoryOfferList extends ArrayAdapter<Send> {
 
     private Activity context;
-    List<OfferToBorrowPost> offers;
+    List<Send> offers;
 
-    public HistoryOfferList(Activity context, List<OfferToBorrowPost> offers) {
-        super(context, R.layout.layout_records_list, offers);
+    public HistoryOfferList(Activity context, List<Send> offers) {
+        super(context, R.layout.layout_offerrecords_list, offers);
         this.context = context;
         this.offers = offers;
     }
@@ -23,17 +23,21 @@ public class HistoryOfferList extends ArrayAdapter<OfferToBorrowPost> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.layout_records_list, null, true);
+        View listViewItem = inflater.inflate(R.layout.layout_offerrecords_list, null, true);
 
         TextView itemname = (TextView) listViewItem.findViewById(R.id.itemnameTxt);
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);
         TextView status = (TextView) listViewItem.findViewById(R.id.statusTxt);
 
-        OfferToBorrowPost offer = offers.get(position);
+        Send offer = offers.get(position);
         itemname.setText(offer.getItemname());
 
-        status.setText("");
-        offernum.setText("Lend To: " + offer.getTargetname());
+        offernum.setText("");
+        if(offer.getSendtype() == 1){
+            status.setText("Requested From: " + offer.getTargetname());
+        }else {
+            status.setText("Offered To: " + offer.getTargetname());
+        }
 
         return listViewItem;
     }

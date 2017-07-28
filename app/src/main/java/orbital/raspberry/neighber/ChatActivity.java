@@ -32,6 +32,7 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseListAdapter<ChatMessage> adapter;
     private String chatroomid;
     private String itemname;
+    private String offerid, postid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,9 @@ public class ChatActivity extends AppCompatActivity {
         Intent i = getIntent();
         chatroomid = i.getStringExtra("chatroomid");
         itemname = i.getStringExtra("itemname");
+        offerid = i.getStringExtra("offerid");
+        postid = i.getStringExtra("postid");
+
 
         getSupportActionBar().setTitle("Item: " + itemname);
 
@@ -87,6 +91,12 @@ public class ChatActivity extends AppCompatActivity {
                     ChatMessage msg = new ChatMessage(msgid, input.getText().toString().trim(), username, userid);
 
                     cDatabase.child(msgid).setValue(msg);
+
+                    FirebaseDatabase.getInstance().getReference("send").child(offerid).child("lastmsg").setValue(input.getText().toString().trim());
+                    FirebaseDatabase.getInstance().getReference("posts").child(postid).child("lastmsg").setValue(input.getText().toString().trim());
+
+
+                    //  cDatabase.child("latestmsg").setValue(input.getText().toString().trim());
 
                 /*
                 FirebaseDatabase.getInstance()

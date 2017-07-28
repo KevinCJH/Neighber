@@ -15,7 +15,7 @@ public class HistoryList extends ArrayAdapter<Post> {
     List<Post> posts;
 
     public HistoryList(Activity context, List<Post> posts) {
-        super(context, R.layout.layout_records_list, posts);
+        super(context, R.layout.layout_offerrecords_list, posts);
         this.context = context;
         this.posts = posts;
     }
@@ -23,7 +23,7 @@ public class HistoryList extends ArrayAdapter<Post> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.layout_records_list, null, true);
+        View listViewItem = inflater.inflate(R.layout.layout_offerrecords_list, null, true);
 
         TextView itemname = (TextView) listViewItem.findViewById(R.id.itemnameTxt);
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);

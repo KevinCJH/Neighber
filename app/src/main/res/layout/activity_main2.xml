@@ -5,77 +5,6 @@
     android:focusableInTouchMode="true"
     android:layout_height="match_parent">
 
-    <!-- Top Nav Bar -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/grey"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout4">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse_offer"
-            android:drawableTop="@drawable/ic_arrow_downward_select_24dp"
-            android:textColor="@color/colorPrimary"
-            android:text="Browse Items"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse_request"
-            android:drawableTop="@drawable/ic_arrow_upward_black_24dp"
-            android:text="Browse Requests"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-
-        </LinearLayout>
-
-
-    <ListView
-        android:id="@+id/listRequest"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/searchbtn"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/linearLayout" />
-
-    <Button
-        style="?android:textAppearanceSmall"
-        android:id="@+id/searchbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/linearLayout4"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:text="Search" />
-
-
-    <EditText
-        android:id="@+id/searchtxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/searchbtn"
-        android:layout_alignBottom="@+id/searchbtn"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp"
-        android:maxLines="1"
-        android:inputType="textPersonName"
-        android:hint="Need an item?" />
-    
-
     <!-- Nav Bar -->
     <LinearLayout
         android:layout_width="fill_parent"
@@ -143,5 +72,84 @@
             android:layout_width="0dp" />
 
     </LinearLayout>
+
+
+    <!-- Top Nav Bar -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/grey"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout4">
+
+        <TextView
+            android:layout_height="50dp"
+            android:id="@+id/action_browse_offer"
+            android:textColor="@color/colorPrimary"
+            android:text="Browse Items"
+            android:background="@color/white"
+            android:textAlignment="center"
+            android:onClick="onClick"
+            android:gravity="center"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:layout_height="50dp"
+            android:id="@+id/action_browse_request"
+            android:background="@drawable/navborder"
+            android:textColor="@color/colorPrimary"
+            android:text="Browse Requests"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+
+
+        </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/listRequest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchbtn"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/linearLayout" />
+
+    <Button
+        style="?android:textAppearanceSmall"
+        android:id="@+id/searchbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/linearLayout4"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:text="Search" />
+
+
+    <EditText
+        android:id="@+id/searchtxt"
+        android:background="@color/lightorange"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_toStartOf="@+id/searchbtn"
+        android:layout_alignBottom="@+id/searchbtn"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp"
+        android:paddingLeft="3dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:lines="1"
+        android:inputType="textPersonName"
+        android:hint="Need an item?" />
+    
+
 
 </RelativeLayout>

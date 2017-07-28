@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class SendAgreementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_agreementsend);
 
         //Get userid based on which item was click in the previous activity
@@ -44,50 +46,6 @@ public class SendAgreementActivity extends AppCompatActivity {
         sendagree = (Button) findViewById(R.id.sendagree);
         offerwritten = (TextView) findViewById(R.id.offerwritten);
 
-
-        //////////////Navigations/////////////
-        records = (TextView) findViewById(R.id.action_records);
-        addnew = (TextView) findViewById(R.id.action_addnew);
-        chat = (TextView) findViewById(R.id.action_chat);
-        profile = (TextView) findViewById(R.id.action_profile);
-        browse = (TextView) findViewById(R.id.action_browse);
-
-        browse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SendAgreementActivity.this, MainActivity.class));
-            }
-        });
-
-        records.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SendAgreementActivity.this, BorrowerRecordsActivity.class));
-            }
-        });
-
-        addnew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SendAgreementActivity.this, AddNewActivity.class));
-            }
-        });
-
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SendAgreementActivity.this, ChatListActivity.class));
-            }
-        });
-
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SendAgreementActivity.this, ProfileActivity.class));
-            }
-        });
-
-        //////////////////////End Navigation////////////////////////////
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -108,11 +66,11 @@ public class SendAgreementActivity extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                OfferToBorrowPost offer = dataSnapshot.getValue(OfferToBorrowPost.class);
+                Send offer = dataSnapshot.getValue(Send.class);
 
                 offerwritten.setText(offer.getOfferdesc());
 
@@ -137,7 +95,6 @@ public class SendAgreementActivity extends AppCompatActivity {
                 confirmAgreement();
                 Toast.makeText(SendAgreementActivity.this, "Please meet up with " + ruserdisplayname + " to pass the item", Toast.LENGTH_SHORT).show();
 
-                startActivity(new Intent(SendAgreementActivity.this, LenderRecordsActivity.class));
                 finish();
 
             }
@@ -153,42 +110,15 @@ public class SendAgreementActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherid").setValue(ruserid);
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("othername").setValue(ruserdisplayname);
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(2);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(2);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(agreement);
     */
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(3);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("status").setValue(3);
-        FirebaseDatabase.getInstance().getReference("offertoborrow").child(rofferid).child("agreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(3);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(agreement);
 
 
     }
 
-    //////////////////Top Right Menu//////////////////////
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                // to do logout action
-                auth.signOut();
-                Intent i = new Intent(SendAgreementActivity.this, LoginpageActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(SendAgreementActivity.this, SettingsActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //////////////////End top menu////////////////////////
 
 }

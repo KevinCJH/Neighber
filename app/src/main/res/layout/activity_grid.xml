@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/GridLayout1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:columnCount="3"
+    android:rowCount="3"
+    android:orientation="horizontal"
+    android:layout_gravity="center"
+    android:background="@color/fadeorange"
+    >
+    <TextView
+        android:id="@+id/office"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/office"
+        android:text="Office" />
+
+    <TextView
+        android:id="@+id/party"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/party"
+        android:text="Party" />
+
+    <TextView
+        android:id="@+id/furniture"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/furniture"
+        android:text="Furniture" />
+
+    <TextView
+        android:id="@+id/shirtf"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/shirtf"
+        android:text="Women's" />
+
+    <TextView
+        android:id="@+id/shirtm"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/shirtm"
+        android:text="Men's" />
+
+    <TextView
+        android:id="@+id/sports"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/sports"
+        android:text="Sports" />
+
+    <TextView
+        android:id="@+id/electronics"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/electrical"
+        android:text="Electronics" />
+
+    <TextView
+        android:id="@+id/food"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/food"
+        android:text="Food" />
+
+    <TextView
+        android:id="@+id/others"
+        android:layout_height="96dp"
+        android:layout_width="96dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:drawableTop="@mipmap/others"
+        android:text="Others" />
+
+</GridLayout>

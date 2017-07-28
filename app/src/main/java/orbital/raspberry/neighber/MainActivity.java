@@ -1,5 +1,7 @@
 package orbital.raspberry.neighber;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.*;
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static boolean calledAlready = false;
     private EditText searchtxt;
     private Button searchbtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     public String getDate(long time) {
@@ -226,11 +232,13 @@ public class MainActivity extends AppCompatActivity {
         return date;
     }
 
+
     ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 

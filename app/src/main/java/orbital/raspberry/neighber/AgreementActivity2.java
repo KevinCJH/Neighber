@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class AgreementActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_agreement2);
 
         //Get userid based on which item was click in the previous activity
@@ -45,49 +47,6 @@ public class AgreementActivity2 extends AppCompatActivity {
         offerdesctxt = (EditText) findViewById(R.id.offerdesc);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
 
-        //////////////Navigations/////////////
-        records = (TextView) findViewById(R.id.action_records);
-        addnew = (TextView) findViewById(R.id.action_addnew);
-        chat = (TextView) findViewById(R.id.action_chat);
-        profile = (TextView) findViewById(R.id.action_profile);
-        browse = (TextView) findViewById(R.id.action_browse);
-
-        browse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity2.this, MainActivity.class));
-            }
-        });
-
-        records.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity2.this, BorrowerRecordsActivity.class));
-            }
-        });
-
-        addnew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity2.this, AddNewActivity.class));
-            }
-        });
-
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity2.this, ChatListActivity.class));
-            }
-        });
-
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AgreementActivity2.this, ProfileActivity.class));
-            }
-        });
-
-        //////////////////////End Navigation////////////////////////////
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -108,11 +67,11 @@ public class AgreementActivity2 extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
         mDatabase.child(rofferid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                OfferToLendPost offer = dataSnapshot.getValue(OfferToLendPost.class);
+                Send offer = dataSnapshot.getValue(Send.class);
 
                 //Display description
                 offerdesctxt.setText(offer.getAgreementdesc());
@@ -141,7 +100,6 @@ public class AgreementActivity2 extends AppCompatActivity {
                                 confirmAgreement();
                                 Toast.makeText(AgreementActivity2.this, "You are now borrowing from: " + ruserdisplayname, Toast.LENGTH_SHORT).show();
 
-                                startActivity(new Intent(AgreementActivity2.this, BorrowerRecordsActivity.class));
                                 finish();
                                 break;
 
@@ -167,36 +125,9 @@ public class AgreementActivity2 extends AppCompatActivity {
         String agreement = offerdesctxt.getText().toString().trim();
 
         FirebaseDatabase.getInstance().getReference("posts").child(postid).child("status").setValue(3);
-        FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("status").setValue(3);
-        FirebaseDatabase.getInstance().getReference("offertolend").child(rofferid).child("agreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(3);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(agreement);
     }
 
-    //////////////////Top Right Menu//////////////////////
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                // to do logout action
-                auth.signOut();
-                Intent i = new Intent(AgreementActivity2.this, LoginpageActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(AgreementActivity2.this, SettingsActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //////////////////End top menu////////////////////////
 
 }

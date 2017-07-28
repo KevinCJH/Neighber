@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_write_offer2);
 
         //Get userid based on which item was click in the previous activity
@@ -42,7 +44,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
         rpostid = i.getStringExtra("rpostid");
         ruserdisplayname = i.getStringExtra("ruserdisplayname");
 
-        //////////////Navigations/////////////
+   /*     //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
         chat = (TextView) findViewById(R.id.action_chat);
@@ -83,7 +85,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
                 startActivity(new Intent(WriteOfferActivity2.this, ProfileActivity.class));
             }
         });
-
+*/
         //////////////////////End Navigation////////////////////////////
 
         submitBtn = (Button)findViewById(R.id.submitRequest);
@@ -121,7 +123,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
 
                 ritemname = post.getItemname();
 
-                itemnameTxt.setText("Item: " + ritemname);
+                itemnameTxt.setText("You are requesting: " + ritemname);
 
                 rrecordcount = post.getRecordcount();
 
@@ -135,7 +137,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +147,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
                 String recordid = mDatabase.push().getKey();
 
                 //Create new offertoborrowpost object
-                OfferToLendPost newreq = new OfferToLendPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
+                Send newreq = new Send(1, recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
 
                 newreq.setRequestdesc(offerdescTxt.getText().toString().trim());
 
@@ -160,7 +162,7 @@ public class WriteOfferActivity2 extends AppCompatActivity {
 
                 pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
 
-                Toast.makeText(WriteOfferActivity2.this, "Request Submitted! You may view/delete the request in the Records(Borrowing) tab", Toast.LENGTH_LONG).show();
+                Toast.makeText(WriteOfferActivity2.this, "Request Submitted! You may view/delete the request in the Records tab", Toast.LENGTH_LONG).show();
 
                 startActivity(new Intent(WriteOfferActivity2.this, MainActivity.class));
                 finish();

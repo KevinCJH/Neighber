@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:text="Item Name: "
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimary"
         android:layout_gravity="center"
-        android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:paddingTop="8dp"
         android:layout_alignStart="@+id/usernameTxt" />
@@ -32,9 +32,9 @@
         android:id="@+id/usernameTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
+        android:paddingTop="5dp"
         android:text="Name: "
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:layout_below="@+id/posttype"
         android:layout_toEndOf="@+id/imgView"
         android:layout_marginStart="15dp" />
@@ -43,8 +43,8 @@
         android:id="@+id/posttype"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:paddingTop="8dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+        android:paddingTop="5dp"
         android:text="Post Type: "
         android:layout_below="@+id/itemnameTxt"
         android:layout_alignStart="@+id/usernameTxt" />

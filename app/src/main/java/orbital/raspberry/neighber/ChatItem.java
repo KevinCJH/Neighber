@@ -7,16 +7,21 @@ public class ChatItem {
     private String itemname;
     private String chatroomid;
     private int posttype;
+    private String lastmsg;
+    private String offerid, postid;
 
     public ChatItem(){}
 
-    public ChatItem(String chatroomid, String itemname, String othername, String otherimguri, int posttype){
+    public ChatItem(String chatroomid, String itemname, String othername, String otherimguri, int posttype, String lastmsg, String postid, String offerid){
 
         this.chatroomid = chatroomid;
         this.itemname = itemname;
         this.otherimguri = otherimguri;
         this.othername = othername;
         this.posttype = posttype;
+        this.lastmsg = lastmsg;
+        this.offerid = offerid;
+        this.postid = postid;
 
     }
 
@@ -38,6 +43,18 @@ public class ChatItem {
 
     public int getPosttype(){
         return posttype;
+    }
+
+    public String getLastmsg(){
+        return lastmsg;
+    }
+
+    public String getOfferid(){
+        return offerid;
+    }
+
+    public String getPostid(){
+        return postid;
     }
 
 }

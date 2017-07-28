@@ -121,18 +121,6 @@ public class MainSearchedActivity extends AppCompatActivity {
 
         searchtxt.setText(searchkey);
 
-        searchtxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // Always use a TextKeyListener when clearing a TextView to prevent android
-                    // warnings in the log
-                    TextKeyListener.clear((searchtxt).getText());
-
-                }
-            }
-        });
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
@@ -210,6 +198,28 @@ public class MainSearchedActivity extends AppCompatActivity {
                 startActivity(i);
 
             }
+        });
+
+        searchtxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // Always use a TextKeyListener when clearing a TextView to prevent android
+                    // warnings in the log
+                    TextKeyListener.clear((searchtxt).getText());
+
+                }
+            }
+        });
+
+        searchtxt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                TextKeyListener.clear((searchtxt).getText());
+            }
+
         });
 
 

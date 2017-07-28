@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ public class WriteOfferActivity extends AppCompatActivity {
     private String ruserid, rpostid, ritemname, ruserdisplayname;
     private TextView browse, records, addnew, chat, profile;
     private int rrecordcount;
-    private Button submitBtn;
+    private Button submitBtn, takephoto;
     private EditText offerdescTxt;
     private TextView itemnameTxt;
 
@@ -36,6 +37,7 @@ public class WriteOfferActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_write_offer);
 
         //Get userid based on which item was click in the previous activity
@@ -44,7 +46,7 @@ public class WriteOfferActivity extends AppCompatActivity {
         rpostid = i.getStringExtra("rpostid");
         ruserdisplayname = i.getStringExtra("ruserdisplayname");
 
-        //////////////Navigations/////////////
+    /*    //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
         chat = (TextView) findViewById(R.id.action_chat);
@@ -84,11 +86,12 @@ public class WriteOfferActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(WriteOfferActivity.this, ProfileActivity.class));
             }
-        });
+        }); */
 
         //////////////////////End Navigation////////////////////////////
 
         submitBtn = (Button)findViewById(R.id.submitRequest);
+        takephoto = (Button)findViewById(R.id.takephoto);
         offerdescTxt = (EditText)findViewById(R.id.offerdesc);
         itemnameTxt = (TextView) findViewById(R.id.itemnametxt) ;
 
@@ -123,7 +126,7 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 ritemname = post.getItemname();
 
-                itemnameTxt.setText("Item: " + ritemname);
+                itemnameTxt.setText("You are offering: " + ritemname);
 
                 rrecordcount = post.getRecordcount();
 
@@ -137,7 +140,7 @@ public class WriteOfferActivity extends AppCompatActivity {
             }
         });
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertoborrow");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +150,7 @@ public class WriteOfferActivity extends AppCompatActivity {
                 String recordid = mDatabase.push().getKey();
 
                 //Create new offertoborrowpost object
-                OfferToBorrowPost newoffer = new OfferToBorrowPost(recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
+                Send newoffer = new Send(2, recordid, rpostid, ritemname, userid, userdisplayname[0],ruserid, ruserdisplayname);
 
                 //newoffer.setAgreementdesc(offerdescTxt.getText().toString().trim());
                 newoffer.setOfferdesc(offerdescTxt.getText().toString().trim());
@@ -163,10 +166,18 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                 pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
 
-                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may view/delete the offer in the Records(Lending) tab", Toast.LENGTH_LONG).show();
+                Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may view/delete the offer in the Records tab", Toast.LENGTH_LONG).show();
 
-                startActivity(new Intent(WriteOfferActivity.this, MainActivity.class));
+                startActivity(new Intent(WriteOfferActivity.this, MainActivity2.class));
                 finish();
+
+            }
+        });
+
+        takephoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(WriteOfferActivity.this, "Feature coming soon!", Toast.LENGTH_LONG).show();
 
             }
         });

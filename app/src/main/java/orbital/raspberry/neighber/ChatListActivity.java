@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -33,7 +34,8 @@ public class ChatListActivity extends AppCompatActivity {
     private List<ChatItem> chats;
     private ListView chatList;
     private String userid;
-    private TextView post, lend, borrow;
+    private TextView post, active;
+    private String lastmsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,7 @@ public class ChatListActivity extends AppCompatActivity {
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
         post = (TextView) findViewById(R.id.action_post);
-        lend = (TextView) findViewById(R.id.action_lend);
-        borrow = (TextView) findViewById(R.id.action_borrow);
+        active = (TextView) findViewById(R.id.action_active);
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,18 +67,11 @@ public class ChatListActivity extends AppCompatActivity {
             }
         });
 
-        lend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChatListActivity.this, ChatListActivity3.class));
-
-            }
-        });
-
-        borrow.setOnClickListener(new View.OnClickListener() {
+        active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChatListActivity.this, ChatListActivity2.class));
+
             }
         });
 
@@ -137,7 +131,9 @@ public class ChatListActivity extends AppCompatActivity {
 
                         if(post.getStatus() >= 2 && post.getUserid().equals(userid)) {
 
-                            ChatItem newchat = new ChatItem(post.getChatid(), post.getItemname(), post.getOthername(), post.getOtherimg(), post.getPosttype());
+                            ChatItem newchat = new ChatItem(post.getChatid(), post.getItemname(), post.getOthername(), post.getOtherimg(), post.getPosttype(), post.getLastmsg(), post.getPostid(), post.getAgreementid());
+
+                          //  Toast.makeText(ChatListActivity.this, "Last msg: " + getLastMsg(post.getChatid()), Toast.LENGTH_SHORT).show();
 
                             //adding to the list
                             chats.add(newchat);
@@ -167,6 +163,8 @@ public class ChatListActivity extends AppCompatActivity {
                Intent i = new Intent(ChatListActivity.this, ChatActivity.class);
                 i.putExtra("chatroomid", chat.getChatroomid());
                 i.putExtra("itemname", chat.getItemname());
+                i.putExtra("offerid", chat.getOfferid());
+                i.putExtra("postid", chat.getPostid());
                 startActivity(i);
 
             }

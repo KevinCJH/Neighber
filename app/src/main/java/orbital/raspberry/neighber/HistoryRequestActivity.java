@@ -30,7 +30,7 @@ public class HistoryRequestActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private TextView borrowing, lending, history;
-    private List<OfferToLendPost> offers;
+    private List<Send> offers;
     private ListView listViewRequests;
     private String userid;
     private Button recordbtn, offerbtn;
@@ -119,7 +119,7 @@ public class HistoryRequestActivity extends AppCompatActivity {
 
         //////////////////////End Navigation////////////////////////////
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("offertolend");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("send");
 
         //attaching value event listener
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -132,10 +132,10 @@ public class HistoryRequestActivity extends AppCompatActivity {
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     //getting artist
-                    OfferToLendPost offer = postSnapshot.getValue(OfferToLendPost.class);
+                    Send offer = postSnapshot.getValue(Send.class);
 
                     //If post type is request aka 1
-                        if(offer.getOwnerid().toString().equals(userid) && offer.getStatus() == 5) {
+                        if(offer.getSendtype() == 1 && offer.getOwnerid().toString().equals(userid) && offer.getStatus() == 5) {
 
                             //adding to the list
                             offers.add(offer);
@@ -159,7 +159,25 @@ public class HistoryRequestActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final OfferToLendPost offer = offers.get(position);
+                final Send offer = offers.get(position);
+
+                //DELETE DIALOG
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                FirebaseDatabase.getInstance().getReference("send").child(offer.getRecordid()).child("status").setValue(8);
+                                offers.remove(position);
+                                Toast.makeText(HistoryRequestActivity.this, "Record has been deleted", Toast.LENGTH_SHORT).show();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
 
                 //DELETE DIALOG
                 final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

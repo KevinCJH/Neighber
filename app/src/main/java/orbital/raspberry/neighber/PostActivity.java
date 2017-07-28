@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +25,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PostActivity extends AppCompatActivity {
@@ -34,6 +38,8 @@ public class PostActivity extends AppCompatActivity {
     private TextView browse, records, addnew, chat, profile;
     private Button viewprofile, writeoffer;
     private int posttype;
+    private TextView posttypeTxt, datetimeTxt;
+    private String datetime;
 
     private FirebaseAuth auth;
 
@@ -53,6 +59,10 @@ public class PostActivity extends AppCompatActivity {
         ruserimg = (CircleImageView) findViewById(R.id.imgView);
         viewprofile = (Button) findViewById(R.id.viewprofile);
         writeoffer = (Button) findViewById(R.id.sendoffer);
+
+        posttypeTxt = (TextView) findViewById(R.id.textView0);
+        datetimeTxt = (TextView) findViewById(R.id.datetime);
+
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -137,14 +147,21 @@ public class PostActivity extends AppCompatActivity {
                 //Display post item name and description
 
                 if(post.getPosttype() == 1) {
-                    itemnametxt.setText("I need " + post.getItemname());
+                    posttypeTxt.setText("Requesting:");
+                    itemnametxt.setText(post.getItemname());
                 }else {
-                    itemnametxt.setText("I can lend " + post.getItemname());
-                    writeoffer.setText("Send Request");
+                    posttypeTxt.setText("Offering:");
+                    itemnametxt.setText(post.getItemname());
+                    writeoffer.setText("Write Request");
                 }
                 postdesctxt.setText(post.getPostdesc());
 
                 posttype = post.getPosttype();
+
+                datetime = getDate(post.getTimestamp());
+
+                datetimeTxt.setText(datetime);
+
 
             }
 
@@ -159,10 +176,14 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(PostActivity.this, ViewProfileActivity.class);
-                //Pass info to next activity
-                i.putExtra("ruserid", ruserid);
-                startActivity(i);
+                if(auth.getCurrentUser().getUid().toString().equals(ruserid)){
+                    startActivity(new Intent(PostActivity.this, ProfileActivity.class));
+                }else {
+                    Intent i = new Intent(PostActivity.this, ViewProfileActivity.class);
+                    //Pass info to next activity
+                    i.putExtra("ruserid", ruserid);
+                    startActivity(i);
+                }
 
             }
         });
@@ -191,6 +212,14 @@ public class PostActivity extends AppCompatActivity {
         });
 
 
+    }
+
+
+    public String getDate(long time) {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time);
+        String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
+        return date;
     }
 
     ///////////////////Top Right Menu//////////////////////

@@ -2,164 +2,84 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:padding="10dp"
     android:layout_height="match_parent">
-
-    <!-- Bottom Nav Bar -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/grey"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout5">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_black_24dp"
-            android:text="Browse"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_select_24dp"
-            android:text="Records"
-            android:textColor="@color/colorPrimary"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_addnew"
-            android:drawableTop="@drawable/ic_add_circle_black_24dp"
-            android:text="Add"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_chat"
-            android:drawableTop="@drawable/ic_chat_black_24dp"
-            android:text="Chat"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_profile"
-            android:drawableTop="@drawable/ic_person_outline_black_24dp"
-            android:text="My Profile"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-    </LinearLayout>
-
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgView"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        app:civ_border_color="#ffffff"
-        app:civ_border_width="2dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="15dp" />
 
 
     <TextView
         android:id="@+id/txt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:gravity="center"
         android:text="Agreement and Condition of Item"
-        android:layout_above="@+id/offerdesc"
-        android:layout_alignParentStart="true" />
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="49dp"
+        android:layout_below="@+id/requestdesc"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/offerdesc"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:maxLines="5"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:lines="3"
-        android:hint="A mutual agreement for you to lend the item."
+        android:hint="An agreement for you to lend the item."
         android:inputType="textMultiLine"
-        android:layout_above="@+id/acceptoffer"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/txt1"
+        android:layout_alignStart="@+id/acceptoffer" />
 
     <Button
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
         android:id="@+id/acceptoffer"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:text="Accept Request"
-        android:layout_marginBottom="16dp"
-        android:layout_above="@+id/linearLayout5"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/viewprofile"
+        android:layout_alignStart="@+id/viewprofile"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/rusernameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_column="0"
         android:layout_gravity="center_vertical"
-        android:layout_row="1"
         android:text="User Name"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:layout_marginEnd="34dp"
-        android:layout_alignTop="@+id/imgView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="21dp" />
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="22dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:textAppearanceSmall"
+        android:textStyle="bold"
         android:id="@+id/viewprofile"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_column="0"
         android:layout_gravity="center_vertical"
-        android:layout_row="4"
         android:background="@color/colorPrimary"
-        android:text="Profile"
+        android:text="View User Profile"
         android:textColor="@color/white"
         android:maxLines="1"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/rusernameTxt"
-        android:layout_alignStart="@+id/rusernameTxt"
-        android:layout_alignEnd="@+id/rusernameTxt" />
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/offerdesc"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/requestdesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:text="Request Description"
-        android:layout_marginTop="19dp"
         android:maxLines="2"
-        android:layout_below="@+id/imgView"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/rusernameTxt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp" />
 
 
 </RelativeLayout>

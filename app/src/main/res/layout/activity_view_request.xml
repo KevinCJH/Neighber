@@ -2,77 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:padding="10dp"
     android:layout_height="match_parent">
 
-
-
-    <!-- Bottom Nav Bar -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/grey"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout5">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_browse"
-            android:drawableTop="@drawable/ic_search_black_24dp"
-            android:text="Browse"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_records"
-            android:drawableTop="@drawable/ic_library_books_select_24dp"
-            android:text="Records"
-            android:textColor="@color/colorPrimary"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_addnew"
-            android:drawableTop="@drawable/ic_add_circle_black_24dp"
-            android:text="Add"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_chat"
-            android:drawableTop="@drawable/ic_chat_black_24dp"
-            android:text="Chat"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_profile"
-            android:drawableTop="@drawable/ic_person_outline_black_24dp"
-            android:text="My Profile"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-    </LinearLayout>
 
     <TextView
         android:layout_height="wrap_content"
@@ -80,6 +12,8 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:text="Requested by:"
         android:paddingTop="8dp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
         android:paddingBottom="8dp"
         android:id="@+id/textView2" />
 
@@ -87,8 +21,7 @@
         android:id="@+id/listRequest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/linearLayout5"
-        android:layout_below="@+id/textView2" />
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
