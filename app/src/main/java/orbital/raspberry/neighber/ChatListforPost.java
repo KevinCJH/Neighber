@@ -35,12 +35,17 @@ public class ChatListforPost extends ArrayAdapter<ChatItem> {
         CircleImageView imgview = (CircleImageView) listViewItem.findViewById(R.id.imgView);
 
         ChatItem chat = chats.get(position);
-        itemname.setText("Item: " + chat.getItemname());
-        username.setText("User: " + chat.getOthername());
+       // itemname.setText("Item: " + chat.getItemname());
+      //  username.setText("User: " + chat.getOthername());
+        username.setText(chat.getLastmsg());
         if(chat.getPosttype() == 1) {
-            posttype.setText("You are Borrowing");
+            posttype.setText("Borrowing from: " + chat.getOthername());
+            itemname.setText("" + chat.getItemname());
+           // posttype.setText("You are Borrowing");
         }else{
-            posttype.setText("You are Lending");
+            posttype.setText("Lending to: " + chat.getOthername());
+            itemname.setText("" + chat.getItemname());
+            //posttype.setText("You are Lending");
         }
         Picasso.with(context).load(chat.getOtherimguri()).placeholder(R.mipmap.defaultprofile).into(imgview);
 

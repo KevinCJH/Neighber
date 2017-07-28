@@ -303,6 +303,8 @@ public class ProfileActivity extends AppCompatActivity {
                                     Intent i1 = new Intent(ProfileActivity.this, ChatActivity.class);
                                     i1.putExtra("chatroomid", post.getChatid());
                                     i1.putExtra("itemname", post.getItemname());
+                                    i1.putExtra("offerid", post.getAgreementid());
+                                    i1.putExtra("postid", post.getPostid());
                                     startActivity(i1);
                                     break;
                                 case 1:
@@ -338,6 +340,8 @@ public class ProfileActivity extends AppCompatActivity {
                                     Intent i1 = new Intent(ProfileActivity.this, ChatActivity.class);
                                     i1.putExtra("chatroomid", post.getChatid());
                                     i1.putExtra("itemname", post.getItemname());
+                                    i1.putExtra("offerid", post.getAgreementid());
+                                    i1.putExtra("postid", post.getPostid());
                                     startActivity(i1);
                                     break;
                                 case 2:

@@ -5,9 +5,9 @@
     android:padding="10dp"
     android:layout_height="match_parent">
 
-
-
     <Button
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
         android:id="@+id/acceptoffer"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -22,17 +22,17 @@
         android:id="@+id/rusernameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_column="0"
         android:layout_gravity="center_vertical"
-        android:layout_row="1"
         android:text="User Name"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"
         android:layout_marginTop="26dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
         android:id="@+id/viewprofile"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -40,18 +40,17 @@
         android:background="@color/colorPrimary"
         android:text="View User Profile"
         android:textColor="@color/white"
-        android:maxLines="1"
         android:layout_below="@+id/requestdesc"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="62dp" />
 
     <TextView
         android:id="@+id/requestdesc"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:text="Offer Description"
-        android:maxLines="2"
+        android:lines="3"
         android:layout_marginTop="41dp"
         android:layout_below="@+id/rusernameTxt"
         android:layout_centerHorizontal="true" />

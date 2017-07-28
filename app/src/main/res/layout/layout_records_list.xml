@@ -16,8 +16,8 @@
     <TextView
         android:text="Item Name: "
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimary"
         android:id="@+id/itemnameTxt"
-        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:layout_height="wrap_content"

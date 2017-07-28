@@ -24,6 +24,7 @@ public class Post {
     private String datetime;
     private int rated;
     private String chatid;
+    private String lastmsg;
     private String otherimg;
     private int category;
 
@@ -119,6 +120,10 @@ public class Post {
 
     public int getCategory(){
         return category;
+    }
+
+    public String getLastmsg(){
+        return lastmsg;
     }
 
 }

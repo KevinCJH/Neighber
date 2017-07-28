@@ -79,7 +79,7 @@
         android:id="@+id/itemnameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"
         android:text="I want to..."
         android:layout_marginTop="24dp"
@@ -91,20 +91,21 @@
         android:id="@+id/catTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"
         android:text="Choose a category..."
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="18dp"
         android:layout_below="@+id/postdesc"
-        android:layout_alignStart="@+id/postdesc" />
+        android:layout_alignStart="@+id/itemnameTxt" />
 
     <EditText
         android:id="@+id/itemname"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textSize="18dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:inputType="textPersonName"
         android:hint="Name of Item"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_below="@+id/borrowtype"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp" />
@@ -114,7 +115,8 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:maxLines="5"
-        android:textSize="18dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:backgroundTint="@color/colorPrimary"
         android:lines="2"
         android:hint="Add description for your Request"
         android:inputType="textMultiLine"
@@ -126,20 +128,20 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Post Request"
+        android:layout_marginTop="5dp"
         android:id="@+id/submitRequest"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_above="@+id/linearLayout3"
-        android:layout_alignStart="@+id/catTxt"
-        android:layout_marginBottom="13dp" />
+        android:layout_below="@+id/category"
+        android:layout_alignStart="@+id/postdesc" />
 
     <Button
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:id="@+id/borrowtype"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="Borrow"
-        android:textSize="12dp"
         android:background="@color/colorPrimary"
         android:textColor="@color/fadeorange"
         android:layout_marginTop="20dp"
@@ -148,11 +150,11 @@
         android:layout_marginStart="35dp" />
 
     <Button
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:id="@+id/lendtype"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="Lend"
-        android:textSize="12dp"
         android:textColor="@color/colorPrimary"
         android:background="@color/fadeorange"
         android:layout_alignBaseline="@+id/borrowtype"
@@ -167,9 +169,9 @@
         android:orientation="horizontal"
         android:background="@color/fadeorange"
         android:id="@+id/category"
-        android:layout_marginTop="18dp"
         android:layout_below="@+id/catTxt"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp">
 
     <TextView
         android:id="@+id/worktools"

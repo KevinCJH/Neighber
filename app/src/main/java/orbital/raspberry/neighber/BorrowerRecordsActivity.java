@@ -255,6 +255,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
                                         i2.putExtra("chatroomid", offer.getChatid());
                                         i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
                                         startActivity(i2);
                                         break;
                                     case 2:
@@ -291,6 +293,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
                                         i2.putExtra("chatroomid", offer.getChatid());
                                         i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
                                         startActivity(i2);
                                         break;
                                     case 2:
@@ -321,6 +325,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
                                         i2.putExtra("chatroomid", offer.getChatid());
                                         i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
                                         startActivity(i2);
                                         break;
                                     case 1:
@@ -409,6 +415,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i2 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
                                         i2.putExtra("chatroomid", offer.getChatid());
                                         i2.putExtra("itemname", offer.getItemname());
+                                        i2.putExtra("offerid", offer.getRecordid());
+                                        i2.putExtra("postid", offer.getPostid());
                                         startActivity(i2);
                                         break;
                                     case 2:
@@ -438,6 +446,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
                                         i1.putExtra("chatroomid", offer.getChatid());
                                         i1.putExtra("itemname", offer.getItemname());
+                                        i1.putExtra("offerid", offer.getRecordid());
+                                        i1.putExtra("postid", offer.getPostid());
                                         startActivity(i1);
                                         break;
                                     case 1:
@@ -468,6 +478,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
                                         i1.putExtra("chatroomid", offer.getChatid());
                                         i1.putExtra("itemname", offer.getItemname());
+                                        i1.putExtra("offerid", offer.getRecordid());
+                                        i1.putExtra("postid", offer.getPostid());
                                         startActivity(i1);
                                         break;
                                     case 1:
@@ -503,6 +515,8 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                                         Intent i1 = new Intent(BorrowerRecordsActivity.this, ChatActivity.class);
                                         i1.putExtra("chatroomid", offer.getChatid());
                                         i1.putExtra("itemname", offer.getItemname());
+                                        i1.putExtra("offerid", offer.getRecordid());
+                                        i1.putExtra("postid", offer.getPostid());
                                         startActivity(i1);
                                         break;
                                     case 2:

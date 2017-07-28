@@ -24,6 +24,7 @@ public class Send {
     private String chatid;
     private String otherimg;
     private String offerdesc;
+    private String lastmsg;
 
 
     public Send(){}
@@ -131,6 +132,10 @@ public class Send {
 
     public int getSendtype(){
         return sendtype;
+    }
+
+    public String getLastmsg(){
+        return lastmsg;
     }
 
 }

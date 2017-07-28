@@ -15,7 +15,7 @@ public class HistoryOfferList extends ArrayAdapter<Send> {
     List<Send> offers;
 
     public HistoryOfferList(Activity context, List<Send> offers) {
-        super(context, R.layout.layout_records_list, offers);
+        super(context, R.layout.layout_offerrecords_list, offers);
         this.context = context;
         this.offers = offers;
     }
@@ -23,7 +23,7 @@ public class HistoryOfferList extends ArrayAdapter<Send> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.layout_records_list, null, true);
+        View listViewItem = inflater.inflate(R.layout.layout_offerrecords_list, null, true);
 
         TextView itemname = (TextView) listViewItem.findViewById(R.id.itemnameTxt);
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);

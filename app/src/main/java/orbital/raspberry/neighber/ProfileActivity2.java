@@ -298,6 +298,8 @@ public class ProfileActivity2 extends AppCompatActivity {
                                     Intent i1 = new Intent(ProfileActivity2.this, ChatActivity.class);
                                     i1.putExtra("chatroomid", post.getChatid());
                                     i1.putExtra("itemname", post.getItemname());
+                                    i1.putExtra("offerid", post.getAgreementid());
+                                    i1.putExtra("postid", post.getPostid());
                                     startActivity(i1);
                                     break;
                                 case 1:
@@ -333,6 +335,8 @@ public class ProfileActivity2 extends AppCompatActivity {
                                     Intent i2 = new Intent(ProfileActivity2.this, ChatActivity.class);
                                     i2.putExtra("chatroomid", post.getChatid());
                                     i2.putExtra("itemname", post.getItemname());
+                                    i2.putExtra("offerid", post.getAgreementid());
+                                    i2.putExtra("postid", post.getPostid());
                                     startActivity(i2);
                                     break;
                                 case 2:
@@ -369,6 +373,8 @@ public class ProfileActivity2 extends AppCompatActivity {
                                     Intent i2 = new Intent(ProfileActivity2.this, ChatActivity.class);
                                     i2.putExtra("chatroomid", post.getChatid());
                                     i2.putExtra("itemname", post.getItemname());
+                                    i2.putExtra("offerid", post.getAgreementid());
+                                    i2.putExtra("postid", post.getPostid());
                                     startActivity(i2);
                                     break;
                                 case 2:
@@ -397,6 +403,8 @@ public class ProfileActivity2 extends AppCompatActivity {
                                     Intent i2 = new Intent(ProfileActivity2.this, ChatActivity.class);
                                     i2.putExtra("chatroomid", post.getChatid());
                                     i2.putExtra("itemname", post.getItemname());
+                                    i2.putExtra("offerid", post.getAgreementid());
+                                    i2.putExtra("postid", post.getPostid());
                                     startActivity(i2);
                                     break;
                                 case 1:

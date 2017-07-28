@@ -14,7 +14,7 @@
         android:layout_marginTop="39dp"
         android:textColor="@color/colorPrimary"
         android:gravity="center"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:text="Agreement and Condition of Item"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -23,7 +23,7 @@
         android:id="@+id/offerdesc"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:lines="3"
         android:hint="Agreement for Offer"
         android:inputType="textMultiLine"
@@ -32,12 +32,14 @@
         android:layout_centerHorizontal="true" />
 
     <Button
+        style="?android:textAppearanceSmall"
         android:id="@+id/acceptoffer"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:text="Accept Agreement"
+        android:textStyle="bold"
         android:layout_marginTop="25dp"
         android:layout_below="@+id/offerdesc"
         android:layout_alignStart="@+id/offerdesc" />

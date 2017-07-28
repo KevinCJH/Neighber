@@ -76,47 +76,46 @@
         android:id="@+id/infotxt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:hint="For security reasons, please enter your password."
-        android:textStyle="bold"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="48dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:hint="Enter Password"
         android:inputType="textPassword"
+        android:layout_marginTop="31dp"
         android:layout_below="@+id/infotxt"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/newemail"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:hint="New Email Address"
         android:inputType="textEmailAddress"
-        android:layout_marginTop="51dp"
+        android:layout_marginTop="24dp"
         android:layout_below="@+id/password"
-        android:layout_alignParentStart="true" />
+        android:layout_alignStart="@+id/password" />
 
     <Button
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Update Email Address"
         android:id="@+id/savechange"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_marginBottom="22dp"
-        android:layout_above="@+id/linearLayout3"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/newemail"
+        android:layout_alignStart="@+id/newemail" />
 
 
 

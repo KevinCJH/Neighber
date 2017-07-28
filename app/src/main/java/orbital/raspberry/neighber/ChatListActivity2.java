@@ -124,11 +124,11 @@ public class ChatListActivity2 extends AppCompatActivity {
 
                     if(offer.getSendtype() == 1 && offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)) {
 
-                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype());
+                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype(), offer.getLastmsg(), offer.getPostid(), offer.getRecordid());
                         chats.add(newchat);
                     }
                     else if(offer.getSendtype() == 2 && offer.getStatus() >= 2 && offer.getOwnerid().equals(userid)){
-                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype());
+                        ChatItem newchat = new ChatItem(offer.getChatid(), offer.getItemname(), offer.getTargetname(), offer.getOtherimg(), offer.getSendtype(), offer.getLastmsg(), offer.getPostid(), offer.getRecordid());
                         chats.add(newchat);
                     }
                 }
@@ -156,6 +156,8 @@ public class ChatListActivity2 extends AppCompatActivity {
                Intent i = new Intent(ChatListActivity2.this, ChatActivity.class);
                 i.putExtra("chatroomid", chat.getChatroomid());
                 i.putExtra("itemname", chat.getItemname());
+                i.putExtra("offerid", chat.getOfferid());
+                i.putExtra("postid", chat.getPostid());
                 startActivity(i);
 
             }

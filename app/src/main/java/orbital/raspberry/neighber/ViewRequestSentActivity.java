@@ -71,6 +71,8 @@ public class ViewRequestSentActivity extends AppCompatActivity {
                 String imageUri = user.getImgUri();
                // Picasso.with(getBaseContext()).load(imageUri).placeholder(R.mipmap.defaultprofile).into(ruserimg);
 
+                otherimgurl = imageUri;
+
                 //Display user name
                 rusernametxt.setText("Request by: " + user.getDisplayname());
 
@@ -150,6 +152,8 @@ public class ViewRequestSentActivity extends AppCompatActivity {
 
                 FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("chatid").setValue(chatroomid);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("chatid").setValue(chatroomid);
+                FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("lastmsg").setValue("Chat with this user!");
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("lastmsg").setValue("Chat with this user!");
 
                 FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("otherimg").setValue(userimgurl);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherimg").setValue(otherimgurl);

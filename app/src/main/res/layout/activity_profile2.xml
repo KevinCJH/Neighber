@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
         android:maxLines="1"
-        android:textSize="18dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:inputType="textPersonName"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:paddingLeft="5dp"
-        android:textSize="14dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:text="Email"
         android:layout_below="@+id/displayname"
         android:layout_alignStart="@+id/displayname" />
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:paddingLeft="5dp"
-        android:textSize="14dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:text="Ratings: "
         android:layout_alignBottom="@+id/rating"
         android:layout_alignStart="@+id/email" />
