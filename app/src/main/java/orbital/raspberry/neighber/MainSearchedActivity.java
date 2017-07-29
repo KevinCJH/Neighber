@@ -1,5 +1,6 @@
 package orbital.raspberry.neighber;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -36,8 +37,8 @@ public class MainSearchedActivity extends AppCompatActivity {
     private List<Post> posts;
     private List<Post> fulllist;
     private ListView listViewRequests;
-    private EditText searchtxt;
-    private Button searchbtn;
+    //private EditText searchtxt;
+   // private Button searchbtn;
     private String searchkey;
 
     @Override
@@ -116,10 +117,10 @@ public class MainSearchedActivity extends AppCompatActivity {
 
         //////////////////////End Navigation////////////////////////////
 
-        searchtxt = (EditText) findViewById(R.id.searchtxt);
-        searchbtn = (Button) findViewById(R.id.searchbtn);
+      //  searchtxt = (EditText) findViewById(R.id.searchtxt);
+     //   searchbtn = (Button) findViewById(R.id.searchbtn);
 
-        searchtxt.setText(searchkey);
+      //  searchtxt.setText(searchkey);
 
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
@@ -199,7 +200,7 @@ public class MainSearchedActivity extends AppCompatActivity {
 
             }
         });
-
+/*
         searchtxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
@@ -262,7 +263,7 @@ public class MainSearchedActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        }); */
 
     }
 
@@ -273,11 +274,48 @@ public class MainSearchedActivity extends AppCompatActivity {
         return date;
     }
 
+    public void searchItem(String query){
+
+        int found = 0;
+
+        for(Post p : fulllist){
+
+            String splitname[] = p.getItemname().split(" ");
+
+            for(int i=0; i<splitname.length; i++) {
+
+                if (splitname[i].toLowerCase().equals(query.toLowerCase())) {
+
+                    String requesterid = p.getUserid();
+                    String postid = p.getPostid();
+
+                    found = 1;
+
+                    Intent i2 = new Intent(MainSearchedActivity.this, MainSearchedActivity.class);
+                    i2.putExtra("searchkey", query);
+                    startActivity(i2);
+                    finish();
+
+                    break;
+                }
+            }
+
+            if(found == 1){
+                break;
+            }
+
+        }
+        if(found == 0) {
+            Toast.makeText(MainSearchedActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_search, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -294,6 +332,28 @@ public class MainSearchedActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainSearchedActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_search:
+
+                final Dialog dialog = new Dialog(MainSearchedActivity.this);
+                dialog.setContentView(R.layout.activity_search);
+                dialog.setTitle("");
+
+                final Button searchbtn = (Button) dialog.findViewById(R.id.searchbtn);
+                final EditText searchtxt = (EditText) dialog.findViewById(R.id.searchtxt);
+
+                searchtxt.setText(searchkey);
+
+                searchbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        searchItem(searchtxt.getText().toString().trim());
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);

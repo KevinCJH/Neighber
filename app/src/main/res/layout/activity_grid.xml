@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:columnCount="3"
     android:rowCount="3"
+    android:paddingTop="10dp"
     android:orientation="horizontal"
     android:layout_gravity="center"
     android:background="@color/fadeorange"
