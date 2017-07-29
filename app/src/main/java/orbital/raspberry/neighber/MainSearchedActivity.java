@@ -223,6 +223,28 @@ public class MainSearchedActivity extends AppCompatActivity {
 
         });
 
+        searchtxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // Always use a TextKeyListener when clearing a TextView to prevent android
+                    // warnings in the log
+                    TextKeyListener.clear((searchtxt).getText());
+
+                }
+            }
+        });
+
+        searchtxt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                TextKeyListener.clear((searchtxt).getText());
+            }
+
+        });
+
 
         searchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
