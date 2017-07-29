@@ -1,5 +1,6 @@
 package orbital.raspberry.neighber;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -42,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Post> posts;
     private ListView listViewRequests;
     private static boolean calledAlready = false;
-    private EditText searchtxt;
-    private Button searchbtn;
+   // private EditText searchtxt;
+   // private Button searchbtn;
 
 
     @Override
@@ -123,9 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
         //////////////////////End Navigation////////////////////////////
 
-        searchtxt = (EditText) findViewById(R.id.searchtxt);
-        searchbtn = (Button) findViewById(R.id.searchbtn);
-
+       // searchtxt = (EditText) findViewById(R.id.searchtxt);
+      //  searchbtn = (Button) findViewById(R.id.searchbtn);
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
@@ -183,46 +183,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        searchbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String query = searchtxt.getText().toString().trim();
-                int found = 0;
-
-                //If found at least one, repopulate the list
-                for(Post p : posts){
-
-                    String splitname[] = p.getItemname().split(" ");
-
-                    for(int i=0; i<splitname.length; i++) {
-
-                        if (splitname[i].toLowerCase().equals(query.toLowerCase())) {
-
-                            found = 1;
-
-                            Intent i2 = new Intent(MainActivity.this, MainSearchedActivity.class);
-                            i2.putExtra("searchkey", query);
-                            startActivity(i2);
-
-                            break;
-                        }
-                    }
-
-                    if(found == 1){
-                        break;
-                    }
-
-                }
-                if(found == 0) {
-                    Toast.makeText(MainActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-
-
     }
 
     public String getDate(long time) {
@@ -233,11 +193,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void searchItem(String query){
+
+        //String query = searchtxt.getText().toString().trim();
+        int found = 0;
+
+        //If found at least one, repopulate the list
+        for(Post p : posts){
+
+            String splitname[] = p.getItemname().split(" ");
+
+            for(int i=0; i<splitname.length; i++) {
+
+                if (splitname[i].toLowerCase().equals(query.toLowerCase())) {
+
+                    found = 1;
+
+                    Intent i2 = new Intent(MainActivity.this, MainSearchedActivity.class);
+                    i2.putExtra("searchkey", query);
+                    startActivity(i2);
+
+                    break;
+                }
+            }
+
+            if(found == 1){
+                break;
+            }
+
+        }
+        if(found == 0) {
+            Toast.makeText(MainActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_search, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -255,6 +250,26 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_search:
+
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.activity_search);
+                dialog.setTitle("");
+
+                final Button searchbtn = (Button) dialog.findViewById(R.id.searchbtn);
+                final EditText searchtxt = (EditText) dialog.findViewById(R.id.searchtxt);
+
+                searchbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        searchItem(searchtxt.getText().toString().trim());
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);

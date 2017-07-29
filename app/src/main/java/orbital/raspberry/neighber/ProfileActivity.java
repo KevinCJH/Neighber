@@ -46,7 +46,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
-    private Button saveChange;
+   // private Button saveChange;
     private CircleImageView imgView;
     private int PICK_IMAGE_REQUEST = 111;
     private Uri filePath;
@@ -60,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
     private List<Post> posts;
     private ListView listViewRequests;
     private int editmode;
+    private String userid, userdisplayname;
 
 
     //creating reference to firebase storage
@@ -136,7 +137,7 @@ public class ProfileActivity extends AppCompatActivity {
         //////////////////////End Navigation////////////////////////////
 
 
-        saveChange = (Button)findViewById(R.id.saveChange);
+        //saveChange = (Button)findViewById(R.id.saveChange);
         imgView = (CircleImageView)findViewById(R.id.imgView);
         displayname = (EditText)findViewById(R.id.displayname);
         email = (TextView) findViewById(R.id.email);
@@ -158,6 +159,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
         final String userid = currentFirebaseUser.getUid();
+        this.userid = currentFirebaseUser.getUid();
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
         mDatabase.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -171,6 +173,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         //Store user display name
                         userdata[0] = user.getDisplayname();
+                        userdisplayname = user.getDisplayname();
 
                         //Fill up profile details
                         displayname.setText(user.getDisplayname());
@@ -382,7 +385,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         //Save change of profile
-        saveChange.setOnClickListener(new View.OnClickListener() {
+/*        saveChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -437,7 +440,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        }); */
 
 
     }
@@ -494,8 +497,65 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public void updateProfile(final String userid, String userdisplayname, final MenuItem item){
 
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
 
+        if(editmode == 0){
+            editmode = 1;
+            displayname.setEnabled(true);
+            item.setIcon(R.drawable.ic_save_black_24dp);
+        }else {
+
+            pd.show();
+
+            //If display name is changed
+            if (!userdisplayname.equals(displayname.getText().toString().trim())) {
+                mDatabase.child(userid).child("displayname").setValue(displayname.getText().toString().trim());
+            }
+
+            //If image has been modified
+            if (imgclickflag) {
+                if (filePath != null) {
+
+                    StorageReference childRef = storageRef.child(userid + ".jpg");
+
+                    //uploading the image
+                    UploadTask uploadTask = childRef.putFile(filePath);
+
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            pd.dismiss();
+                            @SuppressWarnings("VisibleForTests") String dlurl = taskSnapshot.getDownloadUrl().toString();
+                            mDatabase.child(userid).child("imguri").setValue(dlurl);
+                            imgclickflag = false;
+                            editmode = 0;
+                            displayname.setEnabled(false);
+                            item.setIcon(R.drawable.ic_edit_24dp);
+                            Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(ProfileActivity.this, "Fail to upload image" + e, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Please choose an image", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                imgclickflag = false;
+                pd.dismiss();
+                editmode = 0;
+                displayname.setEnabled(false);
+                item.setIcon(R.drawable.ic_edit_24dp);
+            }
+
+        }
+    }
 
 
 
@@ -503,7 +563,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_profile, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -520,6 +580,9 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_edit:
+                updateProfile(userid, userdisplayname, item);
                 break;
         }
         return super.onOptionsItemSelected(item);

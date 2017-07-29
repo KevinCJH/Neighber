@@ -28,142 +28,148 @@
         </activity>
         <activity
             android:name=".PostActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ResetPasswordActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainSearchedActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name=".SignupActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ProfileActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name=".ViewProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ViewProfileActivity2"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".AddNewActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".SignupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProfileActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ViewProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ViewProfileActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddNewActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity2"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name=".BorrowerRecordsActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".WriteOfferActivity"
-                     android:screenOrientation="portrait"
-                    android:theme="@style/Theme.AppCompat.Light.Dialog"
-                    android:label="Write Offer"/>
-
-        <activity android:name=".WriteOfferActivity2"
-                   android:screenOrientation="portrait"
-                     android:theme="@style/Theme.AppCompat.Light.Dialog"
-                    android:label="Write Request"/>
-
-        <activity android:name=".EditPostActivity"
-                    android:screenOrientation="portrait"
-                   android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ViewOfferActivity"
-                    android:screenOrientation="portrait"
-                  android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".AgreementActivity"
-                    android:screenOrientation="portrait"
-                    android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".AgreementActivity2"
-                    android:screenOrientation="portrait"
-                     android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ReturnAgreementActivity"
-                    android:screenOrientation="portrait"
-                    android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ReturnAgreementActivity2"
-                    android:screenOrientation="portrait"
-                 android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ReturnAgreementAcceptActivity"
+        <activity
+            android:name=".BorrowerRecordsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WriteOfferActivity"
+            android:label="Write Offer"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ReturnAgreementAcceptActivity2"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".WriteOfferActivity2"
+            android:label="Write Request"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".LenderRecordsActivity"
-                    android:screenOrientation="portrait"/>
-
-        <activity android:name=".ViewRequestActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".EditPostActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ViewOfferSentActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ViewOfferActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ViewRequestSentActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".AgreementActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".HistoryRecordsActivity"
-                 android:screenOrientation="portrait"/>
-        <activity android:name=".HistoryRequestActivity"
-                    android:screenOrientation="portrait"/>
-        <activity android:name=".HistoryOfferActivity"
-                    android:screenOrientation="portrait"/>
-
-        <activity android:name=".RateUserActivity"
-                   android:screenOrientation="portrait"
-                 android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".OfferRateUserActivity"
-                 android:screenOrientation="portrait"
-                  android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".RequestRateUserActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".SettingsActivity"
-                   android:screenOrientation="portrait"/>
-        <activity android:name=".ChangePasswordActivity"
-                    android:screenOrientation="portrait"/>
-        <activity android:name=".ChangeEmailActivity"
-                   android:screenOrientation="portrait"/>
-
-        <activity android:name=".SendAgreementActivity"
-                  android:screenOrientation="portrait"
-                    android:theme="@style/Theme.AppCompat.Light.Dialog"/>
-
-        <activity android:name=".ChatActivity"
-                   android:screenOrientation="portrait"/>
-        <activity android:name=".ChatListActivity"
-                    android:screenOrientation="portrait"/>
-        <activity android:name=".ChatListActivity2"
-                    android:screenOrientation="portrait"/>
-
-        <activity android:name=".ProfileActivity2"
-                 android:screenOrientation="portrait"
-                  android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name=".GridActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/Theme.AppCompat.Light.Dialog" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".AgreementActivity2"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ReturnAgreementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ReturnAgreementActivity2"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ReturnAgreementAcceptActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ReturnAgreementAcceptActivity2"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".LenderRecordsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ViewRequestActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ViewOfferSentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ViewRequestSentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".HistoryRecordsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HistoryRequestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HistoryOfferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RateUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".OfferRateUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".RequestRateUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChangeEmailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SendAgreementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChatListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChatListActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProfileActivity2"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".GridActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
     </application>
 

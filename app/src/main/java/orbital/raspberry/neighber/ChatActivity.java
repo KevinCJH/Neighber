@@ -116,7 +116,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
@@ -127,6 +126,8 @@ public class ChatActivity extends AppCompatActivity {
                 TextView messageText = (TextView)v.findViewById(R.id.message_text);
                 TextView messageUser = (TextView)v.findViewById(R.id.message_user);
                 TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+
+               // messageText.setGravity();
 
                 // Set their text
                 messageText.setText(model.getMessageText());
