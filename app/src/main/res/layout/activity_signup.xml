@@ -66,6 +66,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="Display Name"
+            android:maxLength="50"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:textColor="@android:color/black"

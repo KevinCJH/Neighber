@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
         android:maxLines="1"
+        android:maxLength="50"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:inputType="textPersonName"
         android:textColor="@android:color/white"

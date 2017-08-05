@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -31,12 +33,18 @@ public class RequestList extends ArrayAdapter<Post> {
 
         TextView itemname = (TextView) listViewItem.findViewById(R.id.itemnameTxt);
         TextView datetime = (TextView) listViewItem.findViewById(R.id.datetimeTxt);
+        TextView dname = (TextView) listViewItem.findViewById(R.id.desc1);
         ImageView imgview = (ImageView) listViewItem.findViewById(R.id.imgView);
-
+        ImageView photo = (ImageView) listViewItem.findViewById(R.id.imgViewPhoto);
 
         Post post = posts.get(position);
         itemname.setText(post.getItemname());
-        datetime.setText(post.getDatetime());
+        datetime.setText(" " + post.getDatetime());
+        dname.setText(" " + post.getDisplayname());
+
+        if(!post.getImgUri().toString().trim().isEmpty()){
+            Picasso.with(context).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo).into(photo);
+        }
 
         switch(post.getCategory()){
             case 0:

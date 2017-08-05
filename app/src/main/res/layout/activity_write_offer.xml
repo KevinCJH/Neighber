@@ -26,7 +26,7 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:text="Offer and Condition of Loan"
         android:textColor="@color/colorPrimary"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="30dp"
         android:layout_below="@+id/itemnametxt"
         android:layout_alignParentStart="true" />
 
@@ -43,6 +43,16 @@
         android:layout_below="@+id/infotxt"
         android:layout_alignStart="@+id/takephoto" />
 
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/offerdesc"
+        android:layout_alignStart="@+id/takephoto"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:id="@+id/imgView"/>
+
     <Button
         style="?android:textAppearanceSmall"
         android:layout_width="300dp"
@@ -52,8 +62,8 @@
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_marginTop="36dp"
-        android:layout_below="@+id/offerdesc"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/imgView"
         android:layout_centerHorizontal="true" />
 
     <Button

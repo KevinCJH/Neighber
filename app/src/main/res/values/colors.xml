@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#ff9800</color>
     <color name="colorAccent">#000000</color>
 
+
+    <color name="logoorange">#f2af58</color>
     <color name="fadeorange">#fffaf2</color>
     <color name="lightorange">#fce6cb</color>
     <color name="black">#000000</color>

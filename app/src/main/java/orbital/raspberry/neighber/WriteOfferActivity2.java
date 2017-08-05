@@ -29,6 +29,8 @@ public class WriteOfferActivity2 extends AppCompatActivity {
     private Button submitBtn;
     private EditText offerdescTxt;
     private TextView itemnameTxt;
+    private int cat;
+    private String imguri;
 
     private FirebaseAuth auth;
 
@@ -127,6 +129,10 @@ public class WriteOfferActivity2 extends AppCompatActivity {
 
                 rrecordcount = post.getRecordcount();
 
+                cat = post.getCategory();
+
+                imguri = post.getImgUri();
+
                 //Toast.makeText(WriteOfferActivity.this, "Count: " + rrecordcount, Toast.LENGTH_SHORT).show();
 
             }
@@ -155,7 +161,8 @@ public class WriteOfferActivity2 extends AppCompatActivity {
                 mDatabase.child(recordid).setValue(newreq);
 
                 mDatabase.child(recordid).child("timestamp").setValue(ServerValue.TIMESTAMP);
-
+                mDatabase.child(recordid).child("imguri").setValue(imguri);
+                mDatabase.child(recordid).child("category").setValue(cat);
                 //Update number of offers made to the post
 
                 rrecordcount += 1;

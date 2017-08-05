@@ -75,6 +75,16 @@
     </LinearLayout>
 
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/linearLayout3">
+
+        <RelativeLayout
+            android:id="@+id/form_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/itemnameTxt"
         android:layout_width="wrap_content"
@@ -93,10 +103,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"
-        android:text="Choose a category..."
+        android:text="Choose a category"
         android:layout_marginTop="18dp"
-        android:layout_below="@+id/postdesc"
+        android:layout_below="@+id/takephoto"
         android:layout_alignStart="@+id/itemnameTxt" />
+
 
     <EditText
         android:id="@+id/itemname"
@@ -105,6 +116,7 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:inputType="textPersonName"
         android:hint="Name of Item"
+        android:maxLength="22"
         android:backgroundTint="@color/colorPrimary"
         android:layout_below="@+id/borrowtype"
         android:layout_centerHorizontal="true"
@@ -128,13 +140,49 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Post Request"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
         android:id="@+id/submitRequest"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:layout_below="@+id/category"
         android:layout_alignStart="@+id/postdesc" />
+
+            <TextView
+                android:id="@+id/photoTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimary"
+                android:text="Photo of Item (Optional)"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/postdesc"
+                android:layout_alignStart="@+id/itemnameTxt" />
+
+            <ImageView
+                android:id="@+id/imgView"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:layout_alignStart="@+id/postdesc"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/photoTxt"
+                />
+
+            <Button
+                style="?android:textAppearanceSmall"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Upload Photo"
+                android:layout_marginTop="15dp"
+                android:id="@+id/takephoto"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_below="@+id/imgView"
+                android:layout_alignStart="@+id/postdesc" />
 
     <Button
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -232,5 +280,7 @@
 
     </LinearLayout>
 
+            </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

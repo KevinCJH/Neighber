@@ -71,7 +71,6 @@ public class ChatListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChatListActivity.this, ChatListActivity2.class));
-
             }
         });
 

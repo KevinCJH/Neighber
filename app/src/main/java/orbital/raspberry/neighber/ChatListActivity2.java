@@ -57,7 +57,8 @@ public class ChatListActivity2 extends AppCompatActivity {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChatListActivity2.this, ChatListActivity.class));
+               // startActivity(new Intent(ChatListActivity2.this, ChatListActivity.class));
+                finish();
             }
         });
 

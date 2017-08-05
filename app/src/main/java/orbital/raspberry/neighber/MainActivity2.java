@@ -68,7 +68,8 @@ public class MainActivity2 extends AppCompatActivity {
         browseoff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, MainActivity.class));
+                //startActivity(new Intent(MainActivity2.this, MainActivity.class));
+                finish();
             }
         });
 
