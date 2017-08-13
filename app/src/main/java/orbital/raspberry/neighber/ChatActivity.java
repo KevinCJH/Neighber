@@ -1,15 +1,18 @@
 package orbital.raspberry.neighber;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,8 +48,7 @@ public class ChatActivity extends AppCompatActivity {
         offerid = i.getStringExtra("offerid");
         postid = i.getStringExtra("postid");
 
-
-        getSupportActionBar().setTitle("Item: " + itemname);
+        getSupportActionBar().setTitle("" + itemname);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -119,19 +121,35 @@ public class ChatActivity extends AppCompatActivity {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-                R.layout.message, FirebaseDatabase.getInstance().getReference("chatmessage").child(chatroomid)) {
+                R.layout.newmessage, FirebaseDatabase.getInstance().getReference("chatmessage").child(chatroomid)) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Get references to the views of message.xml
+                LinearLayout bubble = (LinearLayout)v.findViewById(R.id.chatbubble);
+                LinearLayout wholemsg = (LinearLayout)v.findViewById(R.id.msg);
                 TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
+             //   TextView messageUser = (TextView)v.findViewById(R.id.message_user);
                 TextView messageTime = (TextView)v.findViewById(R.id.message_time);
 
                // messageText.setGravity();
 
+                if(username.equals(model.getMessageUser())) {
+
+                    wholemsg.setGravity(Gravity.RIGHT | Gravity.END);
+                    bubble.setBackgroundResource(R.drawable.yourmsg);
+                    messageText.setTextColor(Color.WHITE);
+                    messageTime.setTextColor(Color.WHITE);
+
+                }else{
+
+                    wholemsg.setGravity(Gravity.LEFT | Gravity.START);
+                    bubble.setBackgroundResource(R.drawable.othermsg);
+
+                }
+
                 // Set their text
                 messageText.setText(model.getMessageText());
-                messageUser.setText(model.getMessageUser());
+          //      messageUser.setText(model.getMessageUser());
 
                 // Format the date before showing it
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",

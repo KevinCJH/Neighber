@@ -79,7 +79,7 @@ public class RecordsOfferList extends ArrayAdapter<Send> {
                     offernum.setText("From: " + offer.getTargetname());
                     break;
                 case 2:
-                    status.setText("Status: Please Write Agreement for Lending");
+                    status.setText("Status: Write an Agreement");
                     offernum.setText("Offer accepted by: " + offer.getTargetname());
                     break;
                 case 3:

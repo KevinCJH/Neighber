@@ -32,6 +32,7 @@ public class ViewOfferSentActivity extends AppCompatActivity {
     private String userid;
     private String otherimgurl;
     private String userimgurl;
+    private String newimguri;
 
     private FirebaseAuth auth;
 
@@ -110,6 +111,8 @@ public class ViewOfferSentActivity extends AppCompatActivity {
 
                 postid = offer.getPostid();
 
+                newimguri = offer.getImguri();
+
             }
 
             @Override
@@ -151,6 +154,7 @@ public class ViewOfferSentActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("lastmsg").setValue("Chat with this user!");
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("lastmsg").setValue("Chat with this user!");
 
+                FirebaseDatabase.getInstance().getReference("posts").child(postid).child("imguri").setValue(newimguri);
 
                 FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("otherimg").setValue(userimgurl);
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("otherimg").setValue(otherimgurl);
