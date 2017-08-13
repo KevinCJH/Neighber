@@ -25,6 +25,8 @@ public class Send {
     private String otherimg;
     private String offerdesc;
     private String lastmsg;
+    private int category;
+    private String imguri;
 
 
     public Send(){}
@@ -136,6 +138,14 @@ public class Send {
 
     public String getLastmsg(){
         return lastmsg;
+    }
+
+    public int getCategory(){
+        return category;
+    }
+
+    public String getImguri(){
+        return imguri;
     }
 
 }

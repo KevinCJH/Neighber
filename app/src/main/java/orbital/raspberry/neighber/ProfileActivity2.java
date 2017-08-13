@@ -82,7 +82,7 @@ public class ProfileActivity2 extends AppCompatActivity {
         offers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity2.this, ProfileActivity.class));
+                //startActivity(new Intent(ProfileActivity2.this, ProfileActivity.class));
                 finish();
             }
         });

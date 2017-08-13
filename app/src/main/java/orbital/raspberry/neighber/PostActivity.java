@@ -1,6 +1,7 @@
 package orbital.raspberry.neighber;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +38,12 @@ public class PostActivity extends AppCompatActivity {
     private TextView rusernametxt, itemnametxt, postdesctxt;
     private CircleImageView ruserimg;
     private TextView browse, records, addnew, chat, profile;
-    private Button viewprofile, writeoffer;
+    private Button viewprofile;
     private int posttype;
     private TextView posttypeTxt, datetimeTxt;
     private String datetime;
+    private ImageView photo;
+    private FloatingActionButton writeoffer;
 
     private FirebaseAuth auth;
 
@@ -58,10 +62,11 @@ public class PostActivity extends AppCompatActivity {
         postdesctxt = (TextView) findViewById(R.id.postdescTxt);
         ruserimg = (CircleImageView) findViewById(R.id.imgView);
         viewprofile = (Button) findViewById(R.id.viewprofile);
-        writeoffer = (Button) findViewById(R.id.sendoffer);
+        writeoffer = (FloatingActionButton) findViewById(R.id.sendoffer);
 
         posttypeTxt = (TextView) findViewById(R.id.textView0);
         datetimeTxt = (TextView) findViewById(R.id.datetime);
+        photo = (ImageView) findViewById(R.id.imgViewPhoto);
 
 
         //////////////Navigations/////////////
@@ -146,13 +151,16 @@ public class PostActivity extends AppCompatActivity {
 
                 //Display post item name and description
 
+                if(!post.getImgUri().toString().trim().isEmpty()){
+                    Picasso.with(PostActivity.this).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo2).into(photo);
+                }
+
                 if(post.getPosttype() == 1) {
                     posttypeTxt.setText("Requesting:");
                     itemnametxt.setText(post.getItemname());
                 }else {
                     posttypeTxt.setText("Offering:");
                     itemnametxt.setText(post.getItemname());
-                    writeoffer.setText("Write Request");
                 }
                 postdesctxt.setText(post.getPostdesc());
 

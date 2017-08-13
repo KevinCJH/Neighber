@@ -64,7 +64,8 @@ public class HistoryRecordsActivity extends AppCompatActivity {
         active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HistoryRecordsActivity.this, BorrowerRecordsActivity.class));
+              //  startActivity(new Intent(HistoryRecordsActivity.this, BorrowerRecordsActivity.class));
+                finish();
             }
         });
 

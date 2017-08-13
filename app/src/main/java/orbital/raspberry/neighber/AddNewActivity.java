@@ -1,7 +1,12 @@
 package orbital.raspberry.neighber;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,10 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,13 +33,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class AddNewActivity extends AppCompatActivity {
 
     private TextView browse, records, addnew, chat, profile;
     private TextView worktools, kitchen, cleaning, more;
-    private Button submitBtn, lendtype, borrowtype;
+    private Uri filePath;
+    private ImageView photo;
+    private Button submitBtn, lendtype, borrowtype, uploadphoto;
     private EditText itemnameTxt, postdescTxt;
     private String userName;
     //1 for borrow, 2 for lending
@@ -39,9 +55,11 @@ public class AddNewActivity extends AppCompatActivity {
     //1 for worktool, 2 for kitchen, 3 for furniture, 4 for others
     private int categorytype;
     public static final int GRID_REQUEST = 1;
+    private static final int CAMERA_REQUEST = 1888;
+    private String username;
 
-
-
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReferenceFromUrl("gs://neighber-b5ee0.appspot.com");
     private FirebaseAuth auth;
 
     @Override
@@ -104,6 +122,9 @@ public class AddNewActivity extends AppCompatActivity {
         cleaning = (TextView) findViewById(R.id.cleaning);
         more = (TextView) findViewById(R.id.more);
 
+        photo = (ImageView) findViewById(R.id.imgView);
+        uploadphoto = (Button)findViewById(R.id.takephoto);
+
         posttype = 1;
 
         categorytype = 0;
@@ -113,6 +134,22 @@ public class AddNewActivity extends AppCompatActivity {
 
         final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
         final String userid = currentFirebaseUser.getUid();
+
+        final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
+        uDatabase.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                username = user.getDisplayname();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(AddNewActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         worktools.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +204,6 @@ public class AddNewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 /*
                 categorytype = 4;*/
-                more.setBackground(ContextCompat.getDrawable(AddNewActivity.this,R.drawable.navborder));
 
                 worktools.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
                 worktools.setTextColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
@@ -230,32 +266,96 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                ProgressDialog pd = new ProgressDialog(AddNewActivity.this);
-                pd.setMessage("Submitting...");
+                final ProgressDialog pd = new ProgressDialog(AddNewActivity.this);
+                pd.setMessage("Posting...");
                 pd.show();
 
                 // get unique post id from firebase
-                String postid = mDatabase.push().getKey();
+                final String postid = mDatabase.push().getKey();
 
                 //Get the post type based on which item is selected in the spinner
             //    int postType = spinner.getSelectedIndex() + 1;
 
-                //Create newpost object
-                Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                        postdescTxt.getText().toString().trim(), posttype, categorytype);
 
-                //Add post to database
-                mDatabase.child(postid).setValue(newpost);
+                //UPLOAD IMAGE
+                if (filePath != null) {
 
-                //Add timestamp to the post
-                mDatabase.child(postid).child("timestamp").setValue(ServerValue.TIMESTAMP);
+                    StorageReference childRef = storageRef.child(postid + ".jpg");
 
-                Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in My Profiles tab", Toast.LENGTH_LONG).show();
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                pd.dismiss();
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+                    byte[] idata = outputStream.toByteArray();
 
-                startActivity(new Intent(AddNewActivity.this, MainActivity.class));
-                finish();
+                    //uploading the image
+                    UploadTask uploadTask = childRef.putBytes(idata);
+
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            pd.dismiss();
+                            @SuppressWarnings("VisibleForTests") String dlurl = taskSnapshot.getDownloadUrl().toString();
+
+                            //Create newpost object
+                            Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
+                                    username, postdescTxt.getText().toString().trim(), posttype, categorytype);
+
+                            //Add post to database
+                            mDatabase.child(postid).setValue(newpost);
+
+                            //Add timestamp to the post
+                            mDatabase.child(postid).child("timestamp").setValue(ServerValue.TIMESTAMP);
+                            mDatabase.child(postid).child("imguri").setValue(dlurl);
+
+
+                            Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in My Profiles tab", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(AddNewActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(AddNewActivity.this, "Fail to upload image, please try again." + e, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }else{
+
+                    //Create newpost object
+                    Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
+                            username, postdescTxt.getText().toString().trim(), posttype, categorytype);
+
+                    //Add post to database
+                    mDatabase.child(postid).setValue(newpost);
+
+                    //Add timestamp to the post
+                    mDatabase.child(postid).child("timestamp").setValue(ServerValue.TIMESTAMP);
+                    mDatabase.child(postid).child("imguri").setValue("");
+
+                     Toast.makeText(AddNewActivity.this, "Post Submitted! You may edit/delete the post in My Profiles tab", Toast.LENGTH_LONG).show();
+                     pd.dismiss();
+                     startActivity(new Intent(AddNewActivity.this, MainActivity.class));
+                     finish();
+
+                }
+
+
+            }
+        });
+
+
+        uploadphoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
             }
         });
@@ -267,6 +367,9 @@ public class AddNewActivity extends AppCompatActivity {
         if (requestCode == GRID_REQUEST) {
             if(resultCode == RESULT_OK) {
                 int num = data.getIntExtra("categorynum", 0);
+
+                more.setBackground(ContextCompat.getDrawable(AddNewActivity.this,R.drawable.navborder));
+
 
                 //Toast.makeText(AddNewActivity.this, "Category: " + num, Toast.LENGTH_LONG).show();
 
@@ -323,7 +426,27 @@ public class AddNewActivity extends AppCompatActivity {
             if (resultCode == RESULT_CANCELED) {
                 //showError("The selection was cancelled");
             }
+        }else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+           // Bitmap img = (Bitmap) data.getExtras().get("data");
+
+            filePath = data.getData();
+
+            try {
+                //getting image from gallery
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+
+                //Setting image to ImageView
+                photo.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+           // photo.setImageBitmap(img);
         }
+
+
+
     }
 
     //////////////////Top Right Menu//////////////////////

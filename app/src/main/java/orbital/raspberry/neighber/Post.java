@@ -27,10 +27,13 @@ public class Post {
     private String lastmsg;
     private String otherimg;
     private int category;
+    private String imguri;
+    private String displayname;
+
 
     public Post(){}
 
-    public Post(String postid, String userid, String itemname, String postdesc, int posttype, int category){
+    public Post(String postid, String userid, String itemname, String displayname, String postdesc, int posttype, int category){
         this.postid = postid;
         this.userid = userid;
         this.itemname = itemname;
@@ -40,6 +43,7 @@ public class Post {
         status = 1;
         rated = 0;
         this.category = category;
+        this.displayname = displayname;
     }
 
     public String getPostid() {
@@ -54,6 +58,10 @@ public class Post {
 
     public String getItemname() {
         return itemname;
+    }
+
+    public String getDisplayname(){
+        return displayname;
     }
 
     public String getPostdesc() {
@@ -125,5 +133,8 @@ public class Post {
     public String getLastmsg(){
         return lastmsg;
     }
+
+    public String getImgUri() { return imguri; }
+
 
 }

@@ -72,52 +72,29 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_above="@+id/linearLayout5">
+
+        <RelativeLayout
+            android:id="@+id/form_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imgViewPhoto"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:background="@color/colorPrimary"
-        android:id="@+id/profilebox">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        app:civ_border_color="#ffffff"
-        app:civ_border_width="2dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="16dp" />
+        android:background="@color/logoorange"
+        android:src="@mipmap/neighberlogo2"
+         />
 
-    <TextView
-        android:id="@+id/rusernameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textColor="@color/white"
-        android:text="User Name"
-        android:layout_marginTop="10dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:layout_alignTop="@+id/imgView"
-        android:layout_toEndOf="@+id/imgView"
-        android:layout_marginStart="35dp" />
-
-        <Button
-            style="?android:textAppearanceSmall"
-            android:textStyle="bold"
-            android:id="@+id/viewprofile"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@color/white"
-            android:text="Profile"
-            android:textColor="@color/colorPrimary"
-            android:maxLines="1"
-            android:layout_below="@+id/rusernameTxt"
-            android:layout_alignStart="@+id/rusernameTxt"
-            android:layout_marginTop="20dp" />
-
-    </RelativeLayout>
 
     <TextView
         android:id="@+id/textView0"
@@ -169,20 +146,128 @@
         android:layout_marginLeft="8dp"
         android:text="Datetime"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/profilebox" />
+        android:layout_below="@+id/imgViewPhoto" />
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:text="Item Ratings:"
+                android:layout_marginTop="17dp"
+                android:layout_below="@+id/postdescTxt"
+                android:layout_alignStart="@+id/postdescTxt" />
+
+            <TextView
+                android:id="@+id/comingsoontxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="Coming soon.."
+                android:layout_below="@+id/textView2"
+                android:layout_alignStart="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:text="Item Condition:"
+                android:layout_marginTop="17dp"
+                android:layout_below="@+id/comingsoontxt"
+                android:layout_alignStart="@+id/comingsoontxt" />
+
+            <TextView
+                android:id="@+id/comingsoontxt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="Coming soon.."
+                android:layout_below="@+id/textView3"
+                android:layout_alignStart="@+id/textView3" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@drawable/navborder"
+                android:layout_below="@id/comingsoontxt2"
+                android:layout_marginTop="15dp"
+                android:id="@+id/profilebox">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgView"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    app:civ_border_color="@color/colorPrimary"
+                    app:civ_border_width="2dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:id="@+id/rusernameTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorPrimary"
+                    android:text="User Name"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:layout_alignTop="@+id/imgView"
+                    android:layout_toEndOf="@+id/imgView"
+                    android:layout_marginStart="35dp" />
+
+                <Button
+                    style="?android:textAppearanceSmall"
+                    android:textStyle="bold"
+                    android:id="@+id/viewprofile"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/colorPrimary"
+                    android:text="Profile"
+                    android:textColor="@color/white"
+                    android:maxLines="1"
+                    android:layout_below="@+id/rusernameTxt"
+                    android:layout_alignStart="@+id/rusernameTxt"
+                    android:layout_marginTop="20dp" />
+
+            </RelativeLayout>
+
+            </RelativeLayout>
+    </ScrollView>
+<!--
     <Button
         style="?android:textAppearanceSmall"
         android:textStyle="bold"
         android:id="@+id/sendoffer"
         android:layout_width="300dp"
+        android:layout_marginBottom="5dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:text="Write Offer"
-        android:layout_below="@+id/postdescTxt"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp" />
+        android:layout_above="@+id/linearLayout5"
+        android:layout_centerHorizontal="true" /> -->
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/ic_edit_24dp"
+        android:id="@+id/sendoffer"
+        android:tint="@android:color/white"
+        android:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        android:layout_above="@+id/linearLayout5"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="16dp" />
 
 
 

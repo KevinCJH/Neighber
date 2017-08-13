@@ -4,6 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <ImageView
+        android:id="@+id/imgViewPhoto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="13dp"
+        android:layout_alignTop="@+id/itemnameTxt"
+        android:background="@color/logoorange"
+        android:src="@mipmap/neighberlogo"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="12dp"
+        android:layout_above="@+id/statusTxt"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:id="@+id/imgView2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="12dp"
+        android:layout_below="@+id/imgView"
+        android:background="@drawable/navborder"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="3dp"
+        android:layout_alignStart="@id/imgView" />
+
     <TextView
         android:text="Item Name: "
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
@@ -13,7 +47,7 @@
         android:layout_marginTop="5dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/imgView"
+        android:layout_toEndOf="@+id/imgViewPhoto"
         android:layout_marginStart="19dp" />
 
     <TextView
@@ -34,6 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/statusTxt"
+        android:layout_marginBottom="3dp"
         android:layout_alignStart="@+id/statusTxt" />
 
 </RelativeLayout>

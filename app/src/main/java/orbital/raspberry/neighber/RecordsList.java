@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class RecordsList extends ArrayAdapter<Post> {
@@ -30,10 +32,15 @@ public class RecordsList extends ArrayAdapter<Post> {
         TextView offernum = (TextView) listViewItem.findViewById(R.id.offernumTxt);
         TextView status = (TextView) listViewItem.findViewById(R.id.statusTxt);
         ImageView imgview = (ImageView) listViewItem.findViewById(R.id.imgView);
+        ImageView photo = (ImageView) listViewItem.findViewById(R.id.imgViewPhoto);
 
 
         Post post = posts.get(position);
         itemname.setText(post.getItemname());
+
+        if(!post.getImgUri().toString().trim().isEmpty()){
+            Picasso.with(context).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo).into(photo);
+        }
 
         switch(post.getStatus()){
             case 1:

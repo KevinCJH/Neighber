@@ -21,6 +21,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        app:borderWidth="0dp"
         app:fabSize="mini" />
 
     <android.support.design.widget.TextInputLayout
