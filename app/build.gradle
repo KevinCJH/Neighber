@@ -36,6 +36,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.jaredrummler:material-spinner:1.1.0'
     compile 'com.firebaseui:firebase-ui:2.0.1'
+    compile 'com.scottyab:aescrypt:0.0.1'
     testCompile 'junit:junit:4.12'
 }
 

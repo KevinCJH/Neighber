@@ -25,7 +25,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.scottyab.aescrypt.AESCrypt;
 import com.squareup.picasso.Picasso;
+
+import java.security.GeneralSecurityException;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -36,6 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private String chatroomid;
     private String itemname;
     private String offerid, postid;
+    private String cipherpassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,10 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("" + itemname);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        cipherpassword = cipher(chatroomid);
+
+      //  Toast.makeText(ChatActivity.this, "Cipher: " + cipherpw, Toast.LENGTH_LONG).show();
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -88,14 +96,37 @@ public class ChatActivity extends AppCompatActivity {
                     // Read the input field and push a new instance
                     // of ChatMessage to the Firebase database
 
-                    String msgid = cDatabase.push().getKey();
+                    String chatmessage = input.getText().toString().trim();
 
-                    ChatMessage msg = new ChatMessage(msgid, input.getText().toString().trim(), username, userid);
+                    try {
 
-                    cDatabase.child(msgid).setValue(msg);
+                        String msgid = cDatabase.push().getKey();
 
-                    FirebaseDatabase.getInstance().getReference("send").child(offerid).child("lastmsg").setValue(input.getText().toString().trim());
-                    FirebaseDatabase.getInstance().getReference("posts").child(postid).child("lastmsg").setValue(input.getText().toString().trim());
+                        String encryptmessage = AESCrypt.encrypt(cipherpassword, chatmessage);
+
+                        ChatMessage msg = new ChatMessage(msgid, encryptmessage, username, userid);
+
+                        cDatabase.child(msgid).setValue(msg);
+
+                        if(chatmessage.length() > 30) {
+
+                            String newlastmsg = chatmessage.substring(0, 29) + "...";
+
+                            FirebaseDatabase.getInstance().getReference("send").child(offerid).child("lastmsg").setValue(newlastmsg);
+                            FirebaseDatabase.getInstance().getReference("posts").child(postid).child("lastmsg").setValue(newlastmsg);
+                        }else{
+                            FirebaseDatabase.getInstance().getReference("send").child(offerid).child("lastmsg").setValue(chatmessage);
+                            FirebaseDatabase.getInstance().getReference("posts").child(postid).child("lastmsg").setValue(chatmessage);
+                        }
+
+
+                        // Clear the input
+                        input.setText("");
+
+                    } catch (GeneralSecurityException e) {
+                        Toast.makeText(ChatActivity.this, "Failed to send message", Toast.LENGTH_SHORT).show();
+                    }
+
 
 
                     //  cDatabase.child("latestmsg").setValue(input.getText().toString().trim());
@@ -110,8 +141,7 @@ public class ChatActivity extends AppCompatActivity {
                                         .getDisplayName())
                         );
 */
-                    // Clear the input
-                    input.setText("");
+
 
                 }
             }
@@ -147,13 +177,25 @@ public class ChatActivity extends AppCompatActivity {
 
                 }
 
-                // Set their text
-                messageText.setText(model.getMessageText());
-          //      messageUser.setText(model.getMessageUser());
+                try {
+                    String decryptedmessage = AESCrypt.decrypt(cipherpassword, model.getMessageText());
 
-                // Format the date before showing it
-                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                        model.getMessageTime()));
+                    // Set their text
+                    messageText.setText(decryptedmessage);
+                    //      messageUser.setText(model.getMessageUser());
+
+                    // Format the date before showing it
+                    messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
+                            model.getMessageTime()));
+
+
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                    Toast.makeText(ChatActivity.this, "Failed to retrieve message", Toast.LENGTH_SHORT).show();
+
+                }
+
+
             }
         };
 
@@ -164,5 +206,31 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-    //////////////////End top menu////////////////////////
+
+    // Rotate a string k-positions
+    public static String cipher(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            sb.append(cipher(s.charAt(i), 3));
+        }
+        return sb.toString();
+    }
+
+
+    // Rotate a character k-positions
+    public static char cipher(char c, int k) {
+        // declare some helping constants
+        final int alphaLength = 26;
+        final char asciiShift = Character.isUpperCase(c) ? 'A' : 'a';
+        final int cipherShift = k % alphaLength;
+
+        // shift down to 0..25 for a..z
+        char shifted = (char) (c - asciiShift);
+        // rotate the letter and handle "wrap-around" for negatives and value >= 26
+        shifted = (char) ((shifted + cipherShift + alphaLength) % alphaLength);
+        // shift back up to english characters
+        return (char) (shifted + asciiShift);
+    }
+
+
 }
