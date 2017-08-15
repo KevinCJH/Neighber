@@ -3,6 +3,7 @@ package orbital.raspberry.neighber;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,8 +55,12 @@ public class ReturnAgreementActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 String returnagreement = returndesc.getText().toString().trim();
+
+                if (TextUtils.isEmpty(returnagreement)) {
+                    Toast.makeText(getApplicationContext(), "Agreement can not be empty!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 FirebaseDatabase.getInstance().getReference("send").child(agreementid).child("returnagreementdesc").setValue(returnagreement);
                 FirebaseDatabase.getInstance().getReference("send").child(agreementid).child("status").setValue(4);

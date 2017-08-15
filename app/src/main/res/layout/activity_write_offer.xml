@@ -44,11 +44,12 @@
         android:layout_alignStart="@+id/takephoto" />
 
     <ImageView
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:maxHeight="200dp"
         android:layout_below="@+id/offerdesc"
-        android:layout_alignStart="@+id/takephoto"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:id="@+id/imgView"/>

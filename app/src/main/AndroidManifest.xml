@@ -13,8 +13,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/neighberlogo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/neighberlogo"
         android:largeHeap="true"
+        android:roundIcon="@mipmap/neighberlogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -57,7 +57,7 @@
         <activity
             android:name=".AddNewActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity2"
             android:screenOrientation="portrait"
@@ -172,6 +172,10 @@
             android:name=".GridActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBapSM3ZUIKc5WjDDm9L1xzjgnSIZTjWEs" />
 
     </application>
 

@@ -41,9 +41,21 @@
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:text="Accept Return Agreement"
-        android:layout_marginTop="13dp"
-        android:layout_below="@+id/offerdesc"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/disputeCheck"
         android:layout_alignStart="@+id/offerdesc" />
+
+    <CheckBox
+        android:id="@+id/disputeCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="Something wrong with the item?"
+        android:textColor="@color/colorPrimary"
+        android:buttonTint="@color/colorPrimary"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/offerdesc"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

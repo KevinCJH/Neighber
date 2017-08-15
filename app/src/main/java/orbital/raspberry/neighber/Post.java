@@ -29,11 +29,12 @@ public class Post {
     private int category;
     private String imguri;
     private String displayname;
+    private String location;
 
 
     public Post(){}
 
-    public Post(String postid, String userid, String itemname, String displayname, String postdesc, int posttype, int category){
+    public Post(String postid, String userid, String itemname, String displayname, String postdesc, int posttype, int category, String location){
         this.postid = postid;
         this.userid = userid;
         this.itemname = itemname;
@@ -44,6 +45,7 @@ public class Post {
         rated = 0;
         this.category = category;
         this.displayname = displayname;
+        this.location = location;
     }
 
     public String getPostid() {
@@ -62,6 +64,10 @@ public class Post {
 
     public String getDisplayname(){
         return displayname;
+    }
+
+    public void setDisplayname(String displayname){
+        this.displayname = displayname;
     }
 
     public String getPostdesc() {
@@ -136,5 +142,8 @@ public class Post {
 
     public String getImgUri() { return imguri; }
 
+    public String getLocation(){
+        return location;
+    }
 
 }

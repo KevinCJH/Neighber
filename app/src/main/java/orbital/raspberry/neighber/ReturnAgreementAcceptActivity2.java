@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
@@ -26,7 +28,8 @@ public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
     private String rofferid, rpostid;
     private TextView offerdesctxt;
     private Button acceptoffer;
-    private String ruserid;
+    private String ruserid, userid;
+    private CheckBox dispute;
 
     private FirebaseAuth auth;
 
@@ -43,6 +46,8 @@ public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
 
         offerdesctxt = (TextView) findViewById(R.id.offerdesc);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
+        dispute = (CheckBox) findViewById(R.id.disputeCheck);
+
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -59,6 +64,8 @@ public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
 
                 ruserid = offer.getOwnerid();
 
+                userid = offer.getTargetid();
+
             }
 
             @Override
@@ -67,6 +74,13 @@ public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
             }
         });
 
+
+        dispute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReturnAgreementAcceptActivity2.this, "We will send you an email shortly regarding any dispute you have after you have accepted the return item.", Toast.LENGTH_LONG).show();
+            }
+        });
 
         acceptoffer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +125,52 @@ public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("posts").child(rpostid).child("status").setValue(5);
         FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(5);
         FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("returnagreementdesc").setValue(agreement);
+
+
+        if(dispute.isChecked()) {
+
+            DatabaseReference dDatabase = FirebaseDatabase.getInstance().getReference("dispute");
+
+            String disputeid = dDatabase.push().getKey();
+
+            Dispute newDispute = new Dispute(disputeid, rpostid, rofferid, userid, ruserid);
+
+            dDatabase.child(disputeid).setValue(newDispute);
+        }
+
+        //Automatcally readd the item into post
+
+
+
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
+
+        final String readdpostid = mDatabase.push().getKey();
+
+        mDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Post post = dataSnapshot.getValue(Post.class);
+
+                Post newpost = new Post(readdpostid, userid, post.getItemname(),
+                        post.getDisplayname(), post.getPostdesc(), post.getPosttype(), post.getCategory(), post.getLocation());
+
+                //Add post to database
+                mDatabase.child(readdpostid).setValue(newpost);
+
+                //Add timestamp to the post
+                mDatabase.child(readdpostid).child("timestamp").setValue(ServerValue.TIMESTAMP);
+                mDatabase.child(readdpostid).child("imguri").setValue(post.getImgUri());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ReturnAgreementAcceptActivity2.this, "Failed to retrieve post data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
     }
 
 

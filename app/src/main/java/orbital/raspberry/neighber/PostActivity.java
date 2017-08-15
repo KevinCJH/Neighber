@@ -2,12 +2,15 @@ package orbital.raspberry.neighber;
 
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
 import android.text.format.DateFormat;
+import android.text.style.UnderlineSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +30,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -35,12 +40,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PostActivity extends AppCompatActivity {
 
     private String ruserid, rpostid, ruserdisplayname;
-    private TextView rusernametxt, itemnametxt, postdesctxt;
+    private TextView rusernametxt, itemnametxt, postdesctxt, meetTxt;
     private CircleImageView ruserimg;
     private TextView browse, records, addnew, chat, profile;
     private Button viewprofile;
     private int posttype;
-    private TextView posttypeTxt, datetimeTxt;
+    private TextView datetimeTxt, locationTxt, categoryTxt;
     private String datetime;
     private ImageView photo;
     private FloatingActionButton writeoffer;
@@ -64,8 +69,11 @@ public class PostActivity extends AppCompatActivity {
         viewprofile = (Button) findViewById(R.id.viewprofile);
         writeoffer = (FloatingActionButton) findViewById(R.id.sendoffer);
 
-        posttypeTxt = (TextView) findViewById(R.id.textView0);
+        //posttypeTxt = (TextView) findViewById(R.id.textView0);
         datetimeTxt = (TextView) findViewById(R.id.datetime);
+        locationTxt = (TextView) findViewById(R.id.location);
+        categoryTxt = (TextView) findViewById(R.id.categoryTxt);
+        meetTxt = (TextView) findViewById(R.id.txt3);
         photo = (ImageView) findViewById(R.id.imgViewPhoto);
 
 
@@ -156,11 +164,13 @@ public class PostActivity extends AppCompatActivity {
                 }
 
                 if(post.getPosttype() == 1) {
-                    posttypeTxt.setText("Requesting:");
+                    //posttypeTxt.setText("Requesting:");
                     itemnametxt.setText(post.getItemname());
+                    meetTxt.setText("Meet The Requester");
                 }else {
-                    posttypeTxt.setText("Offering:");
+                    //posttypeTxt.setText("Offering:");
                     itemnametxt.setText(post.getItemname());
+                    meetTxt.setText("Meet The Lender");
                 }
                 postdesctxt.setText(post.getPostdesc());
 
@@ -169,6 +179,50 @@ public class PostActivity extends AppCompatActivity {
                 datetime = getDate(post.getTimestamp());
 
                 datetimeTxt.setText(datetime);
+
+                SpannableString content = new SpannableString(post.getLocation());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+
+                locationTxt.setText(content);
+
+                switch(post.getCategory()){
+                    case 0:
+                        categoryTxt.setText("Others");
+                        break;
+                    case 1:
+                        categoryTxt.setText("Worktools");
+                        break;
+                    case 2:
+                        categoryTxt.setText("Kitchen");
+                        break;
+                    case 3:
+                        categoryTxt.setText("Cleaning");
+                        break;
+                    case 4:
+                        categoryTxt.setText("Office");
+                        break;
+                    case 5:
+                        categoryTxt.setText("Party");
+                        break;
+                    case 6:
+                        categoryTxt.setText("Furniture");
+                        break;
+                    case 7:
+                        categoryTxt.setText("Men's");
+                        break;
+                    case 8:
+                        categoryTxt.setText("Women's");
+                        break;
+                    case 9:
+                        categoryTxt.setText("Sports");
+                        break;
+                    case 10:
+                        categoryTxt.setText("Electronics");
+                        break;
+                    case 11:
+                        categoryTxt.setText("Food");
+                        break;
+                }
 
 
             }
@@ -179,6 +233,29 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        locationTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    String query = URLEncoder.encode(locationTxt.getText().toString().trim(), "utf-8");
+
+                    //Uri uri = Uri.parse("geo:0,0?q=my+street+address");
+                    Uri uri = Uri.parse("geo:0,0?q=" + query);
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(uri); //lat lng or address query
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
         viewprofile.setOnClickListener(new View.OnClickListener() {
             @Override

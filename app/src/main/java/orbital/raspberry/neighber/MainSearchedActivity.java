@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.method.TextKeyListener;
 import android.view.Menu;
@@ -369,6 +370,12 @@ public class MainSearchedActivity extends AppCompatActivity {
                 searchbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        if (TextUtils.isEmpty(searchtxt.getText().toString().trim())) {
+                            Toast.makeText(getApplicationContext(), "Enter your keyword!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         searchItem(searchtxt.getText().toString().trim());
                         dialog.dismiss();
                     }

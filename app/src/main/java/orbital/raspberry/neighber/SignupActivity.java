@@ -1,5 +1,6 @@
 package orbital.raspberry.neighber;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,7 +24,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword, inputDisplayName;
     private Button btnSignIn, btnSignUp;
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
     private FirebaseAuth auth;
 
     @Override
@@ -41,7 +42,7 @@ public class SignupActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         inputDisplayName = (EditText) findViewById(R.id.displayname);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -74,14 +75,19 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+                final ProgressDialog pd = new ProgressDialog(SignupActivity.this);
+                pd.setMessage("Registering...");
+                pd.show();
+
+               // progressBar.setVisibility(View.VISIBLE);
                 //create user
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Toast.makeText(SignupActivity.this, "Registration successful! ", Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
+                               // progressBar.setVisibility(View.GONE);
+                                pd.dismiss();
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the
                                 // signed in user can be handled in the listener.
@@ -112,6 +118,6 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.GONE);
+        //progressBar.setVisibility(View.GONE);
     }
 }

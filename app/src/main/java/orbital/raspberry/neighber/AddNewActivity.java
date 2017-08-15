@@ -1,8 +1,11 @@
 package orbital.raspberry.neighber;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -10,6 +13,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +30,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,14 +63,17 @@ public class AddNewActivity extends AppCompatActivity {
     private Uri filePath;
     private ImageView photo;
     private Button submitBtn, lendtype, borrowtype, uploadphoto;
-    private EditText itemnameTxt, postdescTxt;
+    private EditText itemnameTxt, postdescTxt, locationTxt;
     private String userName;
     //1 for borrow, 2 for lending
     private int posttype;
     //1 for worktool, 2 for kitchen, 3 for furniture, 4 for others
     private int categorytype;
     public static final int GRID_REQUEST = 1;
-    private static final int CAMERA_REQUEST = 1888;
+    private static final int CAMERA_REQUEST = 2;
+    private static final int REQUEST_CODE_AUTOCOMPLETE = 8;
+    private static final int PICK_IMAGE_REQUEST = 3;
+
     private String username;
 
     private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -116,6 +134,7 @@ public class AddNewActivity extends AppCompatActivity {
         postdescTxt = (EditText)findViewById(R.id.postdesc);
         lendtype = (Button)findViewById(R.id.lendtype);
         borrowtype = (Button)findViewById(R.id.borrowtype);
+        locationTxt = (EditText)findViewById(R.id.locationtxt);
 
         worktools = (TextView) findViewById(R.id.worktools);
         kitchen = (TextView) findViewById(R.id.kitchen);
@@ -245,6 +264,17 @@ public class AddNewActivity extends AppCompatActivity {
 
             }
         });
+
+
+        locationTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAutocompleteActivity();
+            }
+        });
+
+
+
         /*
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
@@ -265,6 +295,19 @@ public class AddNewActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final String location = locationTxt.getText().toString().trim();
+
+                if (TextUtils.isEmpty(itemnameTxt.getText().toString().trim())) {
+                    Toast.makeText(getApplicationContext(), "Must have an item name!", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TextUtils.isEmpty(postdescTxt.getText().toString().trim())) {
+                    Toast.makeText(getApplicationContext(), "Must have item description!", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(TextUtils.isEmpty(location)){
+                    Toast.makeText(getApplicationContext(), "Must have meetup location!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 final ProgressDialog pd = new ProgressDialog(AddNewActivity.this);
                 pd.setMessage("Posting...");
@@ -304,7 +347,7 @@ public class AddNewActivity extends AppCompatActivity {
 
                             //Create newpost object
                             Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                                    username, postdescTxt.getText().toString().trim(), posttype, categorytype);
+                                    username, postdescTxt.getText().toString().trim(), posttype, categorytype, location);
 
                             //Add post to database
                             mDatabase.child(postid).setValue(newpost);
@@ -330,7 +373,7 @@ public class AddNewActivity extends AppCompatActivity {
 
                     //Create newpost object
                     Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                            username, postdescTxt.getText().toString().trim(), posttype, categorytype);
+                            username, postdescTxt.getText().toString().trim(), posttype, categorytype, location);
 
                     //Add post to database
                     mDatabase.child(postid).setValue(newpost);
@@ -354,8 +397,34 @@ public class AddNewActivity extends AppCompatActivity {
         uploadphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+               // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                CharSequence options[] = new CharSequence[]{"Browse Gallery", "Use Camera"};
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(AddNewActivity.this);
+                builder.setTitle("Upload Item Image");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int pos) {
+                        switch (pos) {
+                            case 0:
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+                                break;
+                            case 1:
+                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                                Toast.makeText(AddNewActivity.this, "It is recommended for you to take a landscape photo for better quality", Toast.LENGTH_LONG).show();
+
+                                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                                    startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+                                }
+                        }
+                    }
+                });
+                builder.show();
 
             }
         });
@@ -443,11 +512,78 @@ public class AddNewActivity extends AppCompatActivity {
             }
 
            // photo.setImageBitmap(img);
+        } else  if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+
+            try {
+                //getting image from gallery
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+
+                //Setting image to ImageView
+                photo.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+            if (resultCode == RESULT_OK) {
+                // Get the user's selected place from the Intent.
+                Place place = PlaceAutocomplete.getPlace(this, data);
+               // Log.i(TAG, "Place Selected: " + place.getName());
+
+                // Format the place's details and display them in the TextView.
+              /*  locationTxt.setText(formatPlaceDetails(getResources(), place.getName(),
+                        place.getId(), place.getAddress(), place.getPhoneNumber(),
+                        place.getWebsiteUri())); */
+
+              locationTxt.setText(place.getAddress());
+/*
+                // Display attributions if required.
+                CharSequence attributions = place.getAttributions();
+                if (!TextUtils.isEmpty(attributions)) {
+                    mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
+                } else {
+                    mPlaceAttribution.setText("");
+                }
+                */
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                //Log.e(TAG, "Error: Status = " + status.toString());
+            } else if (resultCode == RESULT_CANCELED) {
+                // Indicates that the activity closed before a selection was made. For example if
+                // the user pressed the back button.
+            }
         }
 
 
 
     }
+
+    public void openAutocompleteActivity(){
+        try {
+            // The autocomplete activity requires Google Play Services to be available. The intent
+            // builder checks this and throws an exception if it is not the case.
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).setBoundsBias(new LatLngBounds(
+                    new LatLng(1.218504, 103.652802),
+                    new LatLng(1.414832, 103.939819))).build(this);
+            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Indicates that Google Play Services is either not installed or not up to date. Prompt
+            // the user to correct the issue.
+            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
+                    0 /* requestCode */).show();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // Indicates that Google Play Services is not available and the problem is not easily
+            // resolvable.
+            String message = "Google Play Services is not available: " +
+                    GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
+
+            // Log.e(TAG, message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     //////////////////Top Right Menu//////////////////////
     @Override

@@ -174,6 +174,9 @@ public class ChatActivity extends AppCompatActivity {
 
                     wholemsg.setGravity(Gravity.LEFT | Gravity.START);
                     bubble.setBackgroundResource(R.drawable.othermsg);
+                    messageText.setTextColor(Color.BLACK);
+                    messageTime.setTextColor(Color.BLACK);
+
 
                 }
 
