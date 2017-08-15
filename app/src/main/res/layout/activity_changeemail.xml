@@ -74,22 +74,23 @@
 
     <TextView
         android:id="@+id/infotxt"
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:hint="For security reasons, please enter your password."
-        android:layout_marginTop="48dp"
+        android:text="For security reasons, please enter your password."
+        android:layout_marginTop="42dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignStart="@+id/password" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:hint="Enter Password"
+        android:hint="Enter Password here"
         android:inputType="textPassword"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="26dp"
         android:layout_below="@+id/infotxt"
         android:layout_centerHorizontal="true" />
 

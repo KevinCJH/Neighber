@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -91,6 +92,11 @@ public class SendAgreementActivity extends AppCompatActivity {
         sendagree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (TextUtils.isEmpty(offerdesctxt.getText().toString().trim())) {
+                    Toast.makeText(getApplicationContext(), "Enter your agreement!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 confirmAgreement();
                 Toast.makeText(SendAgreementActivity.this, "Please meet up with " + ruserdisplayname + " to pass the item", Toast.LENGTH_SHORT).show();

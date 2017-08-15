@@ -1,7 +1,9 @@
 package orbital.raspberry.neighber;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,6 +50,7 @@ public class WriteOfferActivity extends AppCompatActivity {
     private EditText offerdescTxt;
     private TextView itemnameTxt;
     private static final int CAMERA_REQUEST = 1888;
+    private static final int PICK_IMAGE_REQUEST = 3;
     private Uri filePath;
     private ImageView photo;
     private int cat;
@@ -129,6 +133,11 @@ public class WriteOfferActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (TextUtils.isEmpty(offerdescTxt.getText().toString().trim())) {
+                    Toast.makeText(getApplicationContext(), "Enter your offer!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 final ProgressDialog pd = new ProgressDialog(WriteOfferActivity.this);
                 pd.setMessage("Sending...");
@@ -231,8 +240,42 @@ public class WriteOfferActivity extends AppCompatActivity {
         takephoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                /*
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                Toast.makeText(WriteOfferActivity.this, "It is recommended for you to take a landscape photo for better quality", Toast.LENGTH_LONG).show();
+
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+                } */
+
+                CharSequence options[] = new CharSequence[]{"Browse Gallery", "Use Camera"};
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(WriteOfferActivity.this);
+                builder.setTitle("Upload Item Image");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int pos) {
+                        switch (pos) {
+                            case 0:
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+                                break;
+                            case 1:
+                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                                Toast.makeText(WriteOfferActivity.this, "It is recommended for you to take a landscape photo for better quality", Toast.LENGTH_LONG).show();
+
+                                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                                    startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+                                }
+                        }
+                    }
+                });
+                builder.show();
+
             }
         });
 
@@ -257,6 +300,20 @@ public class WriteOfferActivity extends AppCompatActivity {
             }
 
             // photo.setImageBitmap(img);
+        }else if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+
+            try {
+                //getting image from gallery
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+
+                //Setting image to ImageView
+                photo.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

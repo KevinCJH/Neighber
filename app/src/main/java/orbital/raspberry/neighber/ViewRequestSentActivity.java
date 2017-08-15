@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -138,6 +139,11 @@ public class ViewRequestSentActivity extends AppCompatActivity {
         acceptoffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (TextUtils.isEmpty(offerdesctxt.getText().toString().trim())) {
+                    Toast.makeText(getApplicationContext(), "Enter your request!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 FirebaseDatabase.getInstance().getReference("posts").child(postid).child("agreementid").setValue(rofferid);
                 FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("agreementdesc").setValue(offerdesctxt.getText().toString().trim());

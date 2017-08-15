@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -320,6 +321,36 @@ public class ProfileActivity extends AppCompatActivity {
                     builder.show();
                 }
 
+                //Lending
+                else if(post.getStatus() == 3) {
+
+                    CharSequence options[] = new CharSequence[]{"Chat with user", "View borrower profile"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i1 = new Intent(ProfileActivity.this, ChatActivity.class);
+                                    i1.putExtra("chatroomid", post.getChatid());
+                                    i1.putExtra("itemname", post.getItemname());
+                                    i1.putExtra("offerid", post.getAgreementid());
+                                    i1.putExtra("postid", post.getPostid());
+                                    startActivity(i1);
+                                    break;
+                                case 1:
+                                    Intent i2 = new Intent(ProfileActivity.this, ViewProfileActivity.class);
+                                    i2.putExtra("ruserid", post.getOtherid());
+                                    startActivity(i2);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+
                 //Status returning
 
                 else if(post.getStatus() == 4) {
@@ -505,6 +536,11 @@ public class ProfileActivity extends AppCompatActivity {
             displayname.setEnabled(true);
             item.setIcon(R.drawable.ic_save_black_24dp);
         }else {
+
+            if (TextUtils.isEmpty(displayname.getText().toString().trim())) {
+                Toast.makeText(getApplicationContext(), "Display name can not be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             pd.show();
 

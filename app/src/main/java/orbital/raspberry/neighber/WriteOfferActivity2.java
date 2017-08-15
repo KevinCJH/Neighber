@@ -3,6 +3,7 @@ package orbital.raspberry.neighber;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -148,6 +149,11 @@ public class WriteOfferActivity2 extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (TextUtils.isEmpty(offerdescTxt.getText().toString().trim())) {
+                    Toast.makeText(getApplicationContext(), "Enter your request!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // get unique post id from firebase
                 String recordid = mDatabase.push().getKey();

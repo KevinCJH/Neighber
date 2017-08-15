@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -117,6 +118,11 @@ public class ChangeEmailActivity extends AppCompatActivity {
 
                 password = pw.getText().toString().trim();
                 newemailaddress = newemail.getText().toString().trim();
+
+                if (TextUtils.isEmpty(newemailaddress)) {
+                    Toast.makeText(getApplicationContext(), "Enter new email!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 final ProgressDialog pd = new ProgressDialog(ChangeEmailActivity.this);
                 pd.setMessage("Changing Email Address...");

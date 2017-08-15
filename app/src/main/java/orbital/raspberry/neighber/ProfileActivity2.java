@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -572,6 +573,11 @@ public class ProfileActivity2 extends AppCompatActivity {
             displayname.setEnabled(true);
             item.setIcon(R.drawable.ic_save_black_24dp);
         }else {
+
+            if (TextUtils.isEmpty(displayname.getText().toString().trim())) {
+                Toast.makeText(getApplicationContext(), "Display name can not be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             pd.show();
 

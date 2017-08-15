@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,8 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
     private String rofferid, rpostid;
     private TextView offerdesctxt;
     private Button acceptoffer;
-    private String ruserid;
+    private String ruserid, userid;
+    private CheckBox dispute;
 
     private FirebaseAuth auth;
 
@@ -46,6 +48,7 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
 
         offerdesctxt = (TextView) findViewById(R.id.offerdesc);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
+        dispute = (CheckBox) findViewById(R.id.disputeCheck);
 
 
         //Get Firebase auth instance
@@ -63,6 +66,8 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
 
                 ruserid = offer.getTargetid();
 
+                userid = offer.getOwnerid();
+
             }
 
             @Override
@@ -71,6 +76,13 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
             }
         });
 
+
+        dispute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReturnAgreementAcceptActivity.this, "We will send you an email shortly regarding any dispute you have after you have accepted the return item.", Toast.LENGTH_LONG).show();
+            }
+        });
 
         acceptoffer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +127,19 @@ public class ReturnAgreementAcceptActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("posts").child(rpostid).child("status").setValue(6);
         FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(6);
         FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("returnagreementdesc").setValue(agreement);
+
+
+        if(dispute.isChecked()) {
+
+            DatabaseReference dDatabase = FirebaseDatabase.getInstance().getReference("dispute");
+
+            String disputeid = dDatabase.push().getKey();
+
+            Dispute newDispute = new Dispute(disputeid, rpostid, rofferid, userid, ruserid);
+
+            dDatabase.child(disputeid).setValue(newDispute);
+        }
+
     }
 
 

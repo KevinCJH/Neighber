@@ -42,7 +42,7 @@
         android:textColor="@color/white"
         android:layout_below="@+id/requestdesc"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="62dp" />
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/requestdesc"
@@ -50,10 +50,22 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:text="Offer Description"
-        android:lines="3"
-        android:layout_marginTop="41dp"
+        android:lines="2"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/imgView"
+        android:layout_alignStart="@+id/viewprofile" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:maxHeight="200dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:id="@+id/imgView"
         android:layout_below="@+id/rusernameTxt"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

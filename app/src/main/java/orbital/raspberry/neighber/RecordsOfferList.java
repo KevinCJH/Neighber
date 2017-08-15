@@ -51,15 +51,15 @@ public class RecordsOfferList extends ArrayAdapter<Send> {
 
             switch (offer.getStatus()) {
                 case 1:
-                    status.setText("Status: Pending Reply");
-                    offernum.setText("From: " + offer.getTargetname());
+                    status.setText("Status: Awaiting Response");
+                    offernum.setText("User: " + offer.getTargetname());
                     break;
                 case 2:
-                    status.setText("Status: Collection of Item");
+                    status.setText("Status: Collect Item");
                     offernum.setText("Collect From: " + offer.getTargetname());
                     break;
                 case 3:
-                    status.setText("Status: Borrowing in Progress");
+                    status.setText("Status: Borrowing Item");
                     offernum.setText("Borrowing From: " + offer.getTargetname());
                     break;
                 case 4:
@@ -75,19 +75,19 @@ public class RecordsOfferList extends ArrayAdapter<Send> {
 
             switch(offer.getStatus()){
                 case 1:
-                    status.setText("Status: Pending Reply");
-                    offernum.setText("From: " + offer.getTargetname());
+                    status.setText("Status: Awaiting Response");
+                    offernum.setText("User: " + offer.getTargetname());
                     break;
                 case 2:
-                    status.setText("Status: Write an Agreement");
-                    offernum.setText("Offer accepted by: " + offer.getTargetname());
+                    status.setText("Status: Write Agreement");
+                    offernum.setText("Offer accepted: " + offer.getTargetname());
                     break;
                 case 3:
-                    status.setText("Status: Collection of Item");
-                    offernum.setText("Deliver To: " + offer.getTargetname());
+                    status.setText("Status: Collect Item");
+                    offernum.setText("Lend To: " + offer.getTargetname());
                     break;
                 case 4:
-                    status.setText("Status: Lending in Progress");
+                    status.setText("Status: Lending Item");
                     offernum.setText("Lending To: " + offer.getTargetname());
                     break;
                 case 5:

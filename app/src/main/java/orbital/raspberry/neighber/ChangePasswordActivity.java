@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -121,6 +122,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
                 oldpw = opw.getText().toString().trim();
                 newpw = npw.getText().toString().trim();
+
+                if (TextUtils.isEmpty(newpw)) {
+                    Toast.makeText(getApplicationContext(), "Enter new password!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (newpw.length() < 6) {
+                    Toast.makeText(getApplicationContext(), "Password is too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 final ProgressDialog pd = new ProgressDialog(ChangePasswordActivity.this);
                 pd.setMessage("Changing Password...");

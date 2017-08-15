@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ public class ViewOfferSentActivity extends AppCompatActivity {
     private String otherimgurl;
     private String userimgurl;
     private String newimguri;
+    private ImageView photo;
+
 
     private FirebaseAuth auth;
 
@@ -51,6 +54,7 @@ public class ViewOfferSentActivity extends AppCompatActivity {
         viewprofile = (Button) findViewById(R.id.viewprofile);
         acceptoffer = (Button) findViewById(R.id.acceptoffer);
         requestdesctxt = (TextView) findViewById(R.id.requestdesc);
+        photo = (ImageView) findViewById(R.id.imgView);
 
 
         //Get Firebase auth instance
@@ -112,6 +116,10 @@ public class ViewOfferSentActivity extends AppCompatActivity {
                 postid = offer.getPostid();
 
                 newimguri = offer.getImguri();
+
+                if(!newimguri.isEmpty()){
+                    Picasso.with(ViewOfferSentActivity.this).load(newimguri).placeholder(R.mipmap.defaultitem).into(photo);
+                }
 
             }
 

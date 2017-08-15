@@ -1,5 +1,6 @@
 package orbital.raspberry.neighber;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +22,7 @@ public class LoginpageActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
     private Button btnSignup, btnLogin, btnReset;
 
     @Override
@@ -36,7 +37,6 @@ public class LoginpageActivity extends AppCompatActivity {
             finish();
         }
 
-        // set the view now
         setContentView(R.layout.activity_loginpage);
 
        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -44,7 +44,7 @@ public class LoginpageActivity extends AppCompatActivity {
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+       // progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnSignup = (Button) findViewById(R.id.btn_signup);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
@@ -82,7 +82,11 @@ public class LoginpageActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+                final ProgressDialog pd = new ProgressDialog(LoginpageActivity.this);
+                pd.setMessage("Welcome!");
+                pd.show();
+
+               // progressBar.setVisibility(View.VISIBLE);
 
                 //authenticate user
                 auth.signInWithEmailAndPassword(email, password)
@@ -92,7 +96,8 @@ public class LoginpageActivity extends AppCompatActivity {
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the
                                 // signed in user can be handled in the listener.
-                                progressBar.setVisibility(View.GONE);
+                                //progressBar.setVisibility(View.GONE);
+                                pd.dismiss();
                                 if (!task.isSuccessful()) {
                                     // there was an error
                                     if (password.length() < 6) {

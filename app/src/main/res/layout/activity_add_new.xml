@@ -135,6 +135,19 @@
         android:layout_below="@+id/itemname"
         android:layout_alignStart="@+id/itemname" />
 
+            <EditText
+                android:id="@+id/locationtxt"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:backgroundTint="@color/colorPrimary"
+                android:lines="2"
+                android:inputType="textMultiLine"
+                android:focusableInTouchMode="false"
+                android:hint="Location to Meetup"
+                android:layout_below="@+id/postdesc"
+                android:layout_alignStart="@+id/itemname" />
+
     <Button
         style="?android:textAppearanceSmall"
         android:layout_width="300dp"
@@ -157,17 +170,18 @@
                 android:textColor="@color/colorPrimary"
                 android:text="Photo of Item (Optional)"
                 android:layout_marginTop="8dp"
-                android:layout_below="@+id/postdesc"
+                android:layout_below="@+id/locationtxt"
                 android:layout_alignStart="@+id/itemnameTxt" />
 
             <ImageView
                 android:id="@+id/imgView"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
+                android:maxHeight="200dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
-                android:layout_alignStart="@+id/postdesc"
-                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/photoTxt"
                 />
 

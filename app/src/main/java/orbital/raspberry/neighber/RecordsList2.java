@@ -48,11 +48,11 @@ public class RecordsList2 extends ArrayAdapter<Post> {
                 offernum.setText("Number of Requests: " + post.getRecordcount());
                 break;
             case 2:
-                status.setText("Status: Collection of Item");
-                offernum.setText("Deliver To: " + post.getOthername());
+                status.setText("Status: Collect Item");
+                offernum.setText("Lend To: " + post.getOthername());
                 break;
             case 3:
-                status.setText("Status: Lending in Progress");
+                status.setText("Status: Lending Item");
                 offernum.setText("Lending To: " + post.getOthername());
                 break;
             case 4:
