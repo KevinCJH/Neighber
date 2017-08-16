@@ -38,6 +38,7 @@ dependencies {
     compile 'com.firebaseui:firebase-ui:2.0.1'
     compile 'com.scottyab:aescrypt:0.0.1'
     compile 'com.google.android.gms:play-services-places:11.0.1'
+    compile 'com.github.clans:fab:1.6.4'
     testCompile 'junit:junit:4.12'
 }
 

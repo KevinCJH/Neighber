@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
@@ -17,9 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,12 +46,17 @@ public class PostActivity extends AppCompatActivity {
     private TextView rusernametxt, itemnametxt, postdesctxt, meetTxt;
     private CircleImageView ruserimg;
     private TextView browse, records, addnew, chat, profile;
-    private Button viewprofile;
+   // private Button viewprofile;
     private int posttype;
     private TextView datetimeTxt, locationTxt, categoryTxt;
     private String datetime;
     private ImageView photo;
-    private FloatingActionButton writeoffer;
+    private RatingBar ratingbar;
+
+    //private FloatingActionButton writeoffer;
+    private FloatingActionMenu menuFab;
+    private com.github.clans.fab.FloatingActionButton fabW, fabP, fabF;
+
 
     private FirebaseAuth auth;
 
@@ -66,8 +74,8 @@ public class PostActivity extends AppCompatActivity {
         itemnametxt = (TextView) findViewById(R.id.itemnameTxt);
         postdesctxt = (TextView) findViewById(R.id.postdescTxt);
         ruserimg = (CircleImageView) findViewById(R.id.imgView);
-        viewprofile = (Button) findViewById(R.id.viewprofile);
-        writeoffer = (FloatingActionButton) findViewById(R.id.sendoffer);
+       // viewprofile = (Button) findViewById(R.id.viewprofile);
+        //writeoffer = (FloatingActionButton) findViewById(R.id.sendoffer);
 
         //posttypeTxt = (TextView) findViewById(R.id.textView0);
         datetimeTxt = (TextView) findViewById(R.id.datetime);
@@ -76,6 +84,14 @@ public class PostActivity extends AppCompatActivity {
         meetTxt = (TextView) findViewById(R.id.txt3);
         photo = (ImageView) findViewById(R.id.imgViewPhoto);
 
+        ratingbar = (RatingBar) findViewById(R.id.rating);
+
+        menuFab = (FloatingActionMenu) findViewById(R.id.menufab);
+        fabW  = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fabW);
+        fabP  = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fabP);
+        fabF  = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fabF);
+
+        menuFab.setClosedOnTouchOutside(true);
 
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
@@ -125,7 +141,9 @@ public class PostActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser().getUid().toString().equals(ruserid)){
-            writeoffer.setVisibility(View.GONE);
+            //writeoffer.setVisibility(View.GONE);
+            menuFab.setVisibility(View.GONE);
+
         }
 
         final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
@@ -142,6 +160,9 @@ public class PostActivity extends AppCompatActivity {
                 rusernametxt.setText(user.getDisplayname());
 
                 ruserdisplayname = user.getDisplayname();
+
+                ratingbar.setRating(Double.valueOf(user.getRatings()).floatValue());
+
 
             }
 
@@ -167,10 +188,13 @@ public class PostActivity extends AppCompatActivity {
                     //posttypeTxt.setText("Requesting:");
                     itemnametxt.setText(post.getItemname());
                     meetTxt.setText("Meet The Requester");
+                    fabW.setLabelText("Write Offer");
+                    fabF.setVisibility(View.GONE);
                 }else {
                     //posttypeTxt.setText("Offering:");
                     itemnametxt.setText(post.getItemname());
                     meetTxt.setText("Meet The Lender");
+                    fabW.setLabelText("Write Request");
                 }
                 postdesctxt.setText(post.getPostdesc());
 
@@ -178,7 +202,7 @@ public class PostActivity extends AppCompatActivity {
 
                 datetime = getDate(post.getTimestamp());
 
-                datetimeTxt.setText(datetime);
+                datetimeTxt.setText("Posted " + datetime);
 
                 SpannableString content = new SpannableString(post.getLocation());
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
@@ -257,7 +281,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        viewprofile.setOnClickListener(new View.OnClickListener() {
+        fabP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -273,7 +297,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        writeoffer.setOnClickListener(new View.OnClickListener() {
+        fabW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -297,13 +321,44 @@ public class PostActivity extends AppCompatActivity {
         });
 
 
+        fabF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PostActivity.this, "Post added to favourites!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        menuFab.setOnMenuButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!menuFab.isOpened())
+                    menuFab.getMenuIconView().setImageResource(R.drawable.ic_close_24dp);
+                else
+                    menuFab.getMenuIconView().setImageResource(R.drawable.ic_menu_24dp);
+
+                menuFab.toggle(true);
+            }
+        });
+
+        fabW.setLabelColors(ContextCompat.getColor(PostActivity.this, R.color.colorPrimary),
+                ContextCompat.getColor(PostActivity.this, R.color.colorPrimary),
+                ContextCompat.getColor(PostActivity.this, R.color.colorPrimary));
+
+        fabF.setLabelColors(ContextCompat.getColor(PostActivity.this, R.color.colorPrimary),
+                ContextCompat.getColor(PostActivity.this, R.color.colorPrimary),
+                ContextCompat.getColor(PostActivity.this, R.color.colorPrimary));
+
+        fabP.setLabelColors(ContextCompat.getColor(PostActivity.this, R.color.colorPrimary),
+                ContextCompat.getColor(PostActivity.this, R.color.colorPrimary),
+                ContextCompat.getColor(PostActivity.this, R.color.colorPrimary));
+
     }
 
 
     public String getDate(long time) {
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(time);
-        String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
+        String date = DateFormat.format("dd-MM-yyyy hh:mm a", cal).toString();
         return date;
     }
 

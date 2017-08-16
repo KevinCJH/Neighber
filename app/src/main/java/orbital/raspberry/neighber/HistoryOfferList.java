@@ -40,8 +40,10 @@ public class HistoryOfferList extends ArrayAdapter<Send> {
         Send offer = offers.get(position);
         itemname.setText(offer.getItemname());
 
-        if(!offer.getImguri().toString().trim().isEmpty()){
-            Picasso.with(context).load(offer.getImguri()).placeholder(R.mipmap.neighberlogo).into(photo);
+        if(offer.getImguri() != null) {
+            if (!offer.getImguri().toString().trim().isEmpty()) {
+                Picasso.with(context).load(offer.getImguri()).placeholder(R.mipmap.neighberlogo).into(photo);
+            }
         }
 
         offernum.setText("");

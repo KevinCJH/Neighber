@@ -222,7 +222,7 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                     }
                 };
 
-                //Status pending
+                //Request
                 if(post.getPosttype() == 1) {
 
                     CharSequence options[] = new CharSequence[]{"View Lender Profile", "Rate this User", "Delete this Record"};
@@ -258,6 +258,7 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                     });
                     builder.show();
 
+                    //OFFER
                 }else{
 
                     CharSequence options[] = new CharSequence[]{"View Borrower Profile", "Rate this User", "Delete this Record"};
@@ -360,6 +361,7 @@ public class HistoryRecordsActivity extends AppCompatActivity {
                     });
                     builder.show();
 
+                    //OFFER
                 }else{
 
                     CharSequence options[] = new CharSequence[]{"View Borrower Profile", "Rate this User", "Delete this Record"};

@@ -13,28 +13,40 @@
         android:textColor="@color/colorPrimary"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:gravity="center"
-        android:text="Search for Item"
+        android:text="Search by..."
         android:layout_marginTop="5dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/spinner"
+        android:layout_width="300dp"
+        android:layout_below="@+id/txt2"
+        android:layout_marginTop="15dp"
+        app:ms_background_color="@color/colorPrimary"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        app:ms_text_color="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
     <EditText
         android:id="@+id/searchtxt"
-        android:layout_width="250dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:lines="1"
-        android:hint="Insert keywords here"
+        android:hint="Enter keywords here"
         android:backgroundTint="@color/colorPrimary"
-        android:layout_below="@+id/txt2"
+        android:layout_below="@+id/spinner"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp" />
+        android:layout_marginTop="15dp"
+        />
 
     <Button
         style="?android:textAppearanceSmall"
         android:textStyle="bold"
         android:id="@+id/searchbtn"
-        android:layout_width="250dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"

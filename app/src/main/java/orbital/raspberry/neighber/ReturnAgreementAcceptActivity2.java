@@ -125,6 +125,8 @@ public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("posts").child(rpostid).child("status").setValue(5);
         FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("status").setValue(5);
         FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("returnagreementdesc").setValue(agreement);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("historypostid").setValue(rpostid);
+        FirebaseDatabase.getInstance().getReference("send").child(rofferid).child("postid").setValue("");
 
 
         if(dispute.isChecked()) {
@@ -144,22 +146,41 @@ public class ReturnAgreementAcceptActivity2 extends AppCompatActivity {
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
-        final String readdpostid = mDatabase.push().getKey();
+        final String historypostid = mDatabase.push().getKey();
 
         mDatabase.child(rpostid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Post post = dataSnapshot.getValue(Post.class);
 
-                Post newpost = new Post(readdpostid, userid, post.getItemname(),
+                post.setPostid(historypostid);
+
+                /*Post newpost = new Post(historypostid, userid, post.getItemname(),
                         post.getDisplayname(), post.getPostdesc(), post.getPosttype(), post.getCategory(), post.getLocation());
+*/
+                //Add history post to database
+                mDatabase.child(historypostid).setValue(post);
 
-                //Add post to database
-                mDatabase.child(readdpostid).setValue(newpost);
+                mDatabase.child(historypostid).child("imguri").setValue(post.getImgUri());
 
+                //Re configure the post to fresh post
                 //Add timestamp to the post
-                mDatabase.child(readdpostid).child("timestamp").setValue(ServerValue.TIMESTAMP);
-                mDatabase.child(readdpostid).child("imguri").setValue(post.getImgUri());
+                mDatabase.child(rpostid).child("otherimg").setValue("");
+                mDatabase.child(rpostid).child("otherid").setValue("");
+                mDatabase.child(rpostid).child("lastmsg").setValue("Chat with this User!");
+                mDatabase.child(rpostid).child("otherimg").setValue("");
+                mDatabase.child(rpostid).child("chatid").setValue("");
+                mDatabase.child(rpostid).child("agreementid").setValue("");
+                mDatabase.child(rpostid).child("othername").setValue("");
+
+                mDatabase.child(rpostid).child("status").setValue(1);
+
+                int newrecordcount = post.getRecordcount() - 1;
+
+                mDatabase.child(rpostid).child("recordcount").setValue(newrecordcount);
+
+                mDatabase.child(rpostid).child("timestamp").setValue(ServerValue.TIMESTAMP);
+                //mDatabase.child(historypostid).child("imguri").setValue(post.getImgUri());
 
             }
 

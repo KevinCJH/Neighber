@@ -338,7 +338,30 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                             }
                         });
                         builder.show();
-                    }
+
+                        //Rejected
+                    }else if (offer.getStatus() == 0) {
+
+                            CharSequence options[] = new CharSequence[]{"Delete this Request"};
+                            final int newnumrecord;
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                            builder.setTitle("Options");
+                            builder.setItems(options, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int pos) {
+                                    switch (pos) {
+                                        case 0:
+                                            AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                                            builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
+                                                    .setNegativeButton("Cancel", dialogClickListener2).show();
+
+                                            break;
+                                    }
+                                }
+                            });
+                            builder.show();
+                        }
 
                 }else{
 
@@ -528,7 +551,34 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
                             }
                         });
                         builder.show();
+
+                        //Rejected
+                    }else if(offer.getStatus() == 0) {
+
+                        CharSequence options[] = new CharSequence[]{"Delete this Offer"};
+                        final int newnumrecord;
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                        builder.setTitle("Options");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos) {
+                                switch (pos) {
+                                    case 0:
+                                        AlertDialog.Builder builderdel = new AlertDialog.Builder(BorrowerRecordsActivity.this);
+                                        builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
+                                                .setNegativeButton("Cancel", dialogClickListener2).show();
+                                        break;
+
+                                }
+                            }
+                        });
+                        builder.show();
                     }
+
+
+
+
                 }
 
 

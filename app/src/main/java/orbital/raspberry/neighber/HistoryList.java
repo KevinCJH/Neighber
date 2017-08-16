@@ -41,8 +41,10 @@ public class HistoryList extends ArrayAdapter<Post> {
 
         itemname.setText(post.getItemname());
 
-        if(!post.getImgUri().toString().trim().isEmpty()){
-            Picasso.with(context).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo).into(photo);
+        if(post.getImgUri() != null) {
+            if (!post.getImgUri().toString().trim().isEmpty()) {
+                Picasso.with(context).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo).into(photo);
+            }
         }
 
         if(post.getPosttype() == 1){

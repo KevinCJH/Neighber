@@ -117,7 +117,7 @@ public class ViewOfferActivity extends AppCompatActivity {
     public String getDate(long time) {
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(time);
-        String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
+        String date = DateFormat.format("dd-MM-yyyy hh:mm a", cal).toString();
         return date;
     }
 

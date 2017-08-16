@@ -52,6 +52,10 @@ public class Post {
         return postid;
     }
 
+    public void setPostid(String postid){
+        this.postid = postid;
+    }
+
     public String getUserid() {
         return userid;
     }
