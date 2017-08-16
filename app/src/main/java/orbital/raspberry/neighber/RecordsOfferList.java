@@ -37,8 +37,10 @@ public class RecordsOfferList extends ArrayAdapter<Send> {
 
         Send offer = offers.get(position);
 
-        if(!offer.getImguri().toString().trim().isEmpty()){
-            Picasso.with(context).load(offer.getImguri()).placeholder(R.mipmap.neighberlogo).into(photo);
+        if(offer.getImguri() != null) {
+            if (!offer.getImguri().toString().trim().isEmpty()) {
+                Picasso.with(context).load(offer.getImguri()).placeholder(R.mipmap.neighberlogo).into(photo);
+            }
         }
 
         itemname.setText(offer.getItemname());
@@ -50,6 +52,10 @@ public class RecordsOfferList extends ArrayAdapter<Send> {
             type.setImageResource(R.drawable.ic_arrow_downward_select_24dp);
 
             switch (offer.getStatus()) {
+                case 0:
+                    status.setText("Status: Item in Use");
+                    offernum.setText("User has accepted another request");
+                    break;
                 case 1:
                     status.setText("Status: Awaiting Response");
                     offernum.setText("User: " + offer.getTargetname());
@@ -74,6 +80,10 @@ public class RecordsOfferList extends ArrayAdapter<Send> {
             type.setImageResource(R.drawable.ic_arrow_upward_select_24dp);
 
             switch(offer.getStatus()){
+                case 0:
+                    status.setText("Status: Offer Rejected");
+                    offernum.setText("User has accepted another offer");
+                    break;
                 case 1:
                     status.setText("Status: Awaiting Response");
                     offernum.setText("User: " + offer.getTargetname());

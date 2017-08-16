@@ -1,9 +1,11 @@
 package orbital.raspberry.neighber;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.*;
 import android.support.v4.widget.TextViewCompat;
@@ -30,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,9 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView browsereq, browseoff;
     private List<Post> posts;
     private ListView listViewRequests;
+    private FloatingActionButton searchfab;
     private static boolean calledAlready = false;
    // private EditText searchtxt;
    // private Button searchbtn;
+   private boolean doubleBackToExitPressedOnce;
 
 
     @Override
@@ -62,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
+        doubleBackToExitPressedOnce = false;
+
         posts = new ArrayList<>();
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
@@ -74,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         browse = (TextView) findViewById(R.id.action_browse);
         browsereq = (TextView) findViewById(R.id.action_browse_request);
         browseoff = (TextView) findViewById(R.id.action_browse_offer);
+
+        searchfab = (FloatingActionButton) findViewById(R.id.searchfab);
 
         browsereq.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
        // searchtxt = (EditText) findViewById(R.id.searchtxt);
       //  searchbtn = (Button) findViewById(R.id.searchbtn);
+
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
@@ -184,48 +194,132 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        searchfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.activity_search);
+                dialog.setTitle("");
+
+                final Button searchbtn = (Button) dialog.findViewById(R.id.searchbtn);
+                final EditText searchtxt = (EditText) dialog.findViewById(R.id.searchtxt);
+                final MaterialSpinner spinner = (MaterialSpinner) dialog.findViewById(R.id.spinner);
+                spinner.setItems("Item Name", "User Name", "Meeting Point");
+
+                searchbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (TextUtils.isEmpty(searchtxt.getText().toString().trim())) {
+                            Toast.makeText(getApplicationContext(), "Enter your keyword!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        int searchby = spinner.getSelectedIndex();
+
+                        searchItem(searchtxt.getText().toString().trim(), searchby);
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
     }
 
     public String getDate(long time) {
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(time);
-        String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
+        String date = DateFormat.format("dd-MM-yyyy hh:mm a", cal).toString();
         return date;
     }
 
 
-    public void searchItem(String query){
+    public void searchItem(String query, int searchby){
+
+        final ProgressDialog pd = new ProgressDialog(MainActivity.this);
+        pd.setMessage("Searching...");
+        pd.show();
 
         //String query = searchtxt.getText().toString().trim();
         int found = 0;
 
         //If found at least one, repopulate the list
-        for(Post p : posts){
+        for(Post p : posts) {
 
-            String splitname[] = p.getItemname().split(" ");
+            String splitquery[] = query.split(" ");
 
-            for(int i=0; i<splitname.length; i++) {
+            for (int j = 0; j < splitquery.length; j++) {
 
-                if (splitname[i].toLowerCase().equals(query.toLowerCase())) {
+                if (searchby == 0) {
+                    String splitname[] = p.getItemname().split(" ");
 
-                    found = 1;
+                    for (int i = 0; i < splitname.length; i++) {
 
-                    Intent i2 = new Intent(MainActivity.this, MainSearchedActivity.class);
-                    i2.putExtra("searchkey", query);
-                    startActivity(i2);
+                        if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
 
+                            found = 1;
+
+                            Intent i2 = new Intent(MainActivity.this, MainSearchedActivity.class);
+                            i2.putExtra("searchkey", query);
+                            startActivity(i2);
+
+                            break;
+                        }
+                    }
+                } else if (searchby == 1) {
+                    String splitname[] = p.getDisplayname().split(" ");
+
+                    for (int i = 0; i < splitname.length; i++) {
+
+                        if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
+
+                            found = 1;
+
+                            Intent i2 = new Intent(MainActivity.this, MainSearchedActivity2.class);
+                            i2.putExtra("searchkey", query);
+                            startActivity(i2);
+
+                            break;
+                        }
+                    }
+                } else if (searchby == 2) {
+                    String splitname[] = p.getLocation().split(" ");
+
+                    for (int i = 0; i < splitname.length; i++) {
+
+                        if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
+
+                            found = 1;
+
+                            Intent i2 = new Intent(MainActivity.this, MainSearchedActivity3.class);
+                            i2.putExtra("searchkey", query);
+                            startActivity(i2);
+
+                            break;
+                        }
+                    }
+                }
+
+                if (found == 1) {
                     break;
                 }
+
             }
 
-            if(found == 1){
+            if (found == 1) {
                 break;
             }
 
+
         }
-        if(found == 0) {
+
+        if (found == 0) {
             Toast.makeText(MainActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
         }
+
+        pd.dismiss();
 
     }
 
@@ -233,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_search, menu);
+        menuInflater.inflate(R.menu.menu_main, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -252,37 +346,30 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
-            case R.id.action_search:
 
-                final Dialog dialog = new Dialog(MainActivity.this);
-                dialog.setContentView(R.layout.activity_search);
-                dialog.setTitle("");
-
-                final Button searchbtn = (Button) dialog.findViewById(R.id.searchbtn);
-                final EditText searchtxt = (EditText) dialog.findViewById(R.id.searchtxt);
-
-                searchbtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (TextUtils.isEmpty(searchtxt.getText().toString().trim())) {
-                            Toast.makeText(getApplicationContext(), "Enter your keyword!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        searchItem(searchtxt.getText().toString().trim());
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     //////////////////End top menu////////////////////////
 
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please press BACK again to exit the app", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 
 }

@@ -166,7 +166,40 @@ public class ViewRequestSentActivity extends AppCompatActivity {
 
                 ////
 
-                Toast.makeText(ViewRequestSentActivity.this, "Your acceptance has been sent to the user", Toast.LENGTH_SHORT).show();
+                final DatabaseReference oDatabase = FirebaseDatabase.getInstance().getReference("send");
+
+                //attaching value event listener
+                oDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                            Send offer = postSnapshot.getValue(Send.class);
+
+                            //If offer is under this post id then display it
+                            if(offer.getSendtype() == 1 && offer.getPostid().equals(postid)) {
+
+                                if(!rofferid.equals(offer.getRecordid())){
+                                    FirebaseDatabase.getInstance().getReference("send").child(offer.getRecordid()).child("status").setValue(0);
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                ////
+
+                Toast.makeText(ViewRequestSentActivity.this, "You have accepted a request from " + ruserdisplayname, Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(ViewRequestSentActivity.this, ProfileActivity.class));
                 finish();

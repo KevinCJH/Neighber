@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.text.method.TextKeyListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +32,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainSearchedActivity extends AppCompatActivity {
+public class MainSearchedActivity2 extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
@@ -76,7 +75,7 @@ public class MainSearchedActivity extends AppCompatActivity {
         browsereq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainSearchedActivity.this, MainActivity2.class));
+                startActivity(new Intent(MainSearchedActivity2.this, MainActivity2.class));
             }
         });
 
@@ -96,28 +95,28 @@ public class MainSearchedActivity extends AppCompatActivity {
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainSearchedActivity.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(MainSearchedActivity2.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainSearchedActivity.this, AddNewActivity.class));
+                startActivity(new Intent(MainSearchedActivity2.this, AddNewActivity.class));
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainSearchedActivity.this, ChatListActivity.class));
+                startActivity(new Intent(MainSearchedActivity2.this, ChatListActivity.class));
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainSearchedActivity.this, ProfileActivity.class));
+                startActivity(new Intent(MainSearchedActivity2.this, ProfileActivity.class));
             }
         });
 
@@ -148,12 +147,13 @@ public class MainSearchedActivity extends AppCompatActivity {
                     int found = 0;
 
                     //Perform search
-                    String splitname[] = post.getItemname().split(" ");
+                    String splitname[] = post.getDisplayname().split(" ");
 
                     String splitquery[] = searchkey.split(" ");
 
                     //Search individual words in string to see if it matches keyword
                     for(int j = 0; j < splitquery.length; j++) {
+
                         for (int i = 0; i < splitname.length; i++) {
 
                             if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
@@ -167,7 +167,6 @@ public class MainSearchedActivity extends AppCompatActivity {
 
                         if(found == 1)
                             break;
-
                     }
 
                     //If post type is request aka 1 and valid search
@@ -190,7 +189,7 @@ public class MainSearchedActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainSearchedActivity.this, posts);
+                RequestList reqAdapter = new RequestList(MainSearchedActivity2.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -209,7 +208,7 @@ public class MainSearchedActivity extends AppCompatActivity {
                 String requesterid = post.getUserid();
                 String postid = post.getPostid();
 
-                Intent i = new Intent(MainSearchedActivity.this, PostActivity.class);
+                Intent i = new Intent(MainSearchedActivity2.this, PostActivity.class);
                 i.putExtra("ruserid", requesterid);
                 i.putExtra("rpostid", postid);
                 startActivity(i);
@@ -220,7 +219,7 @@ public class MainSearchedActivity extends AppCompatActivity {
         searchfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(MainSearchedActivity.this);
+                final Dialog dialog = new Dialog(MainSearchedActivity2.this);
                 dialog.setContentView(R.layout.activity_search);
                 dialog.setTitle("");
 
@@ -228,6 +227,7 @@ public class MainSearchedActivity extends AppCompatActivity {
                 final EditText searchtxt = (EditText) dialog.findViewById(R.id.searchtxt);
                 final MaterialSpinner spinner = (MaterialSpinner) dialog.findViewById(R.id.spinner);
                 spinner.setItems("Item Name", "User Name", "Meeting Point");
+                spinner.setSelectedIndex(1);
 
                 searchtxt.setText(searchkey);
 
@@ -248,6 +248,7 @@ public class MainSearchedActivity extends AppCompatActivity {
                 });
 
                 dialog.show();
+
             }
         });
 
@@ -349,7 +350,7 @@ public class MainSearchedActivity extends AppCompatActivity {
 
     public void searchItem(String query, int searchby){
 
-        final ProgressDialog pd = new ProgressDialog(MainSearchedActivity.this);
+        final ProgressDialog pd = new ProgressDialog(MainSearchedActivity2.this);
         pd.setMessage("Searching...");
         pd.show();
 
@@ -361,66 +362,66 @@ public class MainSearchedActivity extends AppCompatActivity {
 
             for (int j = 0; j < splitquery.length; j++) {
 
-                if(searchby == 0) {
+                if (searchby == 0) {
 
-                String splitname[] = p.getItemname().split(" ");
+                    String splitname[] = p.getItemname().split(" ");
 
-                for (int i = 0; i < splitname.length; i++) {
+                    for (int i = 0; i < splitname.length; i++) {
 
-                    if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
+                        if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
 
-                        found = 1;
+                            found = 1;
 
-                        Intent i2 = new Intent(MainSearchedActivity.this, MainSearchedActivity.class);
-                        i2.putExtra("searchkey", query);
-                        startActivity(i2);
-                        finish();
+                            Intent i2 = new Intent(MainSearchedActivity2.this, MainSearchedActivity.class);
+                            i2.putExtra("searchkey", query);
+                            startActivity(i2);
+                            finish();
 
-                        break;
+                            break;
+                        }
                     }
+
+                } else if (searchby == 1) {
+
+                    String splitname[] = p.getDisplayname().split(" ");
+
+                    for (int i = 0; i < splitname.length; i++) {
+
+                        if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
+
+                            found = 1;
+
+                            Intent i2 = new Intent(MainSearchedActivity2.this, MainSearchedActivity2.class);
+                            i2.putExtra("searchkey", query);
+                            startActivity(i2);
+                            finish();
+
+                            break;
+                        }
+                    }
+
+                } else if (searchby == 2) {
+
+                    String splitname[] = p.getLocation().split(" ");
+
+                    for (int i = 0; i < splitname.length; i++) {
+
+                        if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
+
+                            found = 1;
+
+                            Intent i2 = new Intent(MainSearchedActivity2.this, MainSearchedActivity3.class);
+                            i2.putExtra("searchkey", query);
+                            startActivity(i2);
+                            finish();
+
+                            break;
+                        }
+                    }
+
                 }
 
-            } else if(searchby == 1) {
-
-                String splitname[] = p.getDisplayname().split(" ");
-
-                for (int i = 0; i < splitname.length; i++) {
-
-                    if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
-
-                        found = 1;
-
-                        Intent i2 = new Intent(MainSearchedActivity.this, MainSearchedActivity2.class);
-                        i2.putExtra("searchkey", query);
-                        startActivity(i2);
-                        finish();
-
-                        break;
-                    }
-                }
-
-            } else if(searchby == 2) {
-
-                String splitname[] = p.getLocation().split(" ");
-
-                for (int i = 0; i < splitname.length; i++) {
-
-                    if (splitname[i].toLowerCase().equals(splitquery[j].toLowerCase())) {
-
-                        found = 1;
-
-                        Intent i2 = new Intent(MainSearchedActivity.this, MainSearchedActivity3.class);
-                        i2.putExtra("searchkey", query);
-                        startActivity(i2);
-                        finish();
-
-                        break;
-                    }
-                }
-
-            }
-
-                if (found == 1) {
+                if(found == 1){
                     break;
                 }
 
@@ -431,9 +432,8 @@ public class MainSearchedActivity extends AppCompatActivity {
             }
 
         }
-
         if(found == 0) {
-            Toast.makeText(MainSearchedActivity.this, "No such items found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainSearchedActivity2.this, "No such items found", Toast.LENGTH_SHORT).show();
         }
 
         pd.dismiss();
@@ -454,14 +454,15 @@ public class MainSearchedActivity extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(MainSearchedActivity.this, LoginpageActivity.class);
+                Intent i = new Intent(MainSearchedActivity2.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(MainSearchedActivity.this, SettingsActivity.class));
+                startActivity(new Intent(MainSearchedActivity2.this, SettingsActivity.class));
                 break;
+
         }
         return super.onOptionsItemSelected(item);
     }

@@ -537,7 +537,7 @@ public class AddNewActivity extends AppCompatActivity {
                         place.getId(), place.getAddress(), place.getPhoneNumber(),
                         place.getWebsiteUri())); */
 
-              locationTxt.setText(place.getAddress());
+              locationTxt.setText(place.getName());
 /*
                 // Display attributions if required.
                 CharSequence attributions = place.getAttributions();

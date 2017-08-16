@@ -25,6 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+//NOT IN USE
+
 public class HistoryRequestActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
@@ -39,7 +41,7 @@ public class HistoryRequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historyrequest);
-
+/*
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -234,10 +236,10 @@ public class HistoryRequestActivity extends AppCompatActivity {
             }
         });
 
-
+*/
     }
 
-
+/*
     ///////////////////Top Right Menu//////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -266,5 +268,5 @@ public class HistoryRequestActivity extends AppCompatActivity {
 
     //////////////////End top menu////////////////////////
 
-
+*/
 }

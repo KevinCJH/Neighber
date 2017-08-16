@@ -36,14 +36,19 @@ public class RequestList extends ArrayAdapter<Post> {
         TextView dname = (TextView) listViewItem.findViewById(R.id.desc1);
         ImageView imgview = (ImageView) listViewItem.findViewById(R.id.imgView);
         ImageView photo = (ImageView) listViewItem.findViewById(R.id.imgViewPhoto);
+        TextView location = (TextView) listViewItem.findViewById(R.id.locationTxt);
+
 
         Post post = posts.get(position);
         itemname.setText(post.getItemname());
-        datetime.setText(" " + post.getDatetime());
+       // datetime.setText(" " + post.getDatetime());
         dname.setText(" " + post.getDisplayname());
+        location.setText(post.getLocation());
 
-        if(!post.getImgUri().toString().trim().isEmpty()){
-            Picasso.with(context).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo).into(photo);
+        if(post.getImgUri() != null) {
+            if (!post.getImgUri().toString().trim().isEmpty()) {
+                Picasso.with(context).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo).into(photo);
+            }
         }
 
         switch(post.getCategory()){
