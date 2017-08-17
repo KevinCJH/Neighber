@@ -157,7 +157,7 @@
                 android:layout_marginTop="5dp"
                 android:inputType="numberDecimal"
                 android:maxLength="10"
-                android:hint="Offer Fee"
+                android:hint="Offer Fee (Optional)"
                 android:layout_below="@+id/locationtxt"
                 android:layout_alignStart="@+id/itemname" />
 
