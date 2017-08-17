@@ -444,6 +444,12 @@ public class HistoryRecordsActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(HistoryRecordsActivity.this, SettingsActivity.class));
                 break;
+            case R.id.action_favourite:
+                startActivity(new Intent(HistoryRecordsActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(HistoryRecordsActivity.this, FeedbackActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

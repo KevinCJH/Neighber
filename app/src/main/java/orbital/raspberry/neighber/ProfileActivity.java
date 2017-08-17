@@ -534,7 +534,8 @@ public class ProfileActivity extends AppCompatActivity {
         if(editmode == 0){
             editmode = 1;
             displayname.setEnabled(true);
-            item.setIcon(R.drawable.ic_save_black_24dp);
+           // item.setIcon(R.drawable.ic_save_black_24dp);
+            item.setTitle("Save");
         }else {
 
             if (TextUtils.isEmpty(displayname.getText().toString().trim())) {
@@ -567,7 +568,8 @@ public class ProfileActivity extends AppCompatActivity {
                             imgclickflag = false;
                             editmode = 0;
                             displayname.setEnabled(false);
-                            item.setIcon(R.drawable.ic_edit_24dp);
+                           // item.setIcon(R.drawable.ic_edit_24dp);
+                            item.setTitle("Edit");
                             Toast.makeText(ProfileActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -586,7 +588,9 @@ public class ProfileActivity extends AppCompatActivity {
                 pd.dismiss();
                 editmode = 0;
                 displayname.setEnabled(false);
-                item.setIcon(R.drawable.ic_edit_24dp);
+               // item.setIcon(R.drawable.ic_edit_24dp);
+                item.setTitle("Edit");
+
             }
 
         }
@@ -618,6 +622,12 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
             case R.id.action_edit:
                 updateProfile(userid, userdisplayname, item);
+                break;
+            case R.id.action_favourite:
+                startActivity(new Intent(ProfileActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(ProfileActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

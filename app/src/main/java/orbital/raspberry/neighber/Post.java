@@ -30,11 +30,12 @@ public class Post {
     private String imguri;
     private String displayname;
     private String location;
+    private String fee;
 
 
     public Post(){}
 
-    public Post(String postid, String userid, String itemname, String displayname, String postdesc, int posttype, int category, String location){
+    public Post(String postid, String userid, String itemname, String displayname, String postdesc, int posttype, int category, String location, String fee){
         this.postid = postid;
         this.userid = userid;
         this.itemname = itemname;
@@ -46,6 +47,11 @@ public class Post {
         this.category = category;
         this.displayname = displayname;
         this.location = location;
+        this.fee = fee;
+    }
+
+    public String getFee(){
+        return fee;
     }
 
     public String getPostid() {

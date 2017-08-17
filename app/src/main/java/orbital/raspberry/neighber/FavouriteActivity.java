@@ -9,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,31 +20,32 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity2 extends AppCompatActivity {
+public class FavouriteActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
-    private TextView browsereq, browseoff;
     private List<Post> posts;
+    private List<String> favids;
     private ListView listViewRequests;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_favourite);
+
+        getSupportActionBar().setTitle("Favourites");
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
         posts = new ArrayList<>();
+        favids = new ArrayList<>();
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
 
@@ -56,59 +55,72 @@ public class MainActivity2 extends AppCompatActivity {
         chat = (TextView) findViewById(R.id.action_chat);
         profile = (TextView) findViewById(R.id.action_profile);
         browse = (TextView) findViewById(R.id.action_browse);
-        browsereq = (TextView) findViewById(R.id.action_browse_request);
-        browseoff = (TextView) findViewById(R.id.action_browse_offer);
-
-        browsereq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
-        browseoff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(MainActivity2.this, MainActivity.class));
-                finish();
-            }
-        });
 
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(FavouriteActivity.this, MainActivity.class));
             }
         });
 
         records.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, BorrowerRecordsActivity.class));
+                startActivity(new Intent(FavouriteActivity.this, BorrowerRecordsActivity.class));
             }
         });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, AddNewActivity.class));
+                startActivity(new Intent(FavouriteActivity.this, AddNewActivity.class));
             }
         });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, ChatListActivity.class));
+                startActivity(new Intent(FavouriteActivity.this, ChatListActivity.class));
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, ProfileActivity.class));
+                startActivity(new Intent(FavouriteActivity.this, ProfileActivity.class));
             }
         });
 
         //////////////////////End Navigation////////////////////////////
+
+        final String currentuserid = auth.getCurrentUser().getUid().toString();
+
+        final DatabaseReference fDatabase = FirebaseDatabase.getInstance().getReference("favourite").child(currentuserid);
+
+        //attaching value event listener
+        fDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //clearing the previous list
+                favids.clear();
+
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    Favourite fav = postSnapshot.getValue(Favourite.class);
+
+                        //adding to the fav list
+                        favids.add(fav.getPostid());
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
@@ -125,20 +137,29 @@ public class MainActivity2 extends AppCompatActivity {
                     //getting artist
                     Post post = postSnapshot.getValue(Post.class);
 
-                    //If post type is request aka 1
-                    if(post.getPosttype() == 1 && post.getStatus() == 1) {
+                    //If post type is offer aka 2
+                    if(post.getPosttype() == 2) {
 
-                        String datetime = getDate(post.getTimestamp());
+                        for(int j=0; j<favids.size();j++){
 
-                        post.setDatetime(datetime);
+                            //If post is favourited by this user
+                            if(post.getPostid().equals(favids.get(j))){
+                                String datetime = getDate(post.getTimestamp());
 
-                        //adding to the list
-                        posts.add(post);
+                                post.setDatetime(datetime);
+
+                                //adding to the list
+                                posts.add(post);
+
+                            }
+
+                        }
+
                     }
                 }
 
                 //creating adapter
-                RequestList reqAdapter = new RequestList(MainActivity2.this, posts);
+                FavouriteList reqAdapter = new FavouriteList(FavouriteActivity.this, posts);
                 //attaching adapter to the listview
                 listViewRequests.setAdapter(reqAdapter);
             }
@@ -157,10 +178,14 @@ public class MainActivity2 extends AppCompatActivity {
                 String requesterid = post.getUserid();
                 String postid = post.getPostid();
 
-                Intent i = new Intent(MainActivity2.this, PostActivity.class);
-                i.putExtra("ruserid", requesterid);
-                i.putExtra("rpostid", postid);
-                startActivity(i);
+                if(post.getStatus() == 1) {
+                    Intent i = new Intent(FavouriteActivity.this, PostActivity.class);
+                    i.putExtra("ruserid", requesterid);
+                    i.putExtra("rpostid", postid);
+                    startActivity(i);
+                }else{
+                    Toast.makeText(FavouriteActivity.this, "Item is not available", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -188,19 +213,16 @@ public class MainActivity2 extends AppCompatActivity {
             case R.id.action_logout:
                 // to do logout action
                 auth.signOut();
-                Intent i = new Intent(MainActivity2.this, LoginpageActivity.class);
+                Intent i = new Intent(FavouriteActivity.this, LoginpageActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(MainActivity2.this, SettingsActivity.class));
-                break;
-            case R.id.action_favourite:
-                startActivity(new Intent(MainActivity2.this, FavouriteActivity.class));
+                startActivity(new Intent(FavouriteActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_feedback:
-                startActivity(new Intent(MainActivity2.this, FeedbackActivity.class));
+                startActivity(new Intent(FavouriteActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

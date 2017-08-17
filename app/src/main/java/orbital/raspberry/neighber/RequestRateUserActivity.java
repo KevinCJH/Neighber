@@ -193,6 +193,12 @@ public class RequestRateUserActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(RequestRateUserActivity.this, SettingsActivity.class));
                 break;
+            case R.id.action_favourite:
+                startActivity(new Intent(RequestRateUserActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(RequestRateUserActivity.this, FeedbackActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

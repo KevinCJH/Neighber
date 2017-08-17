@@ -48,7 +48,7 @@ public class PostActivity extends AppCompatActivity {
     private TextView browse, records, addnew, chat, profile;
    // private Button viewprofile;
     private int posttype;
-    private TextView datetimeTxt, locationTxt, categoryTxt;
+    private TextView datetimeTxt, locationTxt, categoryTxt, feeTxt;
     private String datetime;
     private ImageView photo;
     private RatingBar ratingbar;
@@ -81,6 +81,7 @@ public class PostActivity extends AppCompatActivity {
         datetimeTxt = (TextView) findViewById(R.id.datetime);
         locationTxt = (TextView) findViewById(R.id.location);
         categoryTxt = (TextView) findViewById(R.id.categoryTxt);
+        feeTxt = (TextView) findViewById(R.id.feeTxt);
         meetTxt = (TextView) findViewById(R.id.txt3);
         photo = (ImageView) findViewById(R.id.imgViewPhoto);
 
@@ -209,6 +210,8 @@ public class PostActivity extends AppCompatActivity {
 
                 locationTxt.setText(content);
 
+                feeTxt.setText(post.getFee());
+
                 switch(post.getCategory()){
                     case 0:
                         categoryTxt.setText("Others");
@@ -324,6 +327,51 @@ public class PostActivity extends AppCompatActivity {
         fabF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final String currentuserid = auth.getCurrentUser().getUid().toString();
+
+                //Check if user already has favourite node
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("favourite");
+                rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (snapshot.hasChild(currentuserid)) {
+                            // Do not add
+                            DatabaseReference fDatabase = FirebaseDatabase.getInstance().getReference("favourite").child(currentuserid); //.child("returnagreementdesc").setValue(agreement);
+
+                            String favitemid = fDatabase.push().getKey();
+
+                            Favourite newfav = new Favourite(favitemid, currentuserid, rpostid);
+
+                            fDatabase.child(favitemid).setValue(newfav);
+                        }else {
+                            FirebaseDatabase.getInstance().getReference("favourite").child(currentuserid).setValue(currentuserid);
+
+                            DatabaseReference fDatabase = FirebaseDatabase.getInstance().getReference("favourite").child(currentuserid);
+
+                            String favitemid = fDatabase.push().getKey();
+
+                            Favourite newfav = new Favourite(favitemid, currentuserid, rpostid);
+
+                            fDatabase.child(favitemid).setValue(newfav);
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                //fDatabase.child(favitemid).child("favid").setValue(favitemid);
+
+                //fDatabase.child(favitemid).child("userid").setValue(currentuserid);
+
+                //fDatabase.child(favitemid).child("postid").setValue(rpostid);
+
                 Toast.makeText(PostActivity.this, "Post added to favourites!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -383,6 +431,12 @@ public class PostActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(PostActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_favourite:
+                startActivity(new Intent(PostActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(PostActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

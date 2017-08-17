@@ -46,6 +46,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_changepassword);
 
+        getSupportActionBar().setTitle("Change Password");
+
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
@@ -210,6 +212,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 finish();
+                break;
+            case R.id.action_favourite:
+                startActivity(new Intent(ChangePasswordActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(ChangePasswordActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
