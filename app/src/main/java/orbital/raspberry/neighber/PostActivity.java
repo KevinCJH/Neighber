@@ -324,6 +324,41 @@ public class PostActivity extends AppCompatActivity {
         fabF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final String currentuserid = auth.getCurrentUser().getUid().toString();
+
+                //Check if user already has favourite node
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("favourite");
+                rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (snapshot.hasChild(currentuserid)) {
+                            // Do not add
+                        }else {
+                            FirebaseDatabase.getInstance().getReference("favourite").setValue(currentuserid);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                DatabaseReference fDatabase = FirebaseDatabase.getInstance().getReference("favourite").child(currentuserid); //.child("returnagreementdesc").setValue(agreement);
+
+                String favitemid = fDatabase.push().getKey();
+
+                Favourite newfav = new Favourite(favitemid, currentuserid, rpostid);
+
+                //fDatabase.child(favitemid).child("favid").setValue(favitemid);
+
+                //fDatabase.child(favitemid).child("userid").setValue(currentuserid);
+
+                //fDatabase.child(favitemid).child("postid").setValue(rpostid);
+
+                fDatabase.child(favitemid).setValue(newfav);
+
                 Toast.makeText(PostActivity.this, "Post added to favourites!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -383,6 +418,12 @@ public class PostActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(PostActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_favourite:
+                startActivity(new Intent(PostActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(PostActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -607,6 +607,12 @@ public class AddNewActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(AddNewActivity.this, SettingsActivity.class));
                 break;
+            case R.id.action_favourite:
+                startActivity(new Intent(AddNewActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(AddNewActivity.this, FeedbackActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

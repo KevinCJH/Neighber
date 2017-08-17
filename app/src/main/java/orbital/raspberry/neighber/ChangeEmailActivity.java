@@ -42,6 +42,8 @@ public class ChangeEmailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_changeemail);
 
+        getSupportActionBar().setTitle("Change Email");
+
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
@@ -202,6 +204,12 @@ public class ChangeEmailActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 finish();
+                break;
+            case R.id.action_favourite:
+                startActivity(new Intent(ChangeEmailActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(ChangeEmailActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

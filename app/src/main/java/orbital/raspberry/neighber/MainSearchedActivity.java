@@ -462,6 +462,12 @@ public class MainSearchedActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(MainSearchedActivity.this, SettingsActivity.class));
                 break;
+            case R.id.action_favourite:
+                startActivity(new Intent(MainSearchedActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(MainSearchedActivity.this, FeedbackActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

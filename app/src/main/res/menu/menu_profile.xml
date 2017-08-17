@@ -8,6 +8,18 @@
         android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="withText" />
     <item
+        android:id="@+id/action_favourite"
+        android:orderInCategory="100"
+        android:title="Favourites"
+        android:icon="@drawable/ic_favorite_24dp"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_feedback"
+        android:orderInCategory="100"
+        android:title="Feedback"
+        android:icon="@drawable/ic_edit_24dp"
+        app:showAsAction="withText" />
+    <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="Logout"
@@ -18,7 +30,6 @@
         android:id="@+id/action_edit"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:icon="@drawable/ic_edit_24dp"
         android:title="Edit"/>
 
 </menu>

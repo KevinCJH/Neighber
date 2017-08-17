@@ -71,6 +71,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".FavouriteActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".BorrowerRecordsActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -180,10 +184,14 @@
             android:name=".GridActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBapSM3ZUIKc5WjDDm9L1xzjgnSIZTjWEs" />
+
 
     </application>
 

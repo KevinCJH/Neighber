@@ -644,6 +644,12 @@ public class BorrowerRecordsActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(BorrowerRecordsActivity.this, SettingsActivity.class));
                 break;
+            case R.id.action_favourite:
+                startActivity(new Intent(BorrowerRecordsActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(BorrowerRecordsActivity.this, FeedbackActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

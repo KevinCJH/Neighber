@@ -48,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        getSupportActionBar().setTitle("Settings");
+
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
         ruserid = auth.getCurrentUser().getUid();
@@ -167,6 +169,12 @@ public class SettingsActivity extends AppCompatActivity {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
+                break;
+            case R.id.action_favourite:
+                startActivity(new Intent(SettingsActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(SettingsActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

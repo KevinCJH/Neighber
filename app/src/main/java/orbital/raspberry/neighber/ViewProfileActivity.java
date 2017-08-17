@@ -61,6 +61,8 @@ public class ViewProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
 
+        getSupportActionBar().setTitle("View Profile");
+
         Intent i = getIntent();
         ruserid = i.getStringExtra("ruserid");
 
@@ -253,6 +255,12 @@ public class ViewProfileActivity extends AppCompatActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(ViewProfileActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_favourite:
+                startActivity(new Intent(ViewProfileActivity.this, FavouriteActivity.class));
+                break;
+            case R.id.action_feedback:
+                startActivity(new Intent(ViewProfileActivity.this, FeedbackActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
