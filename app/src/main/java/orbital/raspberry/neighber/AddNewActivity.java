@@ -279,22 +279,6 @@ public class AddNewActivity extends AppCompatActivity {
         });
 
 
-
-        /*
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-               if(position == 0){
-                   postdescTxt.setHint("Provide description for your request. Eg. Duration of borrow?");
-                   submitBtn.setText("Post Request");
-               }else{
-                   postdescTxt.setHint("Provide description for your offer. Eg. Size of item?");
-                   submitBtn.setText("Post Offer");
-               }
-            }
-        }); */
-
-
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
