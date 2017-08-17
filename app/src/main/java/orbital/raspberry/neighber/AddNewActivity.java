@@ -245,7 +245,7 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 postdescTxt.setHint("Provide description for your request. Eg. Duration of borrow?");
-                rentalTxt.setHint("Offer Fee");
+                rentalTxt.setHint("Offer Fee (Optional)");
                 submitBtn.setText("Post Request");
                 posttype = 1;
                 lendtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
@@ -259,7 +259,7 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 postdescTxt.setHint("Provide description for your offer. Eg. Size of item?");
-                rentalTxt.setHint("Rental Fee");
+                rentalTxt.setHint("Rental Fee (Optional)");
                 submitBtn.setText("Post Offer");
                 posttype = 2;
                 lendtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
@@ -279,22 +279,6 @@ public class AddNewActivity extends AppCompatActivity {
         });
 
 
-
-        /*
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-               if(position == 0){
-                   postdescTxt.setHint("Provide description for your request. Eg. Duration of borrow?");
-                   submitBtn.setText("Post Request");
-               }else{
-                   postdescTxt.setHint("Provide description for your offer. Eg. Size of item?");
-                   submitBtn.setText("Post Offer");
-               }
-            }
-        }); */
-
-
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -303,8 +287,22 @@ public class AddNewActivity extends AppCompatActivity {
 
                 final String location = locationTxt.getText().toString().trim();
 
-                final String fee = rentalTxt.getText().toString().trim();
+                final String fee;
 
+                if(!TextUtils.isEmpty(rentalTxt.getText().toString().trim())) {
+
+                 //   if("$0.00".equals(rentalTxt.getText().toString().trim())){
+
+                 //       fee = "Free";
+
+                  //  }else{
+                        fee = rentalTxt.getText().toString().trim();
+                  //  }
+
+                }else{
+                    //fee = "Free";
+                    fee = "$0.00";
+                }
                 //Toast.makeText(getApplicationContext(), "Result: " + fee, Toast.LENGTH_LONG).show();
 
                 if (TextUtils.isEmpty(itemnameTxt.getText().toString().trim())) {
@@ -315,9 +313,6 @@ public class AddNewActivity extends AppCompatActivity {
                     return;
                 }else if(TextUtils.isEmpty(location)){
                     Toast.makeText(getApplicationContext(), "Must have meetup location!", Toast.LENGTH_SHORT).show();
-                    return;
-                }else if(TextUtils.isEmpty(fee)){
-                    Toast.makeText(getApplicationContext(), "Must specify fee!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
