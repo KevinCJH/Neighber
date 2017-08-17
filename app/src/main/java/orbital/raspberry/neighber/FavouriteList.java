@@ -36,13 +36,16 @@ public class FavouriteList extends ArrayAdapter<Post> {
         ImageView photo = (ImageView) listViewItem.findViewById(R.id.imgViewPhoto);
         TextView location = (TextView) listViewItem.findViewById(R.id.locationTxt);
 
-
         Post post = posts.get(position);
         itemname.setText(post.getItemname());
        // datetime.setText(" " + post.getDatetime());
         dname.setText(" " + post.getDisplayname());
-        location.setText(post.getLocation());
 
+        if(post.getLocation().trim().length() > 30){
+            location.setText(post.getLocation().substring(0, 29) + "...");
+        }else {
+            location.setText(post.getLocation());
+        }
         if(post.getImgUri() != null) {
             if (!post.getImgUri().toString().trim().isEmpty()) {
                 Picasso.with(context).load(post.getImgUri()).placeholder(R.mipmap.neighberlogo).into(photo);
@@ -50,9 +53,9 @@ public class FavouriteList extends ArrayAdapter<Post> {
         }
 
         if(post.getStatus() == 1) {
-            imgview2.setImageResource(R.drawable.ic_tick_24dp);
+            imgview2.setImageResource(R.mipmap.tick);
         }else{
-            imgview2.setImageResource(R.drawable.ic_cross_24dp);
+            imgview2.setImageResource(R.mipmap.cross);
         }
 
         switch(post.getCategory()){

@@ -132,6 +132,18 @@
         android:layout_alignStart="@+id/location" /> -->
 
             <TextView
+                android:id="@+id/feeTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="Fee"
+                android:drawablePadding="3dp"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_fee_24dp"
+                android:layout_below="@+id/location"
+                android:layout_alignStart="@+id/location" />
+
+            <TextView
                 android:id="@+id/categoryTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,8 +152,8 @@
                 android:drawablePadding="3dp"
                 android:layout_marginTop="20dp"
                 android:drawableLeft="@drawable/ic_category_24dp"
-                android:layout_below="@+id/location"
-                android:layout_alignStart="@+id/location" />
+                android:layout_below="@+id/feeTxt"
+                android:layout_alignStart="@+id/feeTxt" />
 
             <ImageView
                 android:id="@+id/postdescicon"
@@ -159,6 +171,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:text="Post Description"
+        android:layout_marginRight="5dp"
         android:layout_below="@+id/categoryTxt"
         android:layout_marginTop="17dp"
         android:layout_toEndOf="@+id/postdescicon" />

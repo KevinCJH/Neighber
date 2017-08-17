@@ -148,6 +148,19 @@
                 android:layout_below="@+id/postdesc"
                 android:layout_alignStart="@+id/itemname" />
 
+            <EditText
+                android:id="@+id/rentaltxt"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_marginTop="5dp"
+                android:inputType="numberDecimal"
+                android:maxLength="10"
+                android:hint="Offer Fee"
+                android:layout_below="@+id/locationtxt"
+                android:layout_alignStart="@+id/itemname" />
+
     <Button
         style="?android:textAppearanceSmall"
         android:layout_width="300dp"
@@ -169,8 +182,8 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimary"
                 android:text="Photo of Item (Optional)"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/locationtxt"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/rentaltxt"
                 android:layout_alignStart="@+id/itemnameTxt" />
 
             <ImageView

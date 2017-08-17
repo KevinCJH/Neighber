@@ -63,7 +63,7 @@ public class AddNewActivity extends AppCompatActivity {
     private Uri filePath;
     private ImageView photo;
     private Button submitBtn, lendtype, borrowtype, uploadphoto;
-    private EditText itemnameTxt, postdescTxt, locationTxt;
+    private EditText itemnameTxt, postdescTxt, locationTxt, rentalTxt;
     private String userName;
     //1 for borrow, 2 for lending
     private int posttype;
@@ -135,6 +135,9 @@ public class AddNewActivity extends AppCompatActivity {
         lendtype = (Button)findViewById(R.id.lendtype);
         borrowtype = (Button)findViewById(R.id.borrowtype);
         locationTxt = (EditText)findViewById(R.id.locationtxt);
+        rentalTxt = (EditText)findViewById(R.id.rentaltxt);
+        //Modify it into Currency edittext
+        rentalTxt.addTextChangedListener(new MoneyTextWatcher(rentalTxt));
 
         worktools = (TextView) findViewById(R.id.worktools);
         kitchen = (TextView) findViewById(R.id.kitchen);
@@ -242,6 +245,7 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 postdescTxt.setHint("Provide description for your request. Eg. Duration of borrow?");
+                rentalTxt.setHint("Offer Fee");
                 submitBtn.setText("Post Request");
                 posttype = 1;
                 lendtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.fadeorange));
@@ -255,6 +259,7 @@ public class AddNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 postdescTxt.setHint("Provide description for your offer. Eg. Size of item?");
+                rentalTxt.setHint("Rental Fee");
                 submitBtn.setText("Post Offer");
                 posttype = 2;
                 lendtype.setBackgroundColor(ContextCompat.getColor(AddNewActivity.this,R.color.colorPrimary));
@@ -298,6 +303,10 @@ public class AddNewActivity extends AppCompatActivity {
 
                 final String location = locationTxt.getText().toString().trim();
 
+                final String fee = rentalTxt.getText().toString().trim();
+
+                //Toast.makeText(getApplicationContext(), "Result: " + fee, Toast.LENGTH_LONG).show();
+
                 if (TextUtils.isEmpty(itemnameTxt.getText().toString().trim())) {
                     Toast.makeText(getApplicationContext(), "Must have an item name!", Toast.LENGTH_SHORT).show();
                     return;
@@ -306,6 +315,9 @@ public class AddNewActivity extends AppCompatActivity {
                     return;
                 }else if(TextUtils.isEmpty(location)){
                     Toast.makeText(getApplicationContext(), "Must have meetup location!", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(TextUtils.isEmpty(fee)){
+                    Toast.makeText(getApplicationContext(), "Must specify fee!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -347,7 +359,7 @@ public class AddNewActivity extends AppCompatActivity {
 
                             //Create newpost object
                             Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                                    username, postdescTxt.getText().toString().trim(), posttype, categorytype, location);
+                                    username, postdescTxt.getText().toString().trim(), posttype, categorytype, location, fee);
 
                             //Add post to database
                             mDatabase.child(postid).setValue(newpost);
@@ -373,7 +385,7 @@ public class AddNewActivity extends AppCompatActivity {
 
                     //Create newpost object
                     Post newpost = new Post(postid, userid, itemnameTxt.getText().toString().trim(),
-                            username, postdescTxt.getText().toString().trim(), posttype, categorytype, location);
+                            username, postdescTxt.getText().toString().trim(), posttype, categorytype, location, fee);
 
                     //Add post to database
                     mDatabase.child(postid).setValue(newpost);
