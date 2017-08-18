@@ -363,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+            this.finishAffinity();
             return;
         }
 
