@@ -85,15 +85,13 @@ public class SignupActivity extends AppCompatActivity {
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(SignupActivity.this, "Registration successful! ", Toast.LENGTH_SHORT).show();
                                // progressBar.setVisibility(View.GONE);
                                 pd.dismiss();
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the
                                 // signed in user can be handled in the listener.
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(SignupActivity.this, "Authentication failed. Please try again.\n" + task.getException(),
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignupActivity.this, "Rgistration failed. Please try again.", Toast.LENGTH_SHORT).show();
                                 } else {
 
                                     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
@@ -105,7 +103,11 @@ public class SignupActivity extends AppCompatActivity {
 
                                     mDatabase.child(newuid).setValue(newuser);
 
-                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    //startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    //Toast.makeText(SignupActivity.this, "Registration successful! ", Toast.LENGTH_SHORT).show();
+
+                                    Toast.makeText(SignupActivity.this, "Registration successful! ", Toast.LENGTH_SHORT).show();
+
                                     finish();
                                 }
                             }

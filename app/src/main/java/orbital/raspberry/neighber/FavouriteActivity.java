@@ -1,5 +1,7 @@
 package orbital.raspberry.neighber;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +32,8 @@ public class FavouriteActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private TextView browse, records, addnew, chat, profile;
     private List<Post> posts;
-    private List<String> favids;
+    private List<Favourite> favids;
+    private List<String> favitemids;
     private ListView listViewRequests;
 
 
@@ -46,6 +49,7 @@ public class FavouriteActivity extends AppCompatActivity {
 
         posts = new ArrayList<>();
         favids = new ArrayList<>();
+        favitemids = new ArrayList<>();
 
         listViewRequests = (ListView) findViewById(R.id.listRequest);
 
@@ -111,7 +115,7 @@ public class FavouriteActivity extends AppCompatActivity {
                     Favourite fav = postSnapshot.getValue(Favourite.class);
 
                         //adding to the fav list
-                        favids.add(fav.getPostid());
+                        favids.add(fav);
 
                 }
             }
@@ -143,13 +147,14 @@ public class FavouriteActivity extends AppCompatActivity {
                         for(int j=0; j<favids.size();j++){
 
                             //If post is favourited by this user
-                            if(post.getPostid().equals(favids.get(j))){
+                            if(post.getPostid().equals(favids.get(j).getPostid())){
                                 String datetime = getDate(post.getTimestamp());
 
                                 post.setDatetime(datetime);
 
                                 //adding to the list
                                 posts.add(post);
+                                favitemids.add(favids.get(j).getFavid());
 
                             }
 
@@ -172,19 +177,89 @@ public class FavouriteActivity extends AppCompatActivity {
 
         listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = posts.get(position);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final Post post = posts.get(position);
                 //Toast.makeText(MainActivity.this, "Item: " + post.getItemname() + " selected.", Toast.LENGTH_SHORT).show();
-                String requesterid = post.getUserid();
-                String postid = post.getPostid();
+                final String requesterid = post.getUserid();
+                final String postid = post.getPostid();
+
+
+                //DELETE DIALOG
+                final DialogInterface.OnClickListener dialogClickListener2 = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                String favidinpos = favitemids.get(position);
+                                FirebaseDatabase.getInstance().getReference("favourite").child(currentuserid).child(favidinpos).removeValue();
+                               // posts.remove(position);
+                               // favitemids.remove(position);
+                                startActivity(new Intent(FavouriteActivity.this, FavouriteActivity.class));
+                                finish();
+                                Toast.makeText(FavouriteActivity.this, "Item has been deleted", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+                /////
 
                 if(post.getStatus() == 1) {
+
+                    CharSequence options[] = new CharSequence[]{"View Post", "Delete this item"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(FavouriteActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    Intent i = new Intent(FavouriteActivity.this, PostActivity.class);
+                                    i.putExtra("ruserid", requesterid);
+                                    i.putExtra("rpostid", postid);
+                                    startActivity(i);
+                                    break;
+                                case 1:
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(FavouriteActivity.this);
+                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
+                                            .setNegativeButton("Cancel", dialogClickListener2).show();
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+
+/*
                     Intent i = new Intent(FavouriteActivity.this, PostActivity.class);
                     i.putExtra("ruserid", requesterid);
                     i.putExtra("rpostid", postid);
                     startActivity(i);
+                    */
                 }else{
-                    Toast.makeText(FavouriteActivity.this, "Item is not available", Toast.LENGTH_SHORT).show();
+
+                    CharSequence options[] = new CharSequence[]{"Delete this item"};
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(FavouriteActivity.this);
+                    builder.setTitle("Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            switch (pos) {
+                                case 0:
+                                    AlertDialog.Builder builderdel = new AlertDialog.Builder(FavouriteActivity.this);
+                                    builderdel.setMessage("Confirm Delete?").setPositiveButton("Confirm", dialogClickListener2)
+                                            .setNegativeButton("Cancel", dialogClickListener2).show();
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
                 }
 
             }
