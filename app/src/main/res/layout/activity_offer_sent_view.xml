@@ -5,6 +5,14 @@
     android:padding="10dp"
     android:layout_height="match_parent">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
     <Button
         style="?android:textAppearanceSmall"
         android:textStyle="bold"
@@ -67,5 +75,8 @@
         android:layout_below="@+id/rusernameTxt"
         android:layout_alignParentStart="true" />
 
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
