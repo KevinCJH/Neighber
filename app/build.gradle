@@ -39,6 +39,7 @@ dependencies {
     compile 'com.scottyab:aescrypt:0.0.1'
     compile 'com.google.android.gms:play-services-places:11.0.1'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'agency.tango.android:material-intro-screen:0.0.5'
     testCompile 'junit:junit:4.12'
 }
 

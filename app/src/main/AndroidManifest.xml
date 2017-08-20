@@ -184,14 +184,18 @@
             android:name=".GridActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".FeedbackActivity"
+        <activity
+            android:name=".FeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".IntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Intro" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="apikey" />
-
 
     </application>
 
