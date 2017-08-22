@@ -9,11 +9,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -111,6 +113,34 @@ public class ChatListActivity extends AppCompatActivity {
         });
 
         //////////////////////End Navigation////////////////////////////
+
+        final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
+        final String userid = currentFirebaseUser.getUid();
+
+        final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
+        uDatabase.child(userid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                int notif = user.getNewsent();
+
+                if(notif == 1){
+                    ImageView newnotif = (ImageView) findViewById(R.id.notif);
+                    newnotif.setVisibility(View.VISIBLE);
+                }else{
+                    ImageView newnotif = (ImageView) findViewById(R.id.notif);
+                    newnotif.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ChatListActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");

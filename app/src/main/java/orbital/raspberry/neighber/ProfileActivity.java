@@ -76,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         editmode = 0;
 
+
         //////////////Navigations/////////////
         records = (TextView) findViewById(R.id.action_records);
         addnew = (TextView) findViewById(R.id.action_addnew);
@@ -188,6 +189,8 @@ public class ProfileActivity extends AppCompatActivity {
                         Toast.makeText(ProfileActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        mDatabase.child(userid).child("newsent").setValue(0);
 
         final DatabaseReference postDatabase = FirebaseDatabase.getInstance().getReference("posts");
 
