@@ -152,7 +152,7 @@ public class MainSearchedActivity3 extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainSearchedActivity3.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainSearchedActivity3.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 

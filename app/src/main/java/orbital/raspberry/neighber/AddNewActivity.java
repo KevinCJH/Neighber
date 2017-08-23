@@ -179,7 +179,7 @@ public class AddNewActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AddNewActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AddNewActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 
