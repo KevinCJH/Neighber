@@ -191,6 +191,8 @@ public class WriteOfferActivity extends AppCompatActivity {
 
                             pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
 
+                            uDatabase.child(ruserid).child("newsent").setValue(1);
+
                             Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may view/delete the offer in the Records tab", Toast.LENGTH_LONG).show();
 
                             startActivity(new Intent(WriteOfferActivity.this, MainActivity2.class));
@@ -226,6 +228,8 @@ public class WriteOfferActivity extends AppCompatActivity {
                     rrecordcount += 1;
 
                     pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
+
+                    uDatabase.child(ruserid).child("newsent").setValue(1);
 
                     Toast.makeText(WriteOfferActivity.this, "Offer Submitted! You may view/delete the offer in the Records tab", Toast.LENGTH_LONG).show();
 

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -137,6 +138,32 @@ public class MainActivity extends AppCompatActivity {
        // searchtxt = (EditText) findViewById(R.id.searchtxt);
       //  searchbtn = (Button) findViewById(R.id.searchbtn);
 
+        final FirebaseUser currentFirebaseUser = auth.getCurrentUser() ;
+        final String userid = currentFirebaseUser.getUid();
+
+        final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
+        uDatabase.child(userid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                int notif = user.getNewsent();
+
+                if(notif == 1){
+                    ImageView newnotif = (ImageView) findViewById(R.id.notif);
+                    newnotif.setVisibility(View.VISIBLE);
+                }else{
+                    ImageView newnotif = (ImageView) findViewById(R.id.notif);
+                    newnotif.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Toast.makeText(MainActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("posts");
 

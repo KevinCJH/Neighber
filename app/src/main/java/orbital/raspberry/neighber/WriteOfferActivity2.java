@@ -175,6 +175,8 @@ public class WriteOfferActivity2 extends AppCompatActivity {
 
                 pDatabase.child(rpostid).child("recordcount").setValue(rrecordcount);
 
+                uDatabase.child(ruserid).child("newsent").setValue(1);
+
                 Toast.makeText(WriteOfferActivity2.this, "Request Submitted! You may view/delete the request in the Records tab", Toast.LENGTH_LONG).show();
 
                 startActivity(new Intent(WriteOfferActivity2.this, MainActivity.class));

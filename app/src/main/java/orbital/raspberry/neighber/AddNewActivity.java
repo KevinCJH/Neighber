@@ -158,17 +158,28 @@ public class AddNewActivity extends AppCompatActivity {
         final String userid = currentFirebaseUser.getUid();
 
         final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-        uDatabase.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+        uDatabase.child(userid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
                 username = user.getDisplayname();
+
+                int notif = user.getNewsent();
+
+                if(notif == 1){
+                    ImageView newnotif = (ImageView) findViewById(R.id.notif);
+                    newnotif.setVisibility(View.VISIBLE);
+                }else{
+                    ImageView newnotif = (ImageView) findViewById(R.id.notif);
+                    newnotif.setVisibility(View.INVISIBLE);
+                }
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(AddNewActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AddNewActivity.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
             }
         });
 

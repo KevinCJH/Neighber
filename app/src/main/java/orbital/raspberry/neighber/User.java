@@ -8,6 +8,7 @@ public class User {
     private double ratings;
     private String imguri;
     private int totalvote;
+    private int newmsg, newsent;
 
     public User(){}
 
@@ -19,6 +20,8 @@ public class User {
         ratings = 0;
         imguri = "";
         totalvote = 0;
+        newmsg = 0;
+        newsent = 0;
 
     }
 
@@ -43,4 +46,13 @@ public class User {
     public int getTotalvote(){
         return totalvote;
     }
+
+    public int getNewmsg(){
+        return newmsg;
+    }
+
+    public int getNewsent(){
+        return newsent;
+    }
+
 }

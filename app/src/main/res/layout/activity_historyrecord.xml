@@ -101,16 +101,32 @@
             android:layout_weight="1"
             android:layout_width="0dp" />
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:id="@+id/action_profile"
-            android:drawableTop="@drawable/ic_person_outline_black_24dp"
-            android:text="My Profile"
-            android:textAlignment="center"
-            android:onClick="onClick"
-            android:clickable="true"
+        <RelativeLayout
             android:layout_weight="1"
-            android:layout_width="0dp" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/action_profile"
+                android:drawableTop="@drawable/ic_person_outline_black_24dp"
+                android:text="My Profile"
+                android:textAlignment="center"
+                android:onClick="onClick"
+                android:clickable="true"
+                />
+
+            <ImageView
+                android:id="@+id/notif"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:visibility="invisible"
+                android:src="@mipmap/notifdot"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
